@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "rootDir": "src",
+    "outDir": "lib",
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "noEmitOnError": false,
+    "removeComments": true,
+    "target": "es6",
+    "strict": true,
+    "lib": [ "es2017", "dom" ],
+    "sourceMap": true, /* Generates corresponding '.map' file. */
+    "declaration": true, /* Generates corresponding '.d.ts' file. */
+    "declarationMap": false /* Generates a sourcemap for each corresponding '.d.ts' file. */
+  },
+  "include": [
+    "src/controller.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
