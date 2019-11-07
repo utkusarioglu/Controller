@@ -1,6 +1,6 @@
 {
   "name": "@utkusarioglu/controller",
-  "version": "0.0.4",
+  "version": "0.0.7",
   "description": "2-scope event emitter package that allows one and two-way communications between services",
   "main": "index.js",
   "author": {

@@ -1,4 +1,19 @@
-﻿/* 
+﻿
+/*
+ * ======================================================= Boundary 1 =========
+ *
+ *	IMPORTS
+ *
+ * ============================================================================
+ */
+
+/*
+ *	DEPENDENCIES
+ */
+import { Resolution } from "@utkusarioglu/resolver";
+import { t_namespace } from "@utkusarioglu/namespace";
+
+/*
  *	LOCAL CLASSES
  */
 import "@utkusarioglu/starel-globals";
@@ -29,10 +44,16 @@ import {
     t_channel,
     t_epoch
 } from "./t_controller";
-import { Resolution } from "@utkusarioglu/resolver";
-import { t_namespace } from "@utkusarioglu/namespace";
 
 
+
+/*
+ * ======================================================= Boundary 1 =========
+ *
+ *	EXPORTS
+ *
+ * ============================================================================
+ */
 
 export { M_Controller } from "./m_controller";
 export { M_ControllerEvents } from "./m_controller_events";
@@ -49,6 +70,8 @@ export {
 } from "./t_controller";
 export { C_Controller } from "./c_controller";
 
+
+
 /**
  * Establishes local and global event emitters,
  * Stores the history of exchanges
@@ -59,11 +82,11 @@ export { C_Controller } from "./c_controller";
 export class Controller {
 
 /*
- * ======================================================== Boundary 1 =========
+ * ======================================================= Boundary 1 =========
  *
  *	INSTANTIATION
  *
- * =============================================================================
+ * ============================================================================
  */
 
     /** Provides BaseController functionality for global scope*/

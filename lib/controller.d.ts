@@ -1,7 +1,7 @@
+import { t_namespace } from "@utkusarioglu/namespace";
 import "@utkusarioglu/starel-globals";
 import { t_resolutionInstruction, t_resolutionInstructionNoArgs } from "@utkusarioglu/resolver";
 import { t_scope, t_singleScope, t_waitSet, t_transmission, e_ServiceGroup, t_staticContentArchive, t_localControllerStack, t_epoch } from "./t_controller";
-import { t_namespace } from "@utkusarioglu/namespace";
 export { M_Controller } from "./m_controller";
 export { M_ControllerEvents } from "./m_controller_events";
 export { e_Scope, t_transmission, t_subscription, t_sequenceStep, t_dependency_group, t_service, t_reception, t_channel, t_waitSet, } from "./t_controller";

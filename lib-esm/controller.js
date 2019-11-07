@@ -1,8 +1,8 @@
+import { Resolution } from "@utkusarioglu/resolver";
 import "@utkusarioglu/starel-globals";
 import { BaseController } from "./base_controller";
 import { C_Controller } from "./c_controller";
 import { e_ServiceGroup, e_Scope } from "./t_controller";
-import { Resolution } from "@utkusarioglu/resolver";
 export { M_Controller } from "./m_controller";
 export { M_ControllerEvents } from "./m_controller_events";
 export { e_Scope, } from "./t_controller";
