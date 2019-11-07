@@ -19,5 +19,5 @@ export {
     t_channel,
     t_waitSet,
 } from "./t_controller";
-export { C_Controller } from "./c_controller";
+export { C_Controller, C_StartupTalk, C_BootState } from "./c_controller";
 export { Controller } from "./controller";

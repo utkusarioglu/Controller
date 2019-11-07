@@ -83,6 +83,6 @@ export declare type t_sequenceStep = {
     List: t_namespace[];
     Talk?: t_resolutionInstructionNoArgs;
 };
-export declare type t_controllerGenericObj = {
-    [key: string]: any;
+export declare type i_map<T> = {
+    [key: string]: T;
 };

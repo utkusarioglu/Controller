@@ -255,4 +255,4 @@ export type t_sequenceStep = {
 /**
  * Generic mapping object for Controller
  * */
-export type t_controllerGenericObj = { [key: string]: any }
+export type i_map<T> = { [key: string]: T }

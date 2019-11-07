@@ -1,4 +1,4 @@
-import { C_Controller } from "./c_controller";
+import { C_Controller, C_BootState, C_StartupTalk } from "./c_controller";
 import { e_Scope, e_ServiceGroup, } from "./t_controller";
 export class M_ControllerEvents {
     include_Subscriptions(subscription_list) {
@@ -50,13 +50,13 @@ export class M_ControllerEvents {
     }
     initialize_Controller() {
         this.set_Controller();
-        setTimeout(this.announce_ToAllServices.bind(this, C_BootState.ClassReady), C_Controller.GraceTime);
-        this.get_Controller()
-            .wait(e_Scope.Global, C_Controller.AllServices, C_StartupTalk.run_Listen, undefined, () => {
-            this.register_Dependencies();
-            this.register_Subscriptions();
-            this.announce_ToAllServices(C_BootState.ListenReady);
-        });
+        this.announce_ToAllServices.bind(this, C_BootState.ClassReady),
+            this.get_Controller()
+                .wait(e_Scope.Global, C_Controller.AllServices, C_StartupTalk.run_Listen, undefined, () => {
+                this.register_Dependencies();
+                this.register_Subscriptions();
+                this.announce_ToAllServices(C_BootState.ListenReady);
+            });
         this.get_Controller()
             .wait(e_Scope.Global, C_Controller.AllServices, C_StartupTalk.run_Talk, undefined, () => {
             this.register_Announcements();

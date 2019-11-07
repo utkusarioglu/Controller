@@ -129,21 +129,25 @@ declare module '@utkusarioglu/controller/t_controller' {
         List: t_namespace[];
         Talk?: t_resolutionInstructionNoArgs;
     };
-    export type t_controllerGenericObj = {
-        [key: string]: any;
+    export type i_map<T> = {
+        [key: string]: T;
     };
 }
 
 declare module '@utkusarioglu/controller/c_controller' {
-    import { t_controllerGenericObj } from "@utkusarioglu/controller/t_controller";
-    export const C_Controller: t_controllerGenericObj;
+    import { i_map } from "@utkusarioglu/controller/t_controller";
+    import { t_resolutionInstructionNoArgs } from "@utkusarioglu/resolver";
+    export const C_Controller: i_map<string>;
+    export const C_BootState: i_map<t_resolutionInstructionNoArgs>;
+    export const C_StartupTalk: i_map<t_resolutionInstructionNoArgs>;
 }
 
 declare module '@utkusarioglu/controller/controller' {
     import { t_namespace } from "@utkusarioglu/namespace";
+    import { SeparatorHandler } from "@utkusarioglu/controller/separator_handler";
     import { t_resolutionInstruction, t_resolutionInstructionNoArgs } from "@utkusarioglu/resolver";
     import { t_scope, t_singleScope, t_waitSet, t_transmission, e_ServiceGroup, t_staticContentArchive, t_localControllerStack, t_epoch } from "@utkusarioglu/controller/t_controller";
-    export class Controller {
+    export class Controller extends SeparatorHandler {
         constructor(namespace: t_namespace);
         request(scope: t_singleScope, responding_namespace: t_namespace, talk: t_resolutionInstruction, group?: e_ServiceGroup): Promise<t_transmission>;
         respond(scope: t_scope, response_func: (t_transmission: t_transmission) => Promise<any>, is_static?: boolean, group?: e_ServiceGroup): void;
@@ -172,7 +176,8 @@ declare module '@utkusarioglu/controller/base_controller' {
     import { t_serviceId, t_waitSet, t_transmission, e_ServiceGroup, e_Scope, t_singleScope, t_epoch } from "@utkusarioglu/controller/t_controller";
     import { t_resolutionInstruction, t_resolutionInstructionNoArgs } from "@utkusarioglu/resolver";
     import { t_namespace } from "@utkusarioglu/namespace";
-    export class BaseController {
+    import { SeparatorHandler } from "@utkusarioglu/controller/separator_handler";
+    export class BaseController extends SeparatorHandler {
         constructor(controller_scope: t_singleScope);
         request(scope: e_Scope, sender_namespace: t_namespace, recipient_namespace: t_namespace, talk: t_resolutionInstruction, group: e_ServiceGroup): Promise<any>;
         respond(responder_namespace: t_namespace, response_callback: (transmission: t_transmission) => Promise<any>, group: e_ServiceGroup, scope: e_Scope): void;
@@ -184,6 +189,17 @@ declare module '@utkusarioglu/controller/base_controller' {
         subscribe(scope: t_singleScope, subcribed_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, callback: (transmission: t_transmission) => void): void;
         wait(scope: t_singleScope, sender_namespace: t_namespace, recipient_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, test_callback?: (transmission: t_transmission) => boolean, action_callback?: (transmission: t_transmission) => void, total_count?: number, current_count?: number): Promise<any>;
         wait_Some(scope: t_singleScope, sender_namespace: t_namespace, wait_set: t_waitSet[]): Promise<t_transmission[]>;
+    }
+}
+
+declare module '@utkusarioglu/controller/separator_handler' {
+    import { i_map } from "@utkusarioglu/controller/t_controller";
+    export abstract class SeparatorHandler {
+        protected static _SEPARATOR: i_map<string>;
+        constructor();
+        protected set_Separators_FromGlobal(): void;
+        protected set_Separators(separators: i_map<string>): void;
+        protected get_Separator(separator_name: string): string;
     }
 }
 

@@ -17,6 +17,7 @@ import { t_namespace } from "@utkusarioglu/namespace";
  *	LOCAL CLASSES
  */
 import { BaseController } from "./base_controller";
+import { SeparatorHandler } from "./separator_handler";
 
 /*
  *	CONSTANTS
@@ -43,6 +44,7 @@ import {
     t_channel,
     t_epoch
 } from "./t_controller";
+import { i_map } from "@utkusarioglu/state/t_state";
 
 
 
@@ -57,7 +59,7 @@ import {
  * @remarks
  * Service: Controller
  * */
-export class Controller {
+export class Controller extends SeparatorHandler {
 
 /*
  * ======================================================= Boundary 1 =========
@@ -100,6 +102,7 @@ export class Controller {
      * Service: Controller
      * */
     constructor(namespace: t_namespace) {
+        super();
 
         this.set_GlobalNamespace(namespace);
 
@@ -107,19 +110,18 @@ export class Controller {
     }
 
 
-
 /*
- * ======================================================== Boundary 1 =========
+ * ======================================================= Boundary 1 =========
  *
  *	DIALOGUE
  *	
  *	Request and Respond functions together form the "service" feature.
  *	{@link A_Controller} class introduces include_Services method for registering responses
  *
- * =============================================================================
+ * ============================================================================
  */
 
-/* ---------------------------------------------------------- Use Case ---------
+/* --------------------------------------------------------- Use Case ---------
  *	REQUEST
  */
 
@@ -143,7 +145,7 @@ export class Controller {
         group: e_ServiceGroup = e_ServiceGroup.Standard,
     ): Promise<t_transmission> {
 
-        const responding_channel = responding_namespace + Separator.Dialogue + group;
+        const responding_channel = responding_namespace + this.get_Separator("Dialogue") + group;
         const instruction_code = Resolution.produce_UniqueInstructionCode(talk);
 
         if (Controller.is_StaticResponder(responding_channel) &&
@@ -217,7 +219,7 @@ export class Controller {
 
 
 
-/* ---------------------------------------------------------- Use Case ---------
+/* --------------------------------------------------------- Use Case ---------
  *	RESPOND
  */
 
@@ -247,7 +249,7 @@ export class Controller {
         if (is_static) {
             Controller._static_responders.push(
                 this._controller_global_namespace + 
-                Separator.Dialogue + 
+                this.get_Separator("Dialogue") + 
                 group
             );
         }
@@ -264,7 +266,7 @@ export class Controller {
 
 
 
-/* ---------------------------------------------------------- Use Case ---------
+/* --------------------------------------------------------- Use Case ---------
  *	DOCUMENT and REPORT for DIALOGUE
  */ 
 
@@ -291,7 +293,7 @@ export class Controller {
     }
 
 
-/* ---------------------------------------------------------- Use Case ---------
+/* --------------------------------------------------------- Use Case ---------
  *	HANDLE STATIC SERVICE
  */
 
@@ -384,17 +386,17 @@ export class Controller {
 
 
 /*
- * ======================================================== Boundary 1 =========
+ * ======================================================= Boundary 1 =========
  *
  *	MONOLOGUE
  *	
  *	These methods emit or listen to a certain channel but they do not expect the
  *	other side to take any kind of action.
  *
- * =============================================================================
+ * ============================================================================
  */
 
-/* ---------------------------------------------------------- Use Case ---------
+/* --------------------------------------------------------- Use Case ---------
  *   TALK
  *   
  *   These emit locally or globally
@@ -431,7 +433,7 @@ export class Controller {
 
 
 
-/* ---------------------------------------------------------- Use Case ---------
+/* --------------------------------------------------------- Use Case ---------
  *	DOCUMENT and REPORT for TALK
  */
 
@@ -457,7 +459,7 @@ export class Controller {
 
 
 
-/* ---------------------------------------------------------- Use Case ---------
+/* --------------------------------------------------------- Use Case ---------
  *	LISTEN
  *	
  *	These listen globally or locally
@@ -552,16 +554,16 @@ export class Controller {
 
 
 /*
- * ======================================================== Boundary 1 =========
+ * ======================================================= Boundary 1 =========
  *
  *	HANDLE
  *	
  *	Getters, Setters, Checkers and Manipulators
  *
- * =============================================================================
+ * ============================================================================
  */
 
-/* ---------------------------------------------------------- Use Case ---------
+/* --------------------------------------------------------- Use Case ---------
  *	HANDLE NAMESPACE
  *	
  *	Methods involved with getting and setting global and local namespaces for the instance
@@ -675,7 +677,7 @@ export class Controller {
 
 
 
-/* ---------------------------------------------------------- Use Case ---------
+/* --------------------------------------------------------- Use Case ---------
  *	HANDLE SCOPE
  */
 

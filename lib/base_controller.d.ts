@@ -1,7 +1,8 @@
 import { t_serviceId, t_waitSet, t_transmission, e_ServiceGroup, e_Scope, t_singleScope, t_epoch } from "./t_controller";
 import { t_resolutionInstruction, t_resolutionInstructionNoArgs } from "@utkusarioglu/resolver";
 import { t_namespace } from "@utkusarioglu/namespace";
-export declare class BaseController {
+import { SeparatorHandler } from "./separator_handler";
+export declare class BaseController extends SeparatorHandler {
     private _monologue_emitter;
     private _dialogue_emitter;
     private _announcement_archive;

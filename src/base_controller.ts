@@ -30,6 +30,7 @@ import {
     t_expressionTrail
 } from "@utkusarioglu/resolver";
 import { t_namespace } from "@utkusarioglu/namespace";
+import { SeparatorHandler } from "./separator_handler";
 
 
 
@@ -40,7 +41,7 @@ import { t_namespace } from "@utkusarioglu/namespace";
  * @remarks
  * Service: Controller
  * */
-export class BaseController {
+export class BaseController extends SeparatorHandler {
 
 /*
  * ======================================================== Boundary 1 =========
@@ -82,6 +83,7 @@ export class BaseController {
      * Service: Controller
      */
     constructor(controller_scope: t_singleScope) {
+        super();
         this._controller_scope = controller_scope;
     }
 
@@ -130,10 +132,10 @@ export class BaseController {
 
         const service_id: t_serviceId = BaseController.create_RandomServiceId();
         const request_channel: t_channel = recipient_namespace +
-            Separator.Dialogue +
+            this.get_Separator("Dialogue") +
             group;
         const response_channel: t_channel = request_channel +
-            Separator.Id +
+            this.get_Separator("Id") +
             service_id;
         const request_packet: t_transmission = {
             Channel: response_channel,
@@ -199,7 +201,7 @@ export class BaseController {
 
         const listen_channel: t_channel =
             responder_namespace +
-            Separator.Dialogue +
+            this.get_Separator("Dialogue") +
             group;
 
         this._dialogue_emitter.on(listen_channel,
@@ -336,7 +338,7 @@ export class BaseController {
             Resolution.extract_ExpressionTrail_FromResolutionInstruction(talk);
 
         const announcement_channel: string = recipient_namespace +
-            Separator.Monologue +
+            this.get_Separator("Monologue") +
             expression_trail;
 
         const announcement_packet: t_transmission = {
@@ -357,7 +359,7 @@ export class BaseController {
         if (delay) {
 
             if (delay === true) {
-                delay = C_Controller.GraceTime;
+                delay = C_Controller.GraceTime as unknown as t_epoch;
             }
 
             setTimeout(do_announcement, delay as t_epoch);
@@ -439,7 +441,7 @@ export class BaseController {
             Resolution.extract_ExpressionTrail_FromResolutionInstruction(listen);
 
         const channel: t_channel = subcribed_namespace +
-            Separator.Monologue +
+            this.get_Separator("Monologue") +
             expression_trail;
 
         this._monologue_emitter.on(channel, callback as (transmission: t_transmission) => any);
@@ -504,7 +506,7 @@ export class BaseController {
                     Resolution.extract_ExpressionTrail_FromResolutionInstruction(listen);
 
                 const channel: t_channel = recipient_namespace +
-                    Separator.Monologue +
+                    this.get_Separator("Monologue") +
                     expression_trail;
 
                 return this._monologue_emitter.once(channel, once_callback_function);

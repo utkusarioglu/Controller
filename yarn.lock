@@ -407,36 +407,37 @@
     "@types/yargs-parser" "*"
 
 "@utkusarioglu/mixer@https://github.com/utkusarioglu/Mixer.git":
-  version "0.0.8"
-  resolved "https://github.com/utkusarioglu/Mixer.git#16f1c3c1554108f5390fc2562f95d3142b0afdc3"
+  version "0.0.13"
+  resolved "https://github.com/utkusarioglu/Mixer.git#77f5959f8baa9211b28a44857f8ed43a0d017f7e"
 
 "@utkusarioglu/namespace@https://github.com/utkusarioglu/namespace.git":
-  version "0.0.3"
-  resolved "https://github.com/utkusarioglu/namespace.git#422e74e629f51a251164ba37d61975b61c4b65e8"
+  version "0.0.4"
+  resolved "https://github.com/utkusarioglu/namespace.git#1dac17f5cd446905e2176b306e15e4d810288f9d"
 
 "@utkusarioglu/object-assist@https://github.com/utkusarioglu/ObjectAssist.git":
   version "0.0.13"
   resolved "https://github.com/utkusarioglu/ObjectAssist.git#04e5172f7e3a751613c68c053c39de6d7ca14f66"
 
 "@utkusarioglu/resolver@https://github.com/utkusarioglu/Resolver.git":
-  version "0.0.6"
-  resolved "https://github.com/utkusarioglu/Resolver.git#580eee83f771bed1f21e898686cf5d2068f4b3d8"
+  version "0.0.10"
+  resolved "https://github.com/utkusarioglu/Resolver.git#3db3c1cec7e2f41f2f499697cb352d8f948d9a08"
   dependencies:
     "@utkusarioglu/mixer" "https://github.com/utkusarioglu/Mixer.git"
     "@utkusarioglu/namespace" "https://github.com/utkusarioglu/namespace.git"
     "@utkusarioglu/object-assist" "https://github.com/utkusarioglu/ObjectAssist.git"
     "@utkusarioglu/state" "https://github.com/utkusarioglu/state.git"
 
-"@utkusarioglu/starel-globals@https://github.com/utkusarioglu/StarelGlobals.git":
-  version "0.0.8"
-  resolved "https://github.com/utkusarioglu/StarelGlobals.git#899c9ba3f4142398084334d6fd331773e5e53659"
-
 "@utkusarioglu/state@https://github.com/utkusarioglu/state.git":
-  version "0.0.13"
-  resolved "https://github.com/utkusarioglu/state.git#bb534c5a7c9633a01ca9edc4205631cb3f887133"
+  version "0.0.15"
+  resolved "https://github.com/utkusarioglu/state.git#9a7238861ae67180afc2da6f76f3ffa9022d5a8f"
   dependencies:
     "@utkusarioglu/namespace" "https://github.com/utkusarioglu/namespace.git"
-    "@utkusarioglu/starel-globals" "https://github.com/utkusarioglu/StarelGlobals.git"
+    "@utkusarioglu/object-assist" "https://github.com/utkusarioglu/ObjectAssist.git"
+    "@utkusarioglu/string-assist" "https://github.com/utkusarioglu/StringAssist.git"
+
+"@utkusarioglu/string-assist@https://github.com/utkusarioglu/StringAssist.git":
+  version "0.0.4"
+  resolved "https://github.com/utkusarioglu/StringAssist.git#55f4ebaf3caf07879a041e02786e55694acc308b"
 
 "@webassemblyjs/ast@1.8.5":
   version "1.8.5"

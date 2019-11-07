@@ -1,14 +1,16 @@
 import { Resolution } from "@utkusarioglu/resolver";
 import { BaseController } from "./base_controller";
+import { SeparatorHandler } from "./separator_handler";
 import { C_Controller } from "./c_controller";
 import { e_ServiceGroup, e_Scope } from "./t_controller";
-export class Controller {
+export class Controller extends SeparatorHandler {
     constructor(namespace) {
+        super();
         this.set_GlobalNamespace(namespace);
         return this;
     }
     request(scope, responding_namespace, talk, group = e_ServiceGroup.Standard) {
-        const responding_channel = responding_namespace + Separator.Dialogue + group;
+        const responding_channel = responding_namespace + this.get_Separator("Dialogue") + group;
         const instruction_code = Resolution.produce_UniqueInstructionCode(talk);
         if (Controller.is_StaticResponder(responding_channel) &&
             !Controller._forced_dynamic_service) {
@@ -37,7 +39,7 @@ export class Controller {
     respond(scope, response_func, is_static = true, group = e_ServiceGroup.Standard) {
         if (is_static) {
             Controller._static_responders.push(this._controller_global_namespace +
-                Separator.Dialogue +
+                this.get_Separator("Dialogue") +
                 group);
         }
         this.get_Scopes(scope).forEach((active_scope) => {

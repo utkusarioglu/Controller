@@ -1,8 +1,10 @@
 import { EventEmitter } from "events";
 import { Resolution } from "@utkusarioglu/resolver";
 import { C_Controller } from "./c_controller";
-export class BaseController {
+import { SeparatorHandler } from "./separator_handler";
+export class BaseController extends SeparatorHandler {
     constructor(controller_scope) {
+        super();
         this._monologue_emitter = new EventEmitter().setMaxListeners(20);
         this._dialogue_emitter = new EventEmitter().setMaxListeners(20);
         this._announcement_archive = [];
@@ -12,10 +14,10 @@ export class BaseController {
     request(scope, sender_namespace, recipient_namespace, talk, group) {
         const service_id = BaseController.create_RandomServiceId();
         const request_channel = recipient_namespace +
-            Separator.Dialogue +
+            this.get_Separator("Dialogue") +
             group;
         const response_channel = request_channel +
-            Separator.Id +
+            this.get_Separator("Id") +
             service_id;
         const request_packet = {
             Channel: response_channel,
@@ -38,7 +40,7 @@ export class BaseController {
     }
     respond(responder_namespace, response_callback, group, scope) {
         const listen_channel = responder_namespace +
-            Separator.Dialogue +
+            this.get_Separator("Dialogue") +
             group;
         this._dialogue_emitter.on(listen_channel, (transmission) => {
             response_callback(transmission)
@@ -85,7 +87,7 @@ export class BaseController {
     announce(scope, sender_namespace, recipient_namespace, talk, delay = false) {
         const expression_trail = Resolution.extract_ExpressionTrail_FromResolutionInstruction(talk);
         const announcement_channel = recipient_namespace +
-            Separator.Monologue +
+            this.get_Separator("Monologue") +
             expression_trail;
         const announcement_packet = {
             Channel: announcement_channel,
@@ -124,7 +126,7 @@ export class BaseController {
     subscribe(scope, subcribed_namespace, listen, callback) {
         const expression_trail = Resolution.extract_ExpressionTrail_FromResolutionInstruction(listen);
         const channel = subcribed_namespace +
-            Separator.Monologue +
+            this.get_Separator("Monologue") +
             expression_trail;
         this._monologue_emitter.on(channel, callback);
     }
@@ -143,7 +145,7 @@ export class BaseController {
             if (current_count > 0) {
                 const expression_trail = Resolution.extract_ExpressionTrail_FromResolutionInstruction(listen);
                 const channel = recipient_namespace +
-                    Separator.Monologue +
+                    this.get_Separator("Monologue") +
                     expression_trail;
                 return this._monologue_emitter.once(channel, once_callback_function);
             }

@@ -50,6 +50,9 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\m_controller.ts" />
     <TypeScriptCompile Include="src\m_controller_events.ts" />
+    <TypeScriptCompile Include="src\separator_handler.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\t_controller.ts" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />

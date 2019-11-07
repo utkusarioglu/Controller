@@ -1,7 +1,8 @@
 import { t_namespace } from "@utkusarioglu/namespace";
+import { SeparatorHandler } from "./separator_handler";
 import { t_resolutionInstruction, t_resolutionInstructionNoArgs } from "@utkusarioglu/resolver";
 import { t_scope, t_singleScope, t_waitSet, t_transmission, e_ServiceGroup, t_staticContentArchive, t_localControllerStack, t_epoch } from "./t_controller";
-export declare class Controller {
+export declare class Controller extends SeparatorHandler {
     private static _global_controller;
     private static _local_controllers;
     private static _global_namespaces;

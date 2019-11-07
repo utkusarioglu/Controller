@@ -8,7 +8,7 @@ import { M_Controller } from "./m_controller";
 /*
  *	CONSTANTS
  */
-import { C_Controller } from "./c_controller";
+import { C_Controller, C_BootState, C_StartupTalk } from "./c_controller";
 
 /*
  *	DATA TYPES
@@ -217,10 +217,7 @@ export abstract class M_ControllerEvents {
 
         this.set_Controller();
 
-        setTimeout(
-            this.announce_ToAllServices.bind(this, C_BootState.ClassReady),
-            C_Controller.GraceTime
-        );
+        this.announce_ToAllServices.bind(this, C_BootState.ClassReady),
 
         // Listens
         this.get_Controller()
