@@ -11,7 +11,8 @@ declare module '@utkusarioglu/controller' {
     import { t_namespace } from "@utkusarioglu/namespace";
     export { M_Controller } from "@utkusarioglu/controller/m_controller";
     export { M_ControllerEvents } from "@utkusarioglu/controller/m_controller_events";
-    export { t_transmission } from "@utkusarioglu/controller/t_controller";
+    export { e_Scope, t_transmission, t_subscription, t_sequenceStep, t_dependency_group, t_service, t_reception, t_channel, t_waitSet, } from "@utkusarioglu/controller/t_controller";
+    export { C_Controller } from "@utkusarioglu/controller/c_controller";
     export class Controller {
         constructor(namespace: t_namespace);
         request(scope: t_singleScope, responding_namespace: t_namespace, talk: t_resolutionInstruction, group?: e_ServiceGroup): Promise<t_transmission>;
@@ -157,6 +158,11 @@ declare module '@utkusarioglu/controller/m_controller_events' {
         protected announce_ToAllServices(resolution_instruction: t_resolutionInstruction): void;
         protected announce_LibraryAdded(library_source_namespace: t_namespace): void;
     }
+}
+
+declare module '@utkusarioglu/controller/c_controller' {
+    import { t_controllerGenericObj } from "@utkusarioglu/controller/t_controller";
+    export const C_Controller: t_controllerGenericObj;
 }
 
 declare module '@utkusarioglu/controller/base_controller' {

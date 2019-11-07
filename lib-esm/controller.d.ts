@@ -4,7 +4,8 @@ import { t_scope, t_singleScope, t_waitSet, t_transmission, e_ServiceGroup, t_st
 import { t_namespace } from "@utkusarioglu/namespace";
 export { M_Controller } from "./m_controller";
 export { M_ControllerEvents } from "./m_controller_events";
-export { t_transmission } from "./t_controller";
+export { e_Scope, t_transmission, t_subscription, t_sequenceStep, t_dependency_group, t_service, t_reception, t_channel, t_waitSet, } from "./t_controller";
+export { C_Controller } from "./c_controller";
 export declare class Controller {
     private static _global_controller;
     private static _local_controllers;
