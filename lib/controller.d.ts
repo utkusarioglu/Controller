@@ -1,6 +1,10 @@
-import "@utkusarioglu/object-assist";
+import "@utkusarioglu/starel-globals";
 import { t_resolutionInstruction, t_resolutionInstructionNoArgs } from "@utkusarioglu/resolver";
-import { t_scope, t_singleScope, t_waitSet, t_transmission, e_ServiceGroup, t_staticContentArchive, t_localControllerStack, t_epoch, t_namespace } from "./t_controller";
+import { t_scope, t_singleScope, t_waitSet, t_transmission, e_ServiceGroup, t_staticContentArchive, t_localControllerStack, t_epoch } from "./t_controller";
+import { t_namespace } from "@utkusarioglu/namespace";
+export { M_Controller } from "./m_controller";
+export { M_ControllerEvents } from "./m_controller_events";
+export { t_transmission } from "./t_controller";
 export declare class Controller {
     private static _global_controller;
     private static _local_controllers;

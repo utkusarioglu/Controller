@@ -15,7 +15,9 @@
     "declarationMap": false /* Generates a sourcemap for each corresponding '.d.ts' file. */
   },
   "include": [
-    "src/controller.ts"
+    "src/controller.ts",
+    "src/m_controller.ts",
+    "src/m_controller_events.ts"
   ],
   "exclude": [
     "node_modules"

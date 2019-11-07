@@ -1,7 +1,7 @@
-import { t_resolutionInstructionNoArgs, t_resolutionInstruction } from "@utkusarioglu/resolver";
 import { BaseController } from "./base_controller";
+import { t_resolutionInstructionNoArgs, t_resolutionInstruction } from "@utkusarioglu/resolver";
+import { t_namespace } from "@utkusarioglu/namespace";
 export declare type t_epoch = number;
-export declare type t_namespace = string;
 export declare enum e_Scope {
     Local = 1,
     Global = 10,

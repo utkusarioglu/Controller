@@ -1,15 +1,17 @@
-import "@utkusarioglu/object-assist";
-import { Resolution, } from "@utkusarioglu/resolver";
+import "@utkusarioglu/starel-globals";
 import { BaseController } from "./base_controller";
 import { C_Controller } from "./c_controller";
 import { e_ServiceGroup, e_Scope } from "./t_controller";
+import { Resolution } from "@utkusarioglu/resolver";
+export { M_Controller } from "./m_controller";
+export { M_ControllerEvents } from "./m_controller_events";
 export class Controller {
     constructor(namespace) {
         this.set_GlobalNamespace(namespace);
         return this;
     }
     request(scope, responding_namespace, talk, group = e_ServiceGroup.Standard) {
-        const responding_channel = responding_namespace + C_Controller.DIALOGUE_SEPARATOR + group;
+        const responding_channel = responding_namespace + Separator.Dialogue + group;
         const instruction_code = Resolution.produce_UniqueInstructionCode(talk);
         if (Controller.is_StaticResponder(responding_channel) &&
             !Controller._forced_dynamic_service) {
@@ -38,7 +40,7 @@ export class Controller {
     respond(scope, response_func, is_static = true, group = e_ServiceGroup.Standard) {
         if (is_static) {
             Controller._static_responders.push(this._controller_global_namespace +
-                C_Controller.DIALOGUE_SEPARATOR +
+                Separator.Dialogue +
                 group);
         }
         this.get_Scopes(scope).forEach((active_scope) => {

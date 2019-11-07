@@ -16,8 +16,4 @@ export const C_Controller: t_controllerGenericObj = {
         "if the code is expected to work in local scope"].join(''),
     E_MultipleRequestsBeforeResponse: "Multiple requests for the content was placed before the promise was resolved",
     E_ForcedDynamic: "All services are forced to be dynamic",
-
-    DIALOGUE_SEPARATOR: "?",
-    ID_SEPARATOR: "-",
-    MONOLOGUE_SEPARATOR: "-",
 }

@@ -1,15 +1,9 @@
 ﻿
 /*
  *	COMMON CLASSES
- */
-import "@utkusarioglu/object-assist";
+ */ 
 import { EventEmitter } from "events";
-import {
-    Resolution,
-    t_resolutionInstruction,
-    t_resolutionInstructionNoArgs,
-    t_expressionTrail
-} from "@utkusarioglu/resolver";
+import { Resolution } from "@utkusarioglu/resolver";
 
 /*
  *	CONSTANTS
@@ -27,9 +21,15 @@ import {
     e_Scope,
     t_singleScope,
     t_channel,
-    t_namespace,
-    t_epoch
+    t_epoch,
 } from "./t_controller";
+
+import {
+    t_resolutionInstruction,
+    t_resolutionInstructionNoArgs,
+    t_expressionTrail
+} from "@utkusarioglu/resolver";
+import { t_namespace } from "@utkusarioglu/namespace";
 
 
 
@@ -118,7 +118,6 @@ export class BaseController {
      *
      * @remarks
      * Class: Basecontroller
-     * Class: Basecontroller
      * Service: Controller
      */
     request(
@@ -131,10 +130,10 @@ export class BaseController {
 
         const service_id: t_serviceId = BaseController.create_RandomServiceId();
         const request_channel: t_channel = recipient_namespace +
-            C_Controller.DIALOGUE_SEPARATOR +
+            Separator.Dialogue +
             group;
         const response_channel: t_channel = request_channel +
-            C_Controller.ID_SEPARATOR +
+            Separator.Id +
             service_id;
         const request_packet: t_transmission = {
             Channel: response_channel,
@@ -200,7 +199,7 @@ export class BaseController {
 
         const listen_channel: t_channel =
             responder_namespace +
-            C_Controller.DIALOGUE_SEPARATOR +
+            Separator.Dialogue +
             group;
 
         this._dialogue_emitter.on(listen_channel,
@@ -337,7 +336,7 @@ export class BaseController {
             Resolution.extract_ExpressionTrail_FromResolutionInstruction(talk);
 
         const announcement_channel: string = recipient_namespace +
-            C_Controller.MONOLOGUE_SEPARATOR +
+            Separator.Monologue +
             expression_trail;
 
         const announcement_packet: t_transmission = {
@@ -440,7 +439,7 @@ export class BaseController {
             Resolution.extract_ExpressionTrail_FromResolutionInstruction(listen);
 
         const channel: t_channel = subcribed_namespace +
-            C_Controller.MONOLOGUE_SEPARATOR +
+            Separator.Monologue +
             expression_trail;
 
         this._monologue_emitter.on(channel, callback as (transmission: t_transmission) => any);
@@ -505,7 +504,7 @@ export class BaseController {
                     Resolution.extract_ExpressionTrail_FromResolutionInstruction(listen);
 
                 const channel: t_channel = recipient_namespace +
-                    C_Controller.MONOLOGUE_SEPARATOR +
+                    Separator.Monologue +
                     expression_trail;
 
                 return this._monologue_emitter.once(channel, once_callback_function);

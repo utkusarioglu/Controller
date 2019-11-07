@@ -1,6 +1,6 @@
 {
   "name": "@utkusarioglu/controller",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "2-scope event emitter package that allows one and two-way communications between services",
   "main": "index.js",
   "author": {
@@ -27,10 +27,11 @@
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
-    "@utkusarioglu/m_namespace": "git+https://github.com/utkusarioglu/m_namespace.git",
-    "@utkusarioglu/m_state": "https://github.com/utkusarioglu/m_state.git",
+    "@utkusarioglu/namespace": "https://github.com/utkusarioglu/namespace.git",
     "@utkusarioglu/object-assist": "https://github.com/utkusarioglu/ObjectAssist.git",
-    "@utkusarioglu/resolver": "https://github.com/utkusarioglu/Resolver.git"
+    "@utkusarioglu/resolver": "https://github.com/utkusarioglu/Resolver.git",
+    "@utkusarioglu/starel-globals": "https://github.com/utkusarioglu/StarelGlobals.git",
+    "@utkusarioglu/state": "https://github.com/utkusarioglu/state.git"
   },
   "repository": {
     "type": "git",

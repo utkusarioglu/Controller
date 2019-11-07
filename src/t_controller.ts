@@ -1,37 +1,31 @@
 ﻿/*
- *	DEPENDENCIES
+ *	LOCAL CLASSES
+ */
+import { BaseController } from "./base_controller";
+
+/*
+ *	DATATYPES
  */
 import {
     t_resolutionInstructionNoArgs,
     t_resolutionInstruction,
 } from "@utkusarioglu/resolver";
 
-/*
- *	LOCAL CLASSES
- */
-import { BaseController } from "./base_controller";
-
+import { t_namespace } from "@utkusarioglu/namespace";
 
 
 /*
  * ========================================================================== Boundary 1 =========
  *
- *	STAND-INS
+ *	STAND INS
  *
  * ===============================================================================================
  */
 
 /**
- * Denotes number used for epoch
+ * Number used as unix epoch
  * */
 export type t_epoch = number
-
-/**
- * denotes string used as namespace
- * refer to M_Namespace for more info about this type
- * */
-export type t_namespace = string
-
 
 
 

@@ -1,18 +1,7 @@
-﻿
-/*
- *	DEPENDENCIES
- */
-import "@utkusarioglu/object-assist";
-import {
-    Resolution,
-    t_resolutionInstruction,
-    t_resolutionInstructionNoArgs,
-    t_instructionCode,
-} from "@utkusarioglu/resolver";
-
-/*
+﻿/* 
  *	LOCAL CLASSES
  */
+import "@utkusarioglu/starel-globals";
 import { BaseController } from "./base_controller";
 
 /*
@@ -20,6 +9,14 @@ import { BaseController } from "./base_controller";
  */
 import { C_Controller } from "./c_controller";
 
+/*
+ *	DATATYPES
+ */
+import {
+    t_resolutionInstruction,
+    t_resolutionInstructionNoArgs,
+    t_instructionCode
+} from "@utkusarioglu/resolver";
 import {
     t_scope,
     t_singleScope,
@@ -30,12 +27,16 @@ import {
     e_Scope,
     t_localControllerStack,
     t_channel,
-    t_epoch,
-    t_namespace
+    t_epoch
 } from "./t_controller";
+import { Resolution } from "@utkusarioglu/resolver";
+import { t_namespace } from "@utkusarioglu/namespace";
 
 
 
+export { M_Controller } from "./m_controller";
+export { M_ControllerEvents } from "./m_controller_events";
+export { t_transmission } from "./t_controller";
 
 /**
  * Establishes local and global event emitters,
@@ -130,7 +131,7 @@ export class Controller {
         group: e_ServiceGroup = e_ServiceGroup.Standard,
     ): Promise<t_transmission> {
 
-        const responding_channel = responding_namespace + C_Controller.DIALOGUE_SEPARATOR + group;
+        const responding_channel = responding_namespace + Separator.Dialogue + group;
         const instruction_code = Resolution.produce_UniqueInstructionCode(talk);
 
         if (Controller.is_StaticResponder(responding_channel) &&
@@ -234,7 +235,7 @@ export class Controller {
         if (is_static) {
             Controller._static_responders.push(
                 this._controller_global_namespace + 
-                C_Controller.DIALOGUE_SEPARATOR + 
+                Separator.Dialogue + 
                 group
             );
         }
