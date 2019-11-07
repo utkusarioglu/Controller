@@ -1,6 +1,6 @@
 {
   "name": "@utkusarioglu/controller",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "2-scope event emitter package that allows one and two-way communications between services",
   "main": "index.js",
   "author": {
@@ -10,7 +10,7 @@
   },
   "scripts": {
     "clean": "shx rm -rf _bundles lib lib-esm index.d.ts package-lock.json",
-    "declaration": "dts-bundle --name @utkusarioglu/controller --main lib/controller.d.ts --out ../index.d.ts",
+    "declaration": "dts-bundle --name @utkusarioglu/controller --main lib/index.d.ts --out ../index.d.ts",
     "build": "npm run clean && tsc && tsc -m es6 --outDir lib-esm && webpack && npm run declaration",
     "test": "jest"
   },
@@ -30,7 +30,6 @@
     "@utkusarioglu/namespace": "https://github.com/utkusarioglu/namespace.git",
     "@utkusarioglu/object-assist": "https://github.com/utkusarioglu/ObjectAssist.git",
     "@utkusarioglu/resolver": "https://github.com/utkusarioglu/Resolver.git",
-    "@utkusarioglu/starel-globals": "https://github.com/utkusarioglu/StarelGlobals.git",
     "@utkusarioglu/state": "https://github.com/utkusarioglu/state.git"
   },
   "repository": {

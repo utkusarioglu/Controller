@@ -45,6 +45,9 @@
     <TypeScriptCompile Include="src\base_controller.ts" />
     <TypeScriptCompile Include="src\controller.ts" />
     <TypeScriptCompile Include="src\c_controller.ts" />
+    <TypeScriptCompile Include="src\index.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\m_controller.ts" />
     <TypeScriptCompile Include="src\m_controller_events.ts" />
     <TypeScriptCompile Include="src\t_controller.ts" />
