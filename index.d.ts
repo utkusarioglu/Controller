@@ -8,7 +8,7 @@ declare module '@utkusarioglu/controller' {
     export { M_Controller } from "@utkusarioglu/controller/m_controller";
     export { M_ControllerEvents } from "@utkusarioglu/controller/m_controller_events";
     export { e_Scope, t_transmission, t_subscription, t_sequenceStep, t_dependency_group, t_service, t_reception, t_channel, t_waitSet, } from "@utkusarioglu/controller/t_controller";
-    export { C_Controller } from "@utkusarioglu/controller/c_controller";
+    export { C_Controller, C_StartupTalk, C_BootState } from "@utkusarioglu/controller/c_controller";
     export { Controller } from "@utkusarioglu/controller/controller";
 }
 
