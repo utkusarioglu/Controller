@@ -1,6 +1,6 @@
 {
   "name": "@utkusarioglu/controller",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "2-scope event emitter package that allows one and two-way communications between services",
   "main": "index.js",
   "author": {
@@ -29,7 +29,7 @@
   "dependencies": {
     "@utkusarioglu/namespace": "git+https://github.com/utkusarioglu/namespace.git",
     "@utkusarioglu/object-assist": "git+https://github.com/utkusarioglu/ObjectAssist.git",
-    "@utkusarioglu/resolver": "https://github.com/utkusarioglu/Resolver.git",
+    "@utkusarioglu/resolver": "git+https://github.com/utkusarioglu/Resolver.git",
     "@utkusarioglu/state": "git+https://github.com/utkusarioglu/state.git"
   },
   "repository": {
