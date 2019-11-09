@@ -39,21 +39,38 @@
     <Content Include="webpack.config.js" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="src\BaseController\" />
+    <Folder Include="src\Common\" />
+    <Folder Include="src\Controller\" />
+    <Folder Include="src\Mixins\" />
+    <Folder Include="__mocks__\" />
     <Folder Include="src\" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="src\base_controller.ts" />
-    <TypeScriptCompile Include="src\controller.ts" />
-    <TypeScriptCompile Include="src\c_controller.ts" />
+    <TypeScriptCompile Include="src\BaseController\base_controller.test.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\BaseController\base_controller.ts" />
+    <TypeScriptCompile Include="src\Controller\controller.test.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\Controller\controller.ts" />
+    <TypeScriptCompile Include="src\Common\c_controller.ts" />
     <TypeScriptCompile Include="src\index.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\m_controller.ts" />
-    <TypeScriptCompile Include="src\m_controller_events.ts" />
-    <TypeScriptCompile Include="src\separator_handler.ts">
+    <TypeScriptCompile Include="src\Mixins\m_controller.test.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\t_controller.ts" />
+    <TypeScriptCompile Include="src\Mixins\m_controller.ts" />
+    <TypeScriptCompile Include="src\Mixins\m_controller_events.test.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\Mixins\m_controller_events.ts" />
+    <TypeScriptCompile Include="src\Common\separator_handler.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\Common\t_controller.ts" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
   <ProjectExtensions>
