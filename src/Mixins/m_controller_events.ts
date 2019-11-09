@@ -429,9 +429,8 @@ export abstract class M_ControllerEvents extends M_Controller {
                             return value !== transmission.Sender;
                         });
 
+console.log("remaining list: \n", JSON.stringify(step.List));
                         return step.List.length < 1;
-
-                        console.log(`remaining list: \n ${JSON.stringify(step.List)}`)
                     },
                     () => {
                         return resolve_step_promise(step.Listen);
