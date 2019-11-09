@@ -43,7 +43,6 @@
     <Folder Include="src\Common\" />
     <Folder Include="src\Controller\" />
     <Folder Include="src\Mixins\" />
-    <Folder Include="__mocks__\" />
     <Folder Include="src\" />
   </ItemGroup>
   <ItemGroup>

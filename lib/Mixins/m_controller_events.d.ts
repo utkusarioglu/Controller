@@ -22,7 +22,9 @@ export declare abstract class M_ControllerEvents extends M_Controller {
     private register_Dependencies;
     private register_Announcements;
     private register_Services;
-    protected manage_ControllerSequence(sequence_steps: Array<t_sequenceStep>, scope: t_singleScope, manager_namespace: t_namespace): Promise<void>;
+    protected manage_ControllerSequence(sequence_steps: Array<t_sequenceStep>, scope: t_singleScope, manager_namespace: t_namespace): Promise<any>;
+    produce_PromiseStackMember(scope: t_singleScope, manager_namespace: t_namespace, step: t_sequenceStep): Promise<any>;
+    produce_StepsPromise(scope: t_singleScope, manager_namespace: t_namespace, step_promise_stack: Array<Promise<any>>, step: t_sequenceStep, index: number): Promise<any>;
     protected announce_ToAllServices(resolution_instruction: t_resolutionInstruction, delay?: t_epoch): void;
     protected announce_LibraryAdded(library_source_namespace: t_namespace): void;
 }

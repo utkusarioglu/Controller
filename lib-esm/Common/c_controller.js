@@ -9,6 +9,7 @@ export const C_Controller = {
         "if the code is expected to work in local scope"].join(""),
     E_MultipleRequestsBeforeResponse: "Multiple requests for the content was placed before the promise was resolved",
     E_ForcedDynamic: "All services are forced to be dynamic",
+    E_ActiveStepMemberCount: "Active step requires %0 members",
 };
 export const C_BootState = {
     ClassReady: [RI, "class_ready"],

@@ -9,6 +9,10 @@ export class Controller extends SeparatorHandler {
         this.set_GlobalNamespace(namespace);
         return this;
     }
+    static flush_GlobalController() {
+        Controller._global_controller = new BaseController(e_Scope.Global);
+        Controller.flush_GlobalNamespaces();
+    }
     request(scope, responding_namespace, talk, group = e_ServiceGroup.Standard) {
         const responding_channel = responding_namespace +
             this.get_Separator("Dialogue") + group;
@@ -138,6 +142,9 @@ export class Controller extends SeparatorHandler {
     }
     get_GlobalNamespaces() {
         return Controller._global_namespaces;
+    }
+    static flush_GlobalNamespaces() {
+        Controller._global_namespaces = [];
     }
     get_Scopes(scope) {
         const list = [];

@@ -12,6 +12,7 @@ export declare class Controller extends SeparatorHandler {
     private static _static_responders;
     private static _forced_dynamic_service;
     constructor(namespace: t_namespace);
+    static flush_GlobalController(): void;
     request(scope: t_singleScope, responding_namespace: t_namespace, talk: t_resolutionInstruction, group?: e_ServiceGroup): Promise<t_transmission>;
     private request_DynamicTransmission;
     respond(scope: t_scope, response_func: (t_transmission: t_transmission) => Promise<any>, is_static?: boolean, group?: e_ServiceGroup): void;
@@ -36,6 +37,7 @@ export declare class Controller extends SeparatorHandler {
     private destroy_LocalNamespace;
     private add_Controller_ToGlobalNamespaces;
     get_GlobalNamespaces(): t_namespace[];
+    private static flush_GlobalNamespaces;
     private get_Scopes;
     static get_LocalControllerStack(): t_localControllerStack;
 }

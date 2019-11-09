@@ -248,7 +248,6 @@ export abstract class M_ControllerEvents extends M_Controller {
 
         this.set_Controller();
 
-        this.announce_ToAllServices.bind(this, C_BootState.ClassReady, 1000),
 
         // Listens
         this.get_Controller()
@@ -281,6 +280,8 @@ export abstract class M_ControllerEvents extends M_Controller {
                     this.announce_ToAllServices(C_BootState.TalkReady);
                 },
             );
+
+        this.announce_ToAllServices(C_BootState.ClassReady, 200)
 
         return this;
     }
@@ -408,7 +409,10 @@ export abstract class M_ControllerEvents extends M_Controller {
         sequence_steps: Array<t_sequenceStep>,
         scope: t_singleScope,
         manager_namespace: t_namespace,
-    ): Promise<void> {
+    ): Promise<any> {
+
+        let TEST;
+        //return Promise.resolve(this.get_GlobalNamespace());
 
         const step_promise_stack:
             Array<Promise<t_resolutionInstructionNoArgs>> = [];
@@ -417,61 +421,113 @@ export abstract class M_ControllerEvents extends M_Controller {
 
         sequence_steps.forEach((step, index) => {
 
-            step_promise_stack[index] = new Promise((resolve_step_promise) => {
-
-                return this.get_Controller().wait(
+            step_promise_stack[index] =
+                this.produce_PromiseStackMember(
                     scope,
                     manager_namespace,
-                    step.Listen,
-                    (transmission: t_transmission) => {
-
-                        step.List = step.List.filter((value: string) => {
-                            return value !== transmission.Sender;
-                        });
-
-console.log("remaining list: \n", JSON.stringify(step.List));
-                        return step.List.length < 1;
-                    },
-                    () => {
-                        return resolve_step_promise(step.Listen);
-                    },
-                ); // return this.get_Controller().wait
-
-            }); // step_promise_stack[index]
+                    step
+                );
 
             steps_promise_sequence = steps_promise_sequence
                 .then(() => {
-
-                    step.sniff(["StartMessage"], undefined,
-                        (start_message: string) => {
-                            console.log(start_message);
-                        });
-
-                    step.sniff(["Talk"], undefined,
-                        (step_talk: t_resolutionInstructionNoArgs) => {
-                            this.get_Controller().announce(
-                                scope,
-                                manager_namespace,
-                                step_talk,
-                            );
-                        });
-
-                    return step_promise_stack.sniff([(index).toString()],
-                        () => {
-                            throw new Error(`Active step requires ${index} members`);
-                        },
-                        () => {
-                            const active_step_promise_stack =
-                                step_promise_stack.slice(0, index + 1);
-                            return Promise.all(active_step_promise_stack);
-                        });
+                    return this.produce_StepsPromise(
+                        scope,
+                        manager_namespace,
+                        step_promise_stack,
+                        step,
+                        index,
+                    );
 
                 }); // steps_promise_sequence.then
 
         }); // sequence_steps.forEach
 
+        //return Promise.resolve(sequence_steps[0].List);
+
         return steps_promise_sequence;
 
+    }
+
+    /**
+     * 
+     * 
+     * @param scope
+     * @param manager_namespace
+     * @param step
+     */
+    produce_PromiseStackMember(
+        scope: t_singleScope,
+        manager_namespace: t_namespace,
+        step: t_sequenceStep,
+    ): Promise<any> {
+        return new Promise((resolve_step_promise) => {
+            return this.get_Controller().wait(
+                scope,
+                manager_namespace,
+                step.Listen,
+                (transmission: t_transmission) => {
+
+                    step.List = step.List.filter((value: string) => {
+                        return value !== transmission.Sender;
+                    });
+
+                    return step.List.length < 1;
+
+                },
+                () => {
+                    return resolve_step_promise(step.Listen);
+                },
+            ); // return this.get_Controller().wait
+
+        }); // step_promise_stack[index]
+    }
+
+    /**
+     * 
+     * 
+     * @param scope
+     * @param manager_namespace
+     * @param step_promise_stack
+     * @param step
+     * @param index
+     */
+    produce_StepsPromise(
+        scope: t_singleScope,
+        manager_namespace: t_namespace,
+        step_promise_stack: Array<Promise<any>>,
+        step: t_sequenceStep,
+        index: number,
+    ): Promise<any> {
+
+        step.sniff(["StartMessage"], undefined,
+            (start_message: string) => {
+                console.log(start_message);
+            });
+
+        step.sniff(["Talk"], undefined,
+            (step_talk: t_resolutionInstructionNoArgs) => {
+                this.get_Controller().announce(
+                    scope,
+                    manager_namespace,
+                    step_talk,
+                );
+            });
+
+        const index_str: string = index.toString();
+
+        return step_promise_stack.sniff([index_str],
+            () => {
+                throw new Error(
+                    C_Controller.E_ActiveStepMemberCount
+                        .subs(index_str)
+                );
+            },
+            () => {
+                const active_step_promise_stack =
+                    step_promise_stack.slice(0, index + 1);
+
+                return Promise.all(active_step_promise_stack);
+            });
     }
 
 

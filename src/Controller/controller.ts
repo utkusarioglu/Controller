@@ -126,6 +126,18 @@ export class Controller extends SeparatorHandler {
         return this;
     }
 
+    /**
+     * Removes all the previously defined global controllers
+     * 
+     * @remarks
+     * Class: Controller
+     * Service: Controller
+     */
+    public static flush_GlobalController(): void {
+        Controller._global_controller = new BaseController(e_Scope.Global);
+        Controller.flush_GlobalNamespaces();
+    }
+
 
 /*
  * ======================================================= Boundary 1 =========
@@ -740,6 +752,17 @@ export class Controller extends SeparatorHandler {
      */
     public get_GlobalNamespaces(): t_namespace[] {
         return Controller._global_namespaces;
+    }
+
+    /**
+     * Clears the list of previously defined global namespaces
+     *
+     * @remarks
+     * Class: Controller
+     * Service: Controller
+     */
+    private static flush_GlobalNamespaces(): void {
+        Controller._global_namespaces = [];
     }
 
 

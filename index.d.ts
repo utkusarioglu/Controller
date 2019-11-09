@@ -20,6 +20,7 @@ declare module '@utkusarioglu/controller/Controller/controller' {
     import { t_namespace } from "@utkusarioglu/namespace";
     export class Controller extends SeparatorHandler {
         constructor(namespace: t_namespace);
+        static flush_GlobalController(): void;
         request(scope: t_singleScope, responding_namespace: t_namespace, talk: t_resolutionInstruction, group?: e_ServiceGroup): Promise<t_transmission>;
         respond(scope: t_scope, response_func: (t_transmission: t_transmission) => Promise<any>, is_static?: boolean, group?: e_ServiceGroup): void;
         get_DialogueArchive(scope: t_singleScope): object;
@@ -69,7 +70,9 @@ declare module '@utkusarioglu/controller/Mixins/m_controller_events' {
         include_Receptions(reception_list: t_reception[]): this;
         include_Services(services_list: t_service[]): this;
         initialize_Controller(): this;
-        protected manage_ControllerSequence(sequence_steps: Array<t_sequenceStep>, scope: t_singleScope, manager_namespace: t_namespace): Promise<void>;
+        protected manage_ControllerSequence(sequence_steps: Array<t_sequenceStep>, scope: t_singleScope, manager_namespace: t_namespace): Promise<any>;
+        produce_PromiseStackMember(scope: t_singleScope, manager_namespace: t_namespace, step: t_sequenceStep): Promise<any>;
+        produce_StepsPromise(scope: t_singleScope, manager_namespace: t_namespace, step_promise_stack: Array<Promise<any>>, step: t_sequenceStep, index: number): Promise<any>;
         protected announce_ToAllServices(resolution_instruction: t_resolutionInstruction, delay?: t_epoch): void;
         protected announce_LibraryAdded(library_source_namespace: t_namespace): void;
     }
