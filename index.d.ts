@@ -64,12 +64,12 @@ declare module '@utkusarioglu/controller/Mixins/m_controller_events' {
     import { t_epoch } from "@utkusarioglu/state/t_state";
     export interface M_ControllerEvents extends M_Controller, M_State, M_Namespace {
     }
-    export abstract class M_ControllerEvents extends M_Controller {
+    export abstract class M_ControllerEvents {
         include_Subscriptions(subscription_list: Array<t_subscription>): this;
         include_Dependencies(dependencies_list: t_dependency_group[]): this;
         include_Receptions(reception_list: t_reception[]): this;
         include_Services(services_list: t_service[]): this;
-        initialize_Controller(): this;
+        initialize_Controller(sequential_startup?: boolean): this;
         protected manage_ControllerSequence(sequence_steps: Array<t_sequenceStep>, scope: t_singleScope, manager_namespace: t_namespace): Promise<any>;
         produce_PromiseStackMember(scope: t_singleScope, manager_namespace: t_namespace, step: t_sequenceStep): Promise<any>;
         produce_StepsPromise(scope: t_singleScope, manager_namespace: t_namespace, step_promise_stack: Array<Promise<any>>, step: t_sequenceStep, index: number): Promise<any>;

@@ -7,7 +7,7 @@ import { t_namespace } from "@utkusarioglu/namespace";
 import { t_epoch } from "@utkusarioglu/state/t_state";
 export interface M_ControllerEvents extends M_Controller, M_State, M_Namespace {
 }
-export declare abstract class M_ControllerEvents extends M_Controller {
+export declare abstract class M_ControllerEvents {
     private _subscriptions;
     private _announcements;
     private _receptions;
@@ -17,7 +17,7 @@ export declare abstract class M_ControllerEvents extends M_Controller {
     include_Dependencies(dependencies_list: t_dependency_group[]): this;
     include_Receptions(reception_list: t_reception[]): this;
     include_Services(services_list: t_service[]): this;
-    initialize_Controller(): this;
+    initialize_Controller(sequential_startup?: boolean): this;
     private register_Subscriptions;
     private register_Dependencies;
     private register_Announcements;

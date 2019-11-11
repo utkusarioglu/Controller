@@ -1,9 +1,11 @@
 import { M_ControllerEvents } from "./m_controller_events";
+import { Parent } from "@utkusarioglu/mixer";
 import { e_Scope } from "../Common/t_controller";
 import { C_BootState, C_StartupTalk, C_Controller } from "../Common/c_controller";
 import { Controller } from "../Controller/controller";
+import { M_Controller } from "./m_controller";
 test("App.initialize_Controller", () => {
-    const app_class_expression = class extends M_ControllerEvents {
+    const app_class_expression = class extends Parent().with(M_Controller, M_ControllerEvents) {
         constructor() {
             super();
             this.set_ControllerEvents();
@@ -29,7 +31,7 @@ test("App.initialize_Controller", () => {
     return expect(subscription).resolves.toBe(C_BootState.ClassReady);
 });
 test("Child.announce", () => {
-    const child_class_exp1 = class extends M_ControllerEvents {
+    const child_class_exp1 = class extends Parent().with(M_Controller, M_ControllerEvents) {
         constructor() {
             super();
             this.set_ControllerEvents();
@@ -59,7 +61,7 @@ test("Child.announce", () => {
 });
 test("App_Controller", () => {
     Controller.flush_GlobalController();
-    const app_class_expression = class extends M_ControllerEvents {
+    const app_class_expression = class extends Parent().with(M_Controller, M_ControllerEvents) {
         constructor() {
             super();
             this.set_ControllerEvents();
@@ -91,7 +93,7 @@ test("App_Controller", () => {
             return sequence_manager;
         }
     };
-    const child_class_exp1 = class extends M_ControllerEvents {
+    const child_class_exp1 = class extends Parent().with(M_Controller, M_ControllerEvents) {
         constructor() {
             super();
             this.set_ControllerEvents();

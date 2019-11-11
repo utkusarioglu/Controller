@@ -1,7 +1,6 @@
-import { M_Controller } from "./m_controller";
 import { C_Controller, C_BootState, C_StartupTalk, } from "../Common/c_controller";
 import { e_Scope, e_ServiceGroup, } from "../Common/t_controller";
-export class M_ControllerEvents extends M_Controller {
+export class M_ControllerEvents {
     include_Subscriptions(subscription_list) {
         if (!this._subscriptions) {
             this._subscriptions = [];
@@ -49,21 +48,29 @@ export class M_ControllerEvents extends M_Controller {
         this._services.push(...services_list);
         return this;
     }
-    initialize_Controller() {
+    initialize_Controller(sequential_startup = true) {
         this.set_Controller();
-        this.get_Controller()
-            .wait(e_Scope.Global, C_Controller.AllServices, C_StartupTalk.run_Listen, undefined, () => {
+        if (sequential_startup) {
+            this.get_Controller()
+                .wait(e_Scope.Global, C_Controller.AllServices, C_StartupTalk.run_Listen, undefined, () => {
+                this.register_Dependencies();
+                this.register_Subscriptions();
+                this.announce_ToAllServices(C_BootState.ListenReady);
+            });
+            this.get_Controller()
+                .wait(e_Scope.Global, C_Controller.AllServices, C_StartupTalk.run_Talk, undefined, () => {
+                this.register_Announcements();
+                this.register_Services();
+                this.announce_ToAllServices(C_BootState.TalkReady);
+            });
+            this.announce_ToAllServices(C_BootState.ClassReady, 200);
+        }
+        else {
             this.register_Dependencies();
             this.register_Subscriptions();
-            this.announce_ToAllServices(C_BootState.ListenReady);
-        });
-        this.get_Controller()
-            .wait(e_Scope.Global, C_Controller.AllServices, C_StartupTalk.run_Talk, undefined, () => {
             this.register_Announcements();
             this.register_Services();
-            this.announce_ToAllServices(C_BootState.TalkReady);
-        });
-        this.announce_ToAllServices(C_BootState.ClassReady, 200);
+        }
         return this;
     }
     register_Subscriptions() {

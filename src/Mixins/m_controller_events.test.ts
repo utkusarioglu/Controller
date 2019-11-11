@@ -1,4 +1,12 @@
+
+/* ////////////////////////////////////////////////////////////////////////////
+ *
+ *	IMPORTS
+ *
+ * ///////////////////////////////////////////////////////////////////////// */
+
 import { M_ControllerEvents } from "./m_controller_events";
+import { Parent } from "@utkusarioglu/mixer";
 import { t_namespace } from "@utkusarioglu/namespace";
 import { t_sequenceStep, e_Scope, t_transmission } from "../Common/t_controller";
 import {
@@ -8,11 +16,25 @@ import {
 } from "../Common/c_controller";
 import { Controller } from "../Controller/controller";
 import { t_trackRecord } from "@utkusarioglu/state/t_state";
+import { M_Controller } from "./m_controller";
 
+
+
+
+
+
+/* ////////////////////////////////////////////////////////////////////////////
+ *
+ *	DOMESTICS
+ *
+ * ///////////////////////////////////////////////////////////////////////// */
 
 test("App.initialize_Controller", () => {
 
-    const app_class_expression = class extends M_ControllerEvents {
+    const app_class_expression = class extends Parent().with(
+        M_Controller,
+        M_ControllerEvents
+    ) {
 
         constructor() {
             super();
@@ -57,7 +79,10 @@ test("App.initialize_Controller", () => {
 
 test("Child.announce", () => {
 
-    const child_class_exp1 = class extends M_ControllerEvents {
+    const child_class_exp1 = class extends Parent().with(
+        M_Controller,
+        M_ControllerEvents
+    ) {
 
         constructor() {
             super();
@@ -114,7 +139,10 @@ test("App_Controller", () => {
 
     Controller.flush_GlobalController();
 
-    const app_class_expression = class extends M_ControllerEvents {
+    const app_class_expression = class extends Parent().with(
+        M_Controller,
+        M_ControllerEvents
+    ) {
 
         constructor() {
             super();
@@ -169,7 +197,10 @@ test("App_Controller", () => {
 
 
 
-    const child_class_exp1 = class extends M_ControllerEvents {
+    const child_class_exp1 = class extends Parent().with(
+        M_Controller,
+        M_ControllerEvents
+    ) {
 
         constructor() {
             super();
