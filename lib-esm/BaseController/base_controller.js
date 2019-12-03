@@ -48,6 +48,7 @@ export class BaseController extends SeparatorHandler {
                 const serve_packet = {
                     Sender: transmission.Recipient,
                     Recipient: transmission.Sender,
+                    Channel: transmission.Channel,
                     Talk: transmission.Talk,
                     Content: requested_return_content,
                     Time: (new Date()).getTime(),
