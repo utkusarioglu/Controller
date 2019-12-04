@@ -22,7 +22,7 @@ import {
     t_singleScope,
     t_channel,
     t_epoch,
-    t_talk,
+    i_talk,
 } from "../Common/t_controller";
 import {
     t_resolutionInstruction,
@@ -157,6 +157,7 @@ export class BaseController extends SeparatorHandler {
         const request_packet: t_transmission = {
             Channel: response_channel,
             Sender: sender_namespace,
+            Group: group,
             Recipient: recipient_namespace,
             Talk: talk,
             Id: service_id,
@@ -237,6 +238,8 @@ export class BaseController extends SeparatorHandler {
                             Sender: transmission.Recipient,
                             Recipient: transmission.Sender,
                             Channel: transmission.Channel,
+                            Id: transmission.Id,
+                            Group: group,
                             Talk: transmission.Talk,
                             Content: requested_return_content,
                             Time: (new Date()).getTime(),
@@ -477,7 +480,7 @@ export class BaseController extends SeparatorHandler {
         subcribed_namespace: t_namespace,
         listen: t_resolutionInstructionNoArgs,
         // TODO: t_talk may use a more specific type than t_talk<any> maybe what subscribe and announce transmits needs to be re-evaluated to make the methods more diverse
-        callback: (transmission: t_talk<any>) => void,
+        callback: (transmission: i_talk<any>) => void,
     ): void {
 
         const expression_trail: t_expressionTrail =

@@ -22,6 +22,7 @@ export class BaseController extends SeparatorHandler {
         const request_packet = {
             Channel: response_channel,
             Sender: sender_namespace,
+            Group: group,
             Recipient: recipient_namespace,
             Talk: talk,
             Id: service_id,
@@ -49,6 +50,8 @@ export class BaseController extends SeparatorHandler {
                     Sender: transmission.Recipient,
                     Recipient: transmission.Sender,
                     Channel: transmission.Channel,
+                    Id: transmission.Id,
+                    Group: group,
                     Talk: transmission.Talk,
                     Content: requested_return_content,
                     Time: (new Date()).getTime(),
