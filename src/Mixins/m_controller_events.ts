@@ -29,20 +29,19 @@ import {
  *	DATA TYPES
  */
 import {
-    t_subscription,
-    t_reception,
-    t_dependency_group,
-    t_service,
-    t_announcement,
+    i_subscription,
+    i_reception,
+    i_dependency_group,
+    i_service,
+    i_announcement,
     e_Scope,
     e_ServiceGroup,
-    t_transmission,
     t_singleScope,
-    t_sequenceStep,
+    i_sequenceStep,
 } from "../Common/t_controller";
 import {
-    t_resolutionInstructionNoArgs,
-    t_resolutionInstruction,
+    t_ri,
+    t_ri0,
 } from "@utkusarioglu/resolver";
 import { t_namespace } from "@utkusarioglu/namespace";
 import { t_epoch } from "@utkusarioglu/state/t_state";
@@ -88,11 +87,11 @@ export abstract class M_ControllerEvents {
 /*
  *	LOGS
  */
-    private _subscriptions!: Array<t_subscription>;
-    private _announcements!: Array<t_announcement>;
-    private _receptions!: Array<t_reception>; // this isn't emitted, it's only for archiving
-    private _dependencies!: Array<t_dependency_group>;
-    private _services!: Array<t_service>;
+    private _subscriptions!: Array<i_subscription>;
+    private _announcements!: Array<i_announcement>;
+    private _receptions!: Array<i_reception>; // this isn't emitted, it's only for archiving
+    private _dependencies!: Array<i_dependency_group<any, any>>;
+    private _services!: Array<i_service>;
 
 
 /*
@@ -120,7 +119,7 @@ export abstract class M_ControllerEvents {
      * Service: Controller
      */
     public include_Subscriptions(
-        subscription_list: Array<t_subscription>,
+        subscription_list: Array<i_subscription>,
     ): this {
 
         if (!this._subscriptions) {
@@ -141,8 +140,8 @@ export abstract class M_ControllerEvents {
      * Class: M_ControllerEvents
      * Service: Controller
      */
-    public include_Dependencies(
-        dependencies_list: t_dependency_group[],
+    public include_Dependencies<TalkArgs, Return>(
+        dependencies_list: i_dependency_group<TalkArgs, Return>[],
     ): this {
 
         if (!this._dependencies) {
@@ -163,7 +162,7 @@ export abstract class M_ControllerEvents {
      * Class: M_ControllerEvents
      * Service: Controller
      */
-    public include_Receptions(reception_list: t_reception[]): this {
+    public include_Receptions(reception_list: i_reception[]): this {
 
         if (!this._receptions) {
             this._receptions = [];
@@ -179,20 +178,20 @@ export abstract class M_ControllerEvents {
 
         this._receptions.push(...reception_list);
 
-        reception_list.forEach((reception: t_reception) => {
+        reception_list.forEach((reception: i_reception) => {
 
             this._subscriptions.push({
                 Scope: reception.Scope,
                 Namespace: reception.Namespace || this.get_GlobalNamespace(),
                 Listen: reception.Listen,
                 Call: reception.Call,
-            } as t_subscription);
+            } as i_subscription);
 
             this._announcements.push({
                 Scope: reception.Scope,
                 Namespace: reception.Namespace,
                 Talk: reception.Talk,
-            } as t_announcement);
+            } as i_announcement);
         });
 
         return this;
@@ -208,7 +207,7 @@ export abstract class M_ControllerEvents {
      * Class: M_ControllerEvents
      * Service: Controller
      */
-    public include_Services(services_list: t_service[]): this {
+    public include_Services(services_list: i_service[]): this {
 
         if (!this._services) {
             this._services = [];
@@ -251,7 +250,6 @@ export abstract class M_ControllerEvents {
             // Listens
             this.get_Controller()
                 .wait(
-                    e_Scope.Global,
                     C_Controller.AllServices,
                     C_StartupTalk.run_Listen,
                     undefined,
@@ -262,12 +260,12 @@ export abstract class M_ControllerEvents {
 
                         this.announce_ToAllServices(C_BootState.ListenReady);
                     },
+                    e_Scope.Global,
                 );
 
             // Talks
             this.get_Controller()
                 .wait(
-                    e_Scope.Global,
                     C_Controller.AllServices,
                     C_StartupTalk.run_Talk,
                     undefined,
@@ -278,6 +276,7 @@ export abstract class M_ControllerEvents {
 
                         this.announce_ToAllServices(C_BootState.TalkReady);
                     },
+                    e_Scope.Global,
                 );
 
             this.announce_ToAllServices(C_BootState.ClassReady, 200)
@@ -288,6 +287,7 @@ export abstract class M_ControllerEvents {
             this.register_Subscriptions();
             this.register_Announcements();
             this.register_Services();
+            this.announce_ToAllServices(C_BootState.ClassReady, 200)
 
         }
 
@@ -314,12 +314,12 @@ export abstract class M_ControllerEvents {
      */
     private register_Subscriptions(): void {
         if (this._subscriptions) {
-            this._subscriptions.forEach((subscription: t_subscription) => {
+            this._subscriptions.forEach((subscription: i_subscription) => {
                 this.get_Controller().subscribe(
-                    subscription.Scope,
-                    subscription.Namespace,
                     subscription.Listen,
                     subscription.Call,
+                    subscription.Namespace,
+                    subscription.Scope,
                 );
             });
         }
@@ -336,10 +336,10 @@ export abstract class M_ControllerEvents {
     private register_Dependencies(): void {
         if (this._dependencies && this._dependencies.length > 0) {
             this._dependencies
-                .forEach((dependency: t_dependency_group) => {
+                .forEach((dependency: i_dependency_group<any, any>) => {
                     this.get_Controller().wait_Some(
-                        dependency.Scope,
                         dependency.Members,
+                        dependency.Scope,
                     )
                         .then((data) => {
                             return dependency.Call(data);
@@ -366,11 +366,11 @@ export abstract class M_ControllerEvents {
      */
     private register_Announcements(): void {
         if (this._announcements) {
-            this._announcements.forEach((announcement: t_announcement) => {
+            this._announcements.forEach((announcement: i_announcement) => {
                 this.get_Controller().announce(
-                    announcement.Scope,
                     announcement.Namespace,
                     announcement.Talk,
+                    announcement.Scope,
                 );
             });
         }
@@ -386,11 +386,11 @@ export abstract class M_ControllerEvents {
      */
     private register_Services(): void {
         if (this._services) {
-            this._services.forEach((service: t_service) => {
+            this._services.forEach((service: i_service) => {
                 this.get_Controller().respond(
-                    service.Scope,
                     service.Call,
                     service.Static || false,
+                    service.Scope,
                     e_ServiceGroup.Standard,
                 );
             }); 
@@ -415,7 +415,7 @@ export abstract class M_ControllerEvents {
      * Service: Controller
      */
     protected manage_ControllerSequence(
-        sequence_steps: Array<t_sequenceStep>,
+        sequence_steps: Array<i_sequenceStep>,
         scope: t_singleScope,
         manager_namespace: t_namespace,
     ): Promise<any> {
@@ -424,7 +424,7 @@ export abstract class M_ControllerEvents {
         //return Promise.resolve(this.get_GlobalNamespace());
 
         const step_promise_stack:
-            Array<Promise<t_resolutionInstructionNoArgs>> = [];
+            Array<Promise<t_ri>> = [];
 
         let steps_promise_sequence: Promise<void> = Promise.resolve();
 
@@ -467,14 +467,13 @@ export abstract class M_ControllerEvents {
     produce_PromiseStackMember(
         scope: t_singleScope,
         manager_namespace: t_namespace,
-        step: t_sequenceStep,
-    ): Promise<any> {
+        step: i_sequenceStep,
+    ): Promise<t_ri> {
         return new Promise((resolve_step_promise) => {
-            return this.get_Controller().wait(
-                scope,
+            return this.get_Controller().wait<string, any>(
                 manager_namespace,
                 step.Listen,
-                (transmission: t_transmission) => {
+                (transmission) => {
 
                     step.List = step.List.filter((value: string) => {
                         return value !== transmission.Sender;
@@ -486,6 +485,7 @@ export abstract class M_ControllerEvents {
                 () => {
                     return resolve_step_promise(step.Listen);
                 },
+                scope,
             ); // return this.get_Controller().wait
 
         }); // step_promise_stack[index]
@@ -504,7 +504,7 @@ export abstract class M_ControllerEvents {
         scope: t_singleScope,
         manager_namespace: t_namespace,
         step_promise_stack: Array<Promise<any>>,
-        step: t_sequenceStep,
+        step: i_sequenceStep,
         index: number,
     ): Promise<any> {
 
@@ -514,11 +514,11 @@ export abstract class M_ControllerEvents {
             });
 
         step.sniff(["Talk"], undefined,
-            (step_talk: t_resolutionInstructionNoArgs) => {
+            (step_talk: t_ri) => {
                 this.get_Controller().announce(
-                    scope,
                     manager_namespace,
                     step_talk,
+                    scope,
                 );
             });
 
@@ -554,13 +554,14 @@ export abstract class M_ControllerEvents {
      * Service: Controller
      */
     protected announce_ToAllServices(
-        resolution_instruction: t_resolutionInstruction,
+        resolution_instruction: t_ri,
         delay: t_epoch = 0,
     ): void {
+
         this.get_Controller().announce(
-            e_Scope.Global,
             C_Controller.AllServices,
             resolution_instruction,
+            e_Scope.Global,
             delay,
         );
     }
@@ -578,12 +579,9 @@ export abstract class M_ControllerEvents {
         library_source_namespace: t_namespace,
     ): void {
         this.get_Controller().announce(
-            e_Scope.Global,
             C_Controller.AllServices,
-            [
-                ...C_BootState.LibraryAdded,
-                [library_source_namespace],
-            ] as t_resolutionInstruction,
+            [...C_BootState.LibraryAdded, [library_source_namespace]] as t_ri<[t_namespace]>,
+            e_Scope.Global,
             true,
         );
     }

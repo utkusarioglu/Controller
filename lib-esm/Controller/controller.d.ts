@@ -1,8 +1,10 @@
 import { SeparatorHandler } from "../Common/separator_handler";
-import { t_resolutionInstruction, t_resolutionInstructionNoArgs } from "@utkusarioglu/resolver";
-import { t_scope, t_singleScope, t_waitSet, t_transmission, e_ServiceGroup, t_staticContentArchive, t_localControllerStack, t_epoch, i_talk } from "../Common/t_controller";
+import { t_ri } from "@utkusarioglu/resolver";
+import { t_scope, t_singleScope, i_waitSet, e_ServiceGroup, i_staticContentArchive, i_localControllerStack, t_epoch, i_talk, i_request, i_response, i_EventEmitter, t_waitActionCallback, t_waitTestCallback, t_wait } from "../Common/t_controller";
 import { t_namespace } from "@utkusarioglu/namespace";
+import { t_ri_any } from "@utkusarioglu/resolver/Common/t_resolver";
 export declare class Controller extends SeparatorHandler {
+    private static _event_emitter_class;
     private static _global_controller;
     private static _local_controllers;
     private static _global_namespaces;
@@ -13,21 +15,25 @@ export declare class Controller extends SeparatorHandler {
     private static _forced_dynamic_service;
     constructor(namespace: t_namespace);
     static flush_GlobalController(): void;
-    request(scope: t_singleScope, responding_namespace: t_namespace, talk: t_resolutionInstruction, group?: e_ServiceGroup): Promise<t_transmission>;
+    private set_GlobalController;
+    static set_EventEmitter(event_emitter: any): void;
+    static get_EventEmitter(): i_EventEmitter;
+    get_EventEmitter(): i_EventEmitter;
+    request<Content = any>(responding_namespace: t_namespace, talk: t_ri_any, scope?: t_singleScope, group?: e_ServiceGroup): Promise<i_response<Content>>;
     private request_DynamicTransmission;
-    respond(scope: t_scope, response_func: (t_transmission: t_transmission) => Promise<any>, is_static?: boolean, group?: e_ServiceGroup): void;
+    respond<Content = any>(response_callback: (transmission: i_request) => Promise<Content>, is_static?: boolean, scope?: t_scope, group?: e_ServiceGroup): this;
     get_DialogueArchive(scope: t_singleScope): object;
     private static set_PromisifiedStaticContent;
     static get_AllStaticChannels(): t_namespace[];
-    static get_AllStaticContent(): t_staticContentArchive;
+    static get_AllStaticContent(): i_staticContentArchive;
     static flush_StaticContentArchive(): void;
     static force_AllDynamicService(): void;
-    announce(scope: t_scope, recipient_namespace: t_namespace, talk: t_resolutionInstruction, delay?: boolean | t_epoch): void;
+    announce<TalkRi extends t_ri_any>(recipient_namespace: t_namespace, talk: TalkRi, scope?: t_scope, delay?: boolean | t_epoch): this;
     private static is_StaticResponder;
     get_AnnouncementArchive(scope: t_singleScope): object[];
-    subscribe(scope: t_scope, subcribed_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, callback: (transmission: i_talk<any>) => void): void;
-    wait(scope: t_singleScope, recipient_namespace: t_namespace, listen: t_resolutionInstructionNoArgs, test_callback?: (transmission: t_transmission) => boolean, action_callback?: (transmission: t_transmission) => void, count?: number, current_count?: number): Promise<any>;
-    wait_Some(scope: t_singleScope, wait_set: t_waitSet[]): Promise<any>;
+    subscribe<TalkRi = t_ri_any>(listen: t_ri, callback: (transmission: i_talk<TalkRi>) => void, subcribed_namespace?: t_namespace, scope?: t_scope): this;
+    wait<TalkArgs = any, Return = i_talk<TalkArgs>>(recipient_namespace: t_namespace, listen: t_ri, test_callback?: t_waitTestCallback<TalkArgs>, action_callback?: t_waitActionCallback<TalkArgs, Return>, scope?: t_singleScope, count?: number, current_count?: number): Promise<t_wait<TalkArgs, Return>>;
+    wait_Some<TalkArgs = any, Return = i_talk<TalkArgs>>(wait_set: Array<i_waitSet<TalkArgs, Return>>, scope: t_singleScope): Promise<Array<t_wait<TalkArgs, Return>>>;
     set_LocalNamespace(local_namespace: t_namespace): this;
     get_LocalNamespace(): t_namespace;
     get_LocalNamespaces(): t_namespace[];
@@ -36,8 +42,8 @@ export declare class Controller extends SeparatorHandler {
     private create_LocalNamespace;
     private destroy_LocalNamespace;
     private add_Controller_ToGlobalNamespaces;
-    get_GlobalNamespaces(): t_namespace[];
+    static get_GlobalNamespaces(): t_namespace[];
     private static flush_GlobalNamespaces;
     private get_Scopes;
-    static get_LocalControllerStack(): t_localControllerStack;
+    static get_LocalControllerStack(): i_localControllerStack;
 }

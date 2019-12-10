@@ -10,8 +10,7 @@ import {
     t_epoch
 } from "./t_controller";
 import {
-    t_resolutionInstruction,
-    t_resolutionInstructionNoArgs
+    t_ri,
 } from "@utkusarioglu/resolver";
 
 
@@ -56,7 +55,7 @@ export const C_Controller: i_map<string> = {
     E_ActiveStepMemberCount: "Active step requires %0 members",
 };
 
-export const C_BootState: i_map<t_resolutionInstructionNoArgs> = {
+export const C_BootState: i_map<t_ri> = {
 
     /** Class ready t_methodTrail for controller methods to emit/receive */
     ClassReady: [RI, "class_ready"],
@@ -86,7 +85,7 @@ export const C_BootState: i_map<t_resolutionInstructionNoArgs> = {
     LibraryAdded: [RI, "LibraryAdded"],
 };
 
-export const C_StartupTalk: i_map<t_resolutionInstructionNoArgs> = {
+export const C_StartupTalk: i_map<t_ri> = {
 
     /** t_methodTrail for controller manager node to emit for the start of listen
     * methods by all active nodes*/

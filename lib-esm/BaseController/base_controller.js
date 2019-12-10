@@ -1,17 +1,17 @@
-import { EventEmitter } from "events";
 import { Resolution } from "@utkusarioglu/resolver";
 import { SeparatorHandler } from "../Common/separator_handler";
 import { C_Controller } from "../Common/c_controller";
 export class BaseController extends SeparatorHandler {
-    constructor(controller_scope) {
+    constructor(controller_scope, event_emitter) {
         super();
-        this._monologue_emitter = new EventEmitter().setMaxListeners(20);
-        this._dialogue_emitter = new EventEmitter().setMaxListeners(20);
         this._announcement_archive = [];
         this._dialogue_archive = [];
         this._controller_scope = controller_scope;
+        this._event_emitter = event_emitter;
+        this._monologue_emitter = new event_emitter().setMaxListeners(20);
+        this._dialogue_emitter = new event_emitter().setMaxListeners(20);
     }
-    request(scope, sender_namespace, recipient_namespace, talk, group) {
+    request(sender_namespace, recipient_namespace, talk, scope, group) {
         const service_id = BaseController.create_RandomServiceId();
         const request_channel = recipient_namespace +
             this.get_Separator("Dialogue") +
@@ -39,7 +39,7 @@ export class BaseController extends SeparatorHandler {
             this._dialogue_emitter.emit(request_channel, request_packet);
         });
     }
-    respond(responder_namespace, response_callback, group, scope) {
+    respond(responder_namespace, response_callback, scope, group) {
         const listen_channel = responder_namespace +
             this.get_Separator("Dialogue") +
             group;
@@ -49,10 +49,10 @@ export class BaseController extends SeparatorHandler {
                 const serve_packet = {
                     Sender: transmission.Recipient,
                     Recipient: transmission.Sender,
+                    Talk: transmission.Talk,
+                    Group: group,
                     Channel: transmission.Channel,
                     Id: transmission.Id,
-                    Group: group,
-                    Talk: transmission.Talk,
                     Content: requested_return_content,
                     Time: (new Date()).getTime(),
                     Static: false,
@@ -87,7 +87,7 @@ export class BaseController extends SeparatorHandler {
     publicget_ServedChannels() {
         return this._dialogue_emitter.eventNames();
     }
-    announce(scope, sender_namespace, recipient_namespace, talk, delay = false) {
+    announce(sender_namespace, recipient_namespace, talk, scope, delay = false) {
         const expression_trail = Resolution.extract_ExpressionTrail(talk);
         const announcement_channel = recipient_namespace +
             this.get_Separator("Monologue") +
@@ -106,8 +106,8 @@ export class BaseController extends SeparatorHandler {
             this.archive_Announcement(sender_namespace, announcement_channel, announcement_packet);
         };
         if (delay) {
-            if (delay === true) {
-                delay = C_Controller.GraceTime;
+            if (delay == true) {
+                delay = parseInt(C_Controller.GraceTime);
             }
             setTimeout(do_announcement, delay);
         }
@@ -126,23 +126,25 @@ export class BaseController extends SeparatorHandler {
             Time: (new Date()).getTime(),
         });
     }
-    subscribe(scope, subcribed_namespace, listen, callback) {
+    subscribe(listen, callback, subcribed_namespace, scope) {
         const expression_trail = Resolution.extract_ExpressionTrail(listen);
         const channel = subcribed_namespace +
             this.get_Separator("Monologue") +
             expression_trail;
         this._monologue_emitter.on(channel, callback);
     }
-    wait(scope, waiter_namespace, recipient_namespace, listen, test_callback = () => true, action_callback = (transmission) => transmission, total_count = 1, current_count = total_count) {
-        return new Promise((resolve, reject) => {
+    wait(waiter_namespace, recipient_namespace, listen, test_callback = () => true, action_callback = (transmission) => transmission, scope, total_count = 1, current_count = total_count) {
+        return new Promise((resolve2) => {
             const once_callback_function = (transmission) => {
                 if (test_callback(transmission)) {
                     current_count--;
-                    resolve(action_callback(transmission));
+                    resolve2(action_callback(transmission));
+                    return action_callback(transmission);
                 }
                 else {
-                    const new_promise = this.wait(scope, waiter_namespace, recipient_namespace, listen, test_callback, action_callback, total_count, current_count);
-                    resolve(new_promise);
+                    const new_promise = this.wait(waiter_namespace, recipient_namespace, listen, test_callback, action_callback, scope, total_count, current_count);
+                    resolve2(new_promise);
+                    return new_promise;
                 }
             };
             if (current_count > 0) {
@@ -150,16 +152,14 @@ export class BaseController extends SeparatorHandler {
                 const channel = recipient_namespace +
                     this.get_Separator("Monologue") +
                     expression_trail;
-                return this._monologue_emitter.once(channel, once_callback_function);
+                this._monologue_emitter.once(channel, once_callback_function);
             }
-        })
-            .catch((error_content) => {
-            console.error("BaseController.wait.Promise.catch:\n", error_content);
         });
     }
     wait_Some(scope, waiter_namespace, wait_set) {
-        return Promise.all(wait_set.map((wait_event) => {
-            return this.wait(scope, waiter_namespace, wait_event.Namespace, wait_event.Listen, wait_event.Test, wait_event.Call);
+        return Promise.all(wait_set
+            .map((wait_event) => {
+            return this.wait(waiter_namespace, wait_event.Namespace, wait_event.Listen, wait_event.Test, wait_event.Call, scope);
         }));
     }
 }
