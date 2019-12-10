@@ -26,5 +26,6 @@ export {
     t_channel,
     i_waitSet,
     i_talk,
-    i_response
+    i_response,
+    i_request,
 } from "./Common/t_controller";

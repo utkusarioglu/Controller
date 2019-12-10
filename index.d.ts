@@ -11,7 +11,7 @@ declare module '@utkusarioglu/controller' {
     export { M_Controller } from "@utkusarioglu/controller/Mixins/m_controller";
     export { M_ControllerEvents } from "@utkusarioglu/controller/Mixins/m_controller_events";
     export { C_Controller, C_StartupTalk, C_BootState, } from "@utkusarioglu/controller/Common/c_controller";
-    export { e_Scope, i_subscription, i_sequenceStep, i_dependency_group, i_service, i_reception, t_channel, i_waitSet, i_talk, i_response } from "@utkusarioglu/controller/Common/t_controller";
+    export { e_Scope, i_subscription, i_sequenceStep, i_dependency_group, i_service, i_reception, t_channel, i_waitSet, i_talk, i_response, i_request, } from "@utkusarioglu/controller/Common/t_controller";
 }
 
 declare module '@utkusarioglu/controller/Controller/controller' {
