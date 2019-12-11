@@ -115,7 +115,7 @@ declare module '@utkusarioglu/controller/Common/t_controller' {
         Call?: t_waitPromiseResponse<TalkRi, Return>;
     }
     export type t_transmissionContent = any;
-    export interface i_dependency_group<TalkRi, Return> {
+    export interface i_dependency_group<TalkRi, Return = i_talk<TalkRi>> {
         Scope: t_singleScope;
         Members: i_waitSet<TalkRi, Return>[];
         Call: (value: any) => Promise<any>;

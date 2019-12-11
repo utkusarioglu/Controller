@@ -14,7 +14,7 @@ export declare abstract class M_ControllerEvents {
     private _dependencies;
     private _services;
     include_Subscriptions(subscription_list: Array<i_subscription>): this;
-    include_Dependencies<TalkArgs, Return>(dependencies_list: i_dependency_group<TalkArgs, Return>[]): this;
+    include_Dependencies<TalkRi, Return>(dependencies_list: i_dependency_group<TalkRi, Return>[]): this;
     include_Receptions(reception_list: i_reception[]): this;
     include_Services(services_list: i_service[]): this;
     initialize_Controller(sequential_startup?: boolean): this;
