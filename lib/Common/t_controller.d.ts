@@ -21,15 +21,15 @@ export interface i_waitSet<TalkRi, Return = i_talk<TalkRi>> {
     Call?: t_waitPromiseResponse<TalkRi, Return>;
 }
 export declare type t_transmissionContent = any;
-export interface i_dependency_group<TalkRi, Return = i_talk<TalkRi>> {
+export interface i_dependency_group<TalkRi = t_ri_any, Return = i_talk<TalkRi>> {
     Scope: t_singleScope;
     Members: i_waitSet<TalkRi, Return>[];
     Call: (value: any) => Promise<any>;
 }
-export interface i_subscription {
+export interface i_subscription<ListenRi = t_ri> {
     Scope: t_scope;
     Namespace: t_namespace;
-    Listen: t_ri;
+    Listen: ListenRi;
     Call: (value: any) => any;
 }
 export interface i_service {
@@ -37,7 +37,7 @@ export interface i_service {
     Namespace: t_namespace;
     Listen: t_ri;
     Call: (value: any) => any;
-    Static?: boolean;
+    Static: boolean;
     Group: e_ServiceGroup;
 }
 export interface i_reception {

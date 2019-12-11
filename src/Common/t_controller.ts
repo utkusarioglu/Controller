@@ -104,7 +104,7 @@ export type t_transmissionContent = any;
 /**
  * Datatype for instructing multiple waits followed by a call
  */
-export interface i_dependency_group<TalkRi, Return = i_talk<TalkRi>> {
+export interface i_dependency_group<TalkRi = t_ri_any, Return = i_talk<TalkRi>> {
     /** 1: Local, 2 or 10: global, 3 or 11: global + local */
     Scope: t_singleScope;
     /** Dependency members to be waited*/
@@ -116,13 +116,13 @@ export interface i_dependency_group<TalkRi, Return = i_talk<TalkRi>> {
 /**
  * Datatype for instructing monitor of a channel
  */
-export interface i_subscription {
+export interface i_subscription<ListenRi = t_ri> {
     /** 1: Local, 2 or 10: global, 3 or 11: global + local */
     Scope: t_scope;
     /** The namespace that is being subscribed to*/
     Namespace: t_namespace;
     /** Resolution that is being subscribed at */
-    Listen: t_ri;
+    Listen: ListenRi;
     /** Callback function to be executed when the subscription emits*/
     Call: (value: any) => any;
 }
@@ -141,7 +141,7 @@ export interface i_service {
     /** Callback function to be executed on the response transmission*/
     Call: (value: any) => any;
     /** Whelther the service is static */
-    Static?: boolean;
+    Static: boolean;
     /** Service group */
     Group: e_ServiceGroup;
 }
