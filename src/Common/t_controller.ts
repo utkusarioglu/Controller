@@ -116,30 +116,30 @@ export interface i_dependency_group<TalkRi = t_ri_any, Return = i_talk<TalkRi>> 
 /**
  * Datatype for instructing monitor of a channel
  */
-export interface i_subscription<ListenRi = t_ri> {
+export interface i_subscription<CallRi extends t_ri_any = t_ri_any> {
     /** 1: Local, 2 or 10: global, 3 or 11: global + local */
     Scope: t_scope;
     /** The namespace that is being subscribed to*/
     Namespace: t_namespace;
     /** Resolution that is being subscribed at */
-    Listen: ListenRi;
+    Listen: t_ri;
     /** Callback function to be executed when the subscription emits*/
-    Call: (value: any) => any;
+    Call: (transmission: i_talk<CallRi>) => void;
 }
 
 /**
  * Datatype for instructing monitor of a channel followed by a call whose 
  * return is emitted to the requester
  */
-export interface i_service {
+export interface i_service<CallRi extends t_ri_any = t_ri_any> {
     /** 1: Local, 2 or 10: global, 3 or 11: global + local */
     Scope: t_scope;
     /** Namespace that is expected to respond to the request*/
     Namespace: t_namespace;
     /** Specific method that is being requested*/
-    Listen: t_ri;
-    /** Callback function to be executed on the response transmission*/
-    Call: (value: any) => any;
+    Listen: t_ri_any;
+/** Callback function to be executed on the response transmission*/
+    Call: (value: i_request<CallRi>) => any;
     /** Whelther the service is static */
     Static: boolean;
     /** Service group */
@@ -150,30 +150,33 @@ export interface i_service {
  * Datatype for announcing a listening channel to which multiple clases can independently 
  * send data towards, which will independently handled by the call function
  */
-export interface i_reception {
+export interface i_reception<
+        SubscriptionCallRI extends t_ri_any = t_ri_any,
+        AnnouncementTalkRi extends t_ri_any = t_ri_any,
+    > {
     /** 1: Local, 2 or 10: global, 3 or 11: global + local */
     Scope: t_scope;
     /** Namespace that is accepting the admissions */
     Namespace?: t_namespace;
     /** Announcement resolution */
-    Talk: t_ri;
+    Talk: AnnouncementTalkRi;
     /** Listening resolution */
-    Listen: t_ri;
+    Listen: t_ri_any;
     /** function that will be called when another node emits to the channel (namespace + . + method) */
-    Call: (value: any) => any;
+    Call: (value: i_talk<SubscriptionCallRI>) => any;
 }
 
 /**
  * Datatype for instructing emit of data to a certain channel without any 
  * following listening activity by the emitter
  */
-export interface i_announcement {
+export interface i_announcement<TalkRi extends t_ri_any = t_ri_any> {
     /** 1: Local, 2 or 10: global, 3 or 11: global + local */
     Scope: t_scope;
     /** Namespace of the announcer*/
     Namespace: t_namespace;
     /** the resolution that will be processed by the target */
-    Talk: any;
+    Talk: TalkRi;
 }
 
 export enum e_ServiceGroup {
@@ -286,9 +289,9 @@ export interface i_response<Content> extends i_transmission {
     LastDynamicTime?: t_epoch;
 }
 
-export interface i_request extends i_transmission {
+export interface i_request<TalkRi extends t_ri_any = t_ri_any> extends i_transmission {
     Group: e_ServiceGroup,
-    Talk: t_ri_any,
+    Talk: TalkRi,
     Id: t_serviceId,
     Static: boolean,
 }

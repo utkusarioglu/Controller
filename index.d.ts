@@ -27,7 +27,7 @@ declare module '@utkusarioglu/controller/Controller/controller' {
         static get_EventEmitter(): i_EventEmitter;
         get_EventEmitter(): i_EventEmitter;
         request<Content = any>(responding_namespace: t_namespace, talk: t_ri_any, scope?: t_singleScope, group?: e_ServiceGroup): Promise<i_response<Content>>;
-        respond<Content = any>(response_callback: (transmission: i_request) => Promise<Content>, is_static?: boolean, scope?: t_scope, group?: e_ServiceGroup): this;
+        respond<CallRi extends t_ri_any = t_ri_any, Content = any>(response_callback: (transmission: i_request<CallRi>) => Promise<Content>, is_static?: boolean, scope?: t_scope, group?: e_ServiceGroup): this;
         get_DialogueArchive(scope: t_singleScope): object;
         static get_AllStaticChannels(): t_namespace[];
         static get_AllStaticContent(): i_staticContentArchive;
@@ -35,9 +35,9 @@ declare module '@utkusarioglu/controller/Controller/controller' {
         static force_AllDynamicService(): void;
         announce<TalkRi extends t_ri_any>(recipient_namespace: t_namespace, talk: TalkRi, scope?: t_scope, delay?: boolean | t_epoch): this;
         get_AnnouncementArchive(scope: t_singleScope): object[];
-        subscribe<TalkRi = t_ri_any>(listen: t_ri, callback: (transmission: i_talk<TalkRi>) => void, subcribed_namespace?: t_namespace, scope?: t_scope): this;
-        wait<TalkRi = any, Return = i_talk<TalkRi>>(recipient_namespace: t_namespace, listen: t_ri, test_callback?: t_waitTestCallback<TalkRi>, action_callback?: t_waitActionCallback<TalkRi, Return>, scope?: t_singleScope, count?: number, current_count?: number): Promise<t_wait<TalkRi, Return>>;
-        wait_Some<TalkRi = any, Return = i_talk<TalkRi>>(wait_set: Array<i_waitSet<TalkRi, Return>>, scope: t_singleScope): Promise<Array<t_wait<TalkRi, Return>>>;
+        subscribe<TalkRi extends t_ri_any = t_ri_any>(listen: t_ri, callback: (transmission: i_talk<TalkRi>) => void, subcribed_namespace?: t_namespace, scope?: t_scope): this;
+        wait<TalkRi extends t_ri_any = t_ri_any, Return = i_talk<TalkRi>>(recipient_namespace: t_namespace, listen: t_ri, test_callback?: t_waitTestCallback<TalkRi>, action_callback?: t_waitActionCallback<TalkRi, Return>, scope?: t_singleScope, count?: number, current_count?: number): Promise<t_wait<TalkRi, Return>>;
+        wait_Some<TalkRi extends t_ri_any = t_ri_any, Return = i_talk<TalkRi>>(wait_set: Array<i_waitSet<TalkRi, Return>>, scope: t_singleScope): Promise<Array<t_wait<TalkRi, Return>>>;
         set_LocalNamespace(local_namespace: t_namespace): this;
         get_LocalNamespace(): t_namespace;
         get_LocalNamespaces(): t_namespace[];
@@ -64,15 +64,15 @@ declare module '@utkusarioglu/controller/Mixins/m_controller_events' {
     import { M_Namespace } from "@utkusarioglu/namespace";
     import { M_Controller } from "@utkusarioglu/controller/Mixins/m_controller";
     import { i_subscription, i_reception, i_dependency_group, i_service, t_singleScope, i_sequenceStep } from "@utkusarioglu/controller/Common/t_controller";
-    import { t_ri } from "@utkusarioglu/resolver";
+    import { t_ri, t_ri_any } from "@utkusarioglu/resolver";
     import { t_namespace } from "@utkusarioglu/namespace";
     import { t_epoch } from "@utkusarioglu/state/t_state";
     export interface M_ControllerEvents extends M_Controller, M_State, M_Namespace {
     }
     export abstract class M_ControllerEvents {
-        include_Subscriptions(subscription_list: Array<i_subscription>): this;
+        include_Subscriptions<SubscriptionCallRI extends t_ri_any = t_ri_any>(subscription_list: Array<i_subscription<SubscriptionCallRI>>): this;
         include_Dependencies<TalkRi, Return>(dependencies_list: i_dependency_group<TalkRi, Return>[]): this;
-        include_Receptions(reception_list: i_reception[]): this;
+        include_Receptions<SubscriptionCallRi extends t_ri_any = t_ri_any, AnnouncementTalkRi extends t_ri_any = t_ri_any>(reception_list: i_reception<SubscriptionCallRi, AnnouncementTalkRi>[]): this;
         include_Services(services_list: i_service[]): this;
         initialize_Controller(sequential_startup?: boolean): this;
         protected manage_ControllerSequence(sequence_steps: Array<i_sequenceStep>, scope: t_singleScope, manager_namespace: t_namespace): Promise<any>;
@@ -120,31 +120,31 @@ declare module '@utkusarioglu/controller/Common/t_controller' {
         Members: i_waitSet<TalkRi, Return>[];
         Call: (value: any) => Promise<any>;
     }
-    export interface i_subscription<ListenRi = t_ri> {
-        Scope: t_scope;
-        Namespace: t_namespace;
-        Listen: ListenRi;
-        Call: (value: any) => any;
-    }
-    export interface i_service {
+    export interface i_subscription<CallRi extends t_ri_any = t_ri_any> {
         Scope: t_scope;
         Namespace: t_namespace;
         Listen: t_ri;
-        Call: (value: any) => any;
+        Call: (transmission: i_talk<CallRi>) => void;
+    }
+    export interface i_service<CallRi extends t_ri_any = t_ri_any> {
+        Scope: t_scope;
+        Namespace: t_namespace;
+        Listen: t_ri_any;
+        Call: (value: i_request<CallRi>) => any;
         Static: boolean;
         Group: e_ServiceGroup;
     }
-    export interface i_reception {
+    export interface i_reception<SubscriptionCallRI extends t_ri_any = t_ri_any, AnnouncementTalkRi extends t_ri_any = t_ri_any> {
         Scope: t_scope;
         Namespace?: t_namespace;
-        Talk: t_ri;
-        Listen: t_ri;
-        Call: (value: any) => any;
+        Talk: AnnouncementTalkRi;
+        Listen: t_ri_any;
+        Call: (value: i_talk<SubscriptionCallRI>) => any;
     }
-    export interface i_announcement {
+    export interface i_announcement<TalkRi extends t_ri_any = t_ri_any> {
         Scope: t_scope;
         Namespace: t_namespace;
-        Talk: any;
+        Talk: TalkRi;
     }
     export enum e_ServiceGroup {
         Standard = 0
@@ -186,9 +186,9 @@ declare module '@utkusarioglu/controller/Common/t_controller' {
         Static: boolean;
         LastDynamicTime?: t_epoch;
     }
-    export interface i_request extends i_transmission {
+    export interface i_request<TalkRi extends t_ri_any = t_ri_any> extends i_transmission {
         Group: e_ServiceGroup;
-        Talk: t_ri_any;
+        Talk: TalkRi;
         Id: t_serviceId;
         Static: boolean;
     }
@@ -250,7 +250,7 @@ declare module '@utkusarioglu/controller/BaseController/base_controller' {
     export class BaseController extends SeparatorHandler {
         constructor(controller_scope: t_singleScope, event_emitter: any);
         request<Content>(sender_namespace: t_namespace, recipient_namespace: t_namespace, talk: t_ri_any, scope: e_Scope, group: e_ServiceGroup): Promise<i_response<Content>>;
-        respond<Content>(responder_namespace: t_namespace, response_callback: (transmission: i_request) => Promise<Content>, scope: e_Scope, group: e_ServiceGroup): void;
+        respond<CallRi extends t_ri_any = t_ri_any, Content = any>(responder_namespace: t_namespace, response_callback: (transmission: i_request<CallRi>) => Promise<Content>, scope: e_Scope, group: e_ServiceGroup): void;
         get_DialogueArchive(): Array<i_dialogueArchiveItem>;
         publicget_ServedChannels(): any[];
         announce<TalkRi extends t_ri_any>(sender_namespace: t_namespace, recipient_namespace: t_namespace, talk: TalkRi, scope: t_singleScope, delay?: boolean | t_epoch): void;

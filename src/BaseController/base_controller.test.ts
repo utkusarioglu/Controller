@@ -250,9 +250,12 @@ test("Basecontroller.service", () => {
     const responder_namespace = "responder/namespace";
     const sender_namespace = "sender/namespace";
 
-    base_controller.respond<i_request>(
+    base_controller.respond<
+        t_ri<[string]>,
+        i_request<t_ri<[string]>>
+    >(
         responder_namespace,
-        (transmission: i_request) => {
+        (transmission) => {
             return new Promise((resolve) => {
                 resolve(transmission);
             });

@@ -26,31 +26,31 @@ export interface i_dependency_group<TalkRi = t_ri_any, Return = i_talk<TalkRi>> 
     Members: i_waitSet<TalkRi, Return>[];
     Call: (value: any) => Promise<any>;
 }
-export interface i_subscription<ListenRi = t_ri> {
-    Scope: t_scope;
-    Namespace: t_namespace;
-    Listen: ListenRi;
-    Call: (value: any) => any;
-}
-export interface i_service {
+export interface i_subscription<CallRi extends t_ri_any = t_ri_any> {
     Scope: t_scope;
     Namespace: t_namespace;
     Listen: t_ri;
-    Call: (value: any) => any;
+    Call: (transmission: i_talk<CallRi>) => void;
+}
+export interface i_service<CallRi extends t_ri_any = t_ri_any> {
+    Scope: t_scope;
+    Namespace: t_namespace;
+    Listen: t_ri_any;
+    Call: (value: i_request<CallRi>) => any;
     Static: boolean;
     Group: e_ServiceGroup;
 }
-export interface i_reception {
+export interface i_reception<SubscriptionCallRI extends t_ri_any = t_ri_any, AnnouncementTalkRi extends t_ri_any = t_ri_any> {
     Scope: t_scope;
     Namespace?: t_namespace;
-    Talk: t_ri;
-    Listen: t_ri;
-    Call: (value: any) => any;
+    Talk: AnnouncementTalkRi;
+    Listen: t_ri_any;
+    Call: (value: i_talk<SubscriptionCallRI>) => any;
 }
-export interface i_announcement {
+export interface i_announcement<TalkRi extends t_ri_any = t_ri_any> {
     Scope: t_scope;
     Namespace: t_namespace;
-    Talk: any;
+    Talk: TalkRi;
 }
 export declare enum e_ServiceGroup {
     Standard = 0
@@ -92,9 +92,9 @@ export interface i_response<Content> extends i_transmission {
     Static: boolean;
     LastDynamicTime?: t_epoch;
 }
-export interface i_request extends i_transmission {
+export interface i_request<TalkRi extends t_ri_any = t_ri_any> extends i_transmission {
     Group: e_ServiceGroup;
-    Talk: t_ri_any;
+    Talk: TalkRi;
     Id: t_serviceId;
     Static: boolean;
 }

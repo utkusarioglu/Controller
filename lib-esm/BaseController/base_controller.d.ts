@@ -12,7 +12,7 @@ export declare class BaseController extends SeparatorHandler {
     private _controller_scope;
     constructor(controller_scope: t_singleScope, event_emitter: any);
     request<Content>(sender_namespace: t_namespace, recipient_namespace: t_namespace, talk: t_ri_any, scope: e_Scope, group: e_ServiceGroup): Promise<i_response<Content>>;
-    respond<Content>(responder_namespace: t_namespace, response_callback: (transmission: i_request) => Promise<Content>, scope: e_Scope, group: e_ServiceGroup): void;
+    respond<CallRi extends t_ri_any = t_ri_any, Content = any>(responder_namespace: t_namespace, response_callback: (transmission: i_request<CallRi>) => Promise<Content>, scope: e_Scope, group: e_ServiceGroup): void;
     private archive_Dialogue;
     private static create_RandomServiceId;
     get_DialogueArchive(): Array<i_dialogueArchiveItem>;

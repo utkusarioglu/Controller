@@ -99,7 +99,8 @@ export class M_ControllerEvents {
     register_Announcements() {
         if (this._announcements) {
             this._announcements.forEach((announcement) => {
-                this.get_Controller().announce(announcement.Namespace, announcement.Talk, announcement.Scope);
+                this.get_Controller()
+                    .announce(announcement.Namespace, announcement.Talk, announcement.Scope);
             });
         }
     }
@@ -126,7 +127,8 @@ export class M_ControllerEvents {
     }
     produce_PromiseStackMember(scope, manager_namespace, step) {
         return new Promise((resolve_step_promise) => {
-            return this.get_Controller().wait(manager_namespace, step.Listen, (transmission) => {
+            return this.get_Controller()
+                .wait(manager_namespace, step.Listen, (transmission) => {
                 step.List = step.List.filter((value) => {
                     return value !== transmission.Sender;
                 });

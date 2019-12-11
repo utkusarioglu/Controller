@@ -109,7 +109,7 @@ test("Controller.service.global", () => {
     const service_controller = new Controller(service_namespace);
     const response_data = "response_data";
 
-    service_controller.respond<string>(
+    service_controller.respond<t_ri<[string]>,string>(
         (transmission) => {
             return Promise.resolve(response_data);
         },

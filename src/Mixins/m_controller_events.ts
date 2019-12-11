@@ -42,6 +42,7 @@ import {
 import {
     t_ri,
     t_ri0,
+    t_ri_any,
 } from "@utkusarioglu/resolver";
 import { t_namespace } from "@utkusarioglu/namespace";
 import { t_epoch } from "@utkusarioglu/state/t_state";
@@ -87,9 +88,10 @@ export abstract class M_ControllerEvents {
 /*
  *	LOGS
  */
-    private _subscriptions!: Array<i_subscription>;
-    private _announcements!: Array<i_announcement>;
-    private _receptions!: Array<i_reception>; // this isn't emitted, it's only for archiving
+    // TODO: any here is not precise enough
+    private _subscriptions!: Array<i_subscription<any>>;
+    private _announcements!: Array<i_announcement<any>>;
+    private _receptions!: Array<i_reception<any, any>>; // this isn't emitted, it's only for archiving
     private _dependencies!: Array<i_dependency_group<any, any>>;
     private _services!: Array<i_service>;
 
@@ -118,8 +120,8 @@ export abstract class M_ControllerEvents {
      * Class: M_ControllerEvents
      * Service: Controller
      */
-    public include_Subscriptions(
-        subscription_list: Array<i_subscription>,
+    public include_Subscriptions<SubscriptionCallRI extends t_ri_any = t_ri_any>(
+        subscription_list: Array<i_subscription<SubscriptionCallRI>>,
     ): this {
 
         if (!this._subscriptions) {
@@ -162,7 +164,10 @@ export abstract class M_ControllerEvents {
      * Class: M_ControllerEvents
      * Service: Controller
      */
-    public include_Receptions(reception_list: i_reception[]): this {
+    public include_Receptions<
+        SubscriptionCallRi extends t_ri_any = t_ri_any,
+        AnnouncementTalkRi extends t_ri_any = t_ri_any,
+    >(reception_list: i_reception<SubscriptionCallRi, AnnouncementTalkRi>[]): this {
 
         if (!this._receptions) {
             this._receptions = [];
@@ -178,20 +183,20 @@ export abstract class M_ControllerEvents {
 
         this._receptions.push(...reception_list);
 
-        reception_list.forEach((reception: i_reception) => {
+        reception_list.forEach((reception) => {
 
             this._subscriptions.push({
                 Scope: reception.Scope,
                 Namespace: reception.Namespace || this.get_GlobalNamespace(),
                 Listen: reception.Listen,
                 Call: reception.Call,
-            } as i_subscription);
+            } as i_subscription<SubscriptionCallRi>);
 
             this._announcements.push({
                 Scope: reception.Scope,
                 Namespace: reception.Namespace,
                 Talk: reception.Talk,
-            } as i_announcement);
+            } as i_announcement<AnnouncementTalkRi>);
         });
 
         return this;
@@ -312,9 +317,11 @@ export abstract class M_ControllerEvents {
      * Class: M_ControllerEvents
      * Service: Controller
      */
-    private register_Subscriptions(): void {
+    private register_Subscriptions<
+        SubscriptionCallRi extends t_ri_any = t_ri_any
+    >(): void {
         if (this._subscriptions) {
-            this._subscriptions.forEach((subscription: i_subscription) => {
+            this._subscriptions.forEach((subscription) => {
                 this.get_Controller().subscribe(
                     subscription.Listen,
                     subscription.Call,
@@ -364,14 +371,17 @@ export abstract class M_ControllerEvents {
      * Class: M_ControllerEvents
      * Service: Controller
      */
-    private register_Announcements(): void {
+    private register_Announcements<
+        TalkRi extends t_ri_any = t_ri_any
+    >(): void {
         if (this._announcements) {
-            this._announcements.forEach((announcement: i_announcement) => {
-                this.get_Controller().announce(
-                    announcement.Namespace,
-                    announcement.Talk,
-                    announcement.Scope,
-                );
+            this._announcements.forEach((announcement: i_announcement<TalkRi>) => {
+                this.get_Controller()
+                    .announce(
+                        announcement.Namespace,
+                        announcement.Talk,
+                        announcement.Scope,
+                    );
             });
         }
     }
@@ -470,21 +480,22 @@ export abstract class M_ControllerEvents {
         step: i_sequenceStep,
     ): Promise<t_ri> {
         return new Promise((resolve_step_promise) => {
-            return this.get_Controller().wait<string, any>(
-                manager_namespace,
-                step.Listen,
-                (transmission) => {
+            return this.get_Controller()
+                .wait<t_ri<[string]>, any>(
+                    manager_namespace,
+                    step.Listen,
+                    (transmission) => {
 
-                    step.List = step.List.filter((value: string) => {
-                        return value !== transmission.Sender;
-                    });
+                        step.List = step.List.filter((value: string) => {
+                            return value !== transmission.Sender;
+                        });
 
-                    return step.List.length < 1;
+                        return step.List.length < 1;
 
-                },
-                () => {
-                    return resolve_step_promise(step.Listen);
-                },
+                    },
+                    () => {
+                        return resolve_step_promise(step.Listen);
+                    },
                 scope,
             ); // return this.get_Controller().wait
 

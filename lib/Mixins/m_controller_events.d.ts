@@ -2,7 +2,7 @@ import { M_State } from "@utkusarioglu/state";
 import { M_Namespace } from "@utkusarioglu/namespace";
 import { M_Controller } from "./m_controller";
 import { i_subscription, i_reception, i_dependency_group, i_service, t_singleScope, i_sequenceStep } from "../Common/t_controller";
-import { t_ri } from "@utkusarioglu/resolver";
+import { t_ri, t_ri_any } from "@utkusarioglu/resolver";
 import { t_namespace } from "@utkusarioglu/namespace";
 import { t_epoch } from "@utkusarioglu/state/t_state";
 export interface M_ControllerEvents extends M_Controller, M_State, M_Namespace {
@@ -13,9 +13,9 @@ export declare abstract class M_ControllerEvents {
     private _receptions;
     private _dependencies;
     private _services;
-    include_Subscriptions(subscription_list: Array<i_subscription>): this;
+    include_Subscriptions<SubscriptionCallRI extends t_ri_any = t_ri_any>(subscription_list: Array<i_subscription<SubscriptionCallRI>>): this;
     include_Dependencies<TalkRi, Return>(dependencies_list: i_dependency_group<TalkRi, Return>[]): this;
-    include_Receptions(reception_list: i_reception[]): this;
+    include_Receptions<SubscriptionCallRi extends t_ri_any = t_ri_any, AnnouncementTalkRi extends t_ri_any = t_ri_any>(reception_list: i_reception<SubscriptionCallRi, AnnouncementTalkRi>[]): this;
     include_Services(services_list: i_service[]): this;
     initialize_Controller(sequential_startup?: boolean): this;
     private register_Subscriptions;

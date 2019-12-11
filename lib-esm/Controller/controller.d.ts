@@ -21,7 +21,7 @@ export declare class Controller extends SeparatorHandler {
     get_EventEmitter(): i_EventEmitter;
     request<Content = any>(responding_namespace: t_namespace, talk: t_ri_any, scope?: t_singleScope, group?: e_ServiceGroup): Promise<i_response<Content>>;
     private request_DynamicTransmission;
-    respond<Content = any>(response_callback: (transmission: i_request) => Promise<Content>, is_static?: boolean, scope?: t_scope, group?: e_ServiceGroup): this;
+    respond<CallRi extends t_ri_any = t_ri_any, Content = any>(response_callback: (transmission: i_request<CallRi>) => Promise<Content>, is_static?: boolean, scope?: t_scope, group?: e_ServiceGroup): this;
     get_DialogueArchive(scope: t_singleScope): object;
     private static set_PromisifiedStaticContent;
     static get_AllStaticChannels(): t_namespace[];
@@ -31,9 +31,9 @@ export declare class Controller extends SeparatorHandler {
     announce<TalkRi extends t_ri_any>(recipient_namespace: t_namespace, talk: TalkRi, scope?: t_scope, delay?: boolean | t_epoch): this;
     private static is_StaticResponder;
     get_AnnouncementArchive(scope: t_singleScope): object[];
-    subscribe<TalkRi = t_ri_any>(listen: t_ri, callback: (transmission: i_talk<TalkRi>) => void, subcribed_namespace?: t_namespace, scope?: t_scope): this;
-    wait<TalkRi = any, Return = i_talk<TalkRi>>(recipient_namespace: t_namespace, listen: t_ri, test_callback?: t_waitTestCallback<TalkRi>, action_callback?: t_waitActionCallback<TalkRi, Return>, scope?: t_singleScope, count?: number, current_count?: number): Promise<t_wait<TalkRi, Return>>;
-    wait_Some<TalkRi = any, Return = i_talk<TalkRi>>(wait_set: Array<i_waitSet<TalkRi, Return>>, scope: t_singleScope): Promise<Array<t_wait<TalkRi, Return>>>;
+    subscribe<TalkRi extends t_ri_any = t_ri_any>(listen: t_ri, callback: (transmission: i_talk<TalkRi>) => void, subcribed_namespace?: t_namespace, scope?: t_scope): this;
+    wait<TalkRi extends t_ri_any = t_ri_any, Return = i_talk<TalkRi>>(recipient_namespace: t_namespace, listen: t_ri, test_callback?: t_waitTestCallback<TalkRi>, action_callback?: t_waitActionCallback<TalkRi, Return>, scope?: t_singleScope, count?: number, current_count?: number): Promise<t_wait<TalkRi, Return>>;
+    wait_Some<TalkRi extends t_ri_any = t_ri_any, Return = i_talk<TalkRi>>(wait_set: Array<i_waitSet<TalkRi, Return>>, scope: t_singleScope): Promise<Array<t_wait<TalkRi, Return>>>;
     set_LocalNamespace(local_namespace: t_namespace): this;
     get_LocalNamespace(): t_namespace;
     get_LocalNamespaces(): t_namespace[];

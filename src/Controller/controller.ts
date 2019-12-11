@@ -340,8 +340,11 @@ export class Controller extends SeparatorHandler {
      * Class: Controller
      * Service: Controller
      */
-    public respond<Content = any>(
-        response_callback: (transmission: i_request) => Promise<Content>,
+    public respond<
+        CallRi extends t_ri_any = t_ri_any,
+        Content = any
+    >(
+        response_callback: (transmission: i_request<CallRi>) => Promise<Content>,
         is_static: boolean = true,
         scope: t_scope = e_Scope.Global,
         group: e_ServiceGroup = e_ServiceGroup.Standard,
@@ -356,7 +359,7 @@ export class Controller extends SeparatorHandler {
         }
 
         this.get_Scopes(scope).forEach((active_scope: BaseController) => {
-            active_scope.respond(
+            active_scope.respond<CallRi, Content>(
                 this._controller_global_namespace,
                 response_callback,
                 scope,
@@ -588,7 +591,7 @@ export class Controller extends SeparatorHandler {
      * Class: Controller
      * Service: Controller
      */
-    public subscribe<TalkRi = t_ri_any>(
+    public subscribe<TalkRi extends t_ri_any = t_ri_any>(
         listen: t_ri,
         callback: (transmission: i_talk<TalkRi>) => void,
         subcribed_namespace: t_namespace = this.get_GlobalNamespace(),
@@ -629,7 +632,7 @@ export class Controller extends SeparatorHandler {
      * Service: Controller
      */
     public wait<
-        TalkRi = any,
+        TalkRi extends t_ri_any = t_ri_any,
         Return = i_talk<TalkRi>
     >(
         recipient_namespace: t_namespace,
@@ -666,7 +669,7 @@ export class Controller extends SeparatorHandler {
      * Service: Controller
      */
     public wait_Some<
-        TalkRi = any,
+        TalkRi extends t_ri_any = t_ri_any,
         Return = i_talk<TalkRi>
     >(
         wait_set: Array<i_waitSet<TalkRi, Return>>,

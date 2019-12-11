@@ -241,9 +241,12 @@ export class BaseController extends SeparatorHandler {
      * Class: Basecontroller
      * Service: Controller
      */
-    public respond<Content>(
+    public respond<
+        CallRi extends t_ri_any = t_ri_any,
+        Content = any
+    >(
         responder_namespace: t_namespace,
-        response_callback: (transmission: i_request) => Promise<Content>,
+        response_callback: (transmission: i_request<CallRi>) => Promise<Content>,
         scope: e_Scope,
         group: e_ServiceGroup,
     ): void {
@@ -254,7 +257,7 @@ export class BaseController extends SeparatorHandler {
             group;
 
         this._dialogue_emitter.on(listen_channel,
-            (transmission: i_request) => {
+            (transmission: i_request<CallRi>) => {
 
                 response_callback(transmission)
                     .then((requested_return_content: any) => { 
