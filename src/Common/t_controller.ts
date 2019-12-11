@@ -139,7 +139,7 @@ export interface i_service<CallRi extends t_ri_any = t_ri_any> {
     /** Specific method that is being requested*/
     Listen: t_ri_any;
 /** Callback function to be executed on the response transmission*/
-    Call: (value: i_request<CallRi>) => any;
+    Call: (transmission: i_request<CallRi>) => any;
     /** Whelther the service is static */
     Static: boolean;
     /** Service group */
@@ -163,7 +163,7 @@ export interface i_reception<
     /** Listening resolution */
     Listen: t_ri_any;
     /** function that will be called when another node emits to the channel (namespace + . + method) */
-    Call: (value: i_talk<SubscriptionCallRI>) => any;
+    Call: (transmission: i_talk<SubscriptionCallRI>) => any;
 }
 
 /**

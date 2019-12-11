@@ -93,7 +93,7 @@ export abstract class M_ControllerEvents {
     private _announcements!: Array<i_announcement<any>>;
     private _receptions!: Array<i_reception<any, any>>; // this isn't emitted, it's only for archiving
     private _dependencies!: Array<i_dependency_group<any, any>>;
-    private _services!: Array<i_service>;
+    private _services!: Array<i_service<any>>;
 
 
 /*
@@ -212,7 +212,9 @@ export abstract class M_ControllerEvents {
      * Class: M_ControllerEvents
      * Service: Controller
      */
-    public include_Services(services_list: i_service[]): this {
+    public include_Services<
+        CallRi extends t_ri_any = t_ri_any
+    >(services_list: i_service<CallRi>[]): this {
 
         if (!this._services) {
             this._services = [];

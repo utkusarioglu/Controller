@@ -36,7 +36,7 @@ export interface i_service<CallRi extends t_ri_any = t_ri_any> {
     Scope: t_scope;
     Namespace: t_namespace;
     Listen: t_ri_any;
-    Call: (value: i_request<CallRi>) => any;
+    Call: (transmission: i_request<CallRi>) => any;
     Static: boolean;
     Group: e_ServiceGroup;
 }
@@ -45,7 +45,7 @@ export interface i_reception<SubscriptionCallRI extends t_ri_any = t_ri_any, Ann
     Namespace?: t_namespace;
     Talk: AnnouncementTalkRi;
     Listen: t_ri_any;
-    Call: (value: i_talk<SubscriptionCallRI>) => any;
+    Call: (transmission: i_talk<SubscriptionCallRI>) => any;
 }
 export interface i_announcement<TalkRi extends t_ri_any = t_ri_any> {
     Scope: t_scope;

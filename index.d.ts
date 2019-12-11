@@ -73,7 +73,7 @@ declare module '@utkusarioglu/controller/Mixins/m_controller_events' {
         include_Subscriptions<SubscriptionCallRI extends t_ri_any = t_ri_any>(subscription_list: Array<i_subscription<SubscriptionCallRI>>): this;
         include_Dependencies<TalkRi, Return>(dependencies_list: i_dependency_group<TalkRi, Return>[]): this;
         include_Receptions<SubscriptionCallRi extends t_ri_any = t_ri_any, AnnouncementTalkRi extends t_ri_any = t_ri_any>(reception_list: i_reception<SubscriptionCallRi, AnnouncementTalkRi>[]): this;
-        include_Services(services_list: i_service[]): this;
+        include_Services<CallRi extends t_ri_any = t_ri_any>(services_list: i_service<CallRi>[]): this;
         initialize_Controller(sequential_startup?: boolean): this;
         protected manage_ControllerSequence(sequence_steps: Array<i_sequenceStep>, scope: t_singleScope, manager_namespace: t_namespace): Promise<any>;
         produce_PromiseStackMember(scope: t_singleScope, manager_namespace: t_namespace, step: i_sequenceStep): Promise<t_ri>;
@@ -130,7 +130,7 @@ declare module '@utkusarioglu/controller/Common/t_controller' {
         Scope: t_scope;
         Namespace: t_namespace;
         Listen: t_ri_any;
-        Call: (value: i_request<CallRi>) => any;
+        Call: (transmission: i_request<CallRi>) => any;
         Static: boolean;
         Group: e_ServiceGroup;
     }
@@ -139,7 +139,7 @@ declare module '@utkusarioglu/controller/Common/t_controller' {
         Namespace?: t_namespace;
         Talk: AnnouncementTalkRi;
         Listen: t_ri_any;
-        Call: (value: i_talk<SubscriptionCallRI>) => any;
+        Call: (transmission: i_talk<SubscriptionCallRI>) => any;
     }
     export interface i_announcement<TalkRi extends t_ri_any = t_ri_any> {
         Scope: t_scope;
