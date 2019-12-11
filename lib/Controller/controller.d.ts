@@ -1,6 +1,6 @@
 import { SeparatorHandler } from "../Common/separator_handler";
 import { t_ri } from "@utkusarioglu/resolver";
-import { t_scope, t_singleScope, i_waitSet, e_ServiceGroup, i_staticContentArchive, i_localControllerStack, t_epoch, i_talk, i_request, i_response, i_EventEmitter, t_waitActionCallback, t_waitTestCallback, t_wait } from "../Common/t_controller";
+import { t_scope, t_singleScope, i_waitSet, e_ServiceGroup, i_staticContentArchive, i_localControllerStack, t_epoch, i_talk, i_response, i_EventEmitter, t_waitActionCallback, t_waitTestCallback, t_wait, t_serviceCallback } from "../Common/t_controller";
 import { t_namespace } from "@utkusarioglu/namespace";
 import { t_ri_any } from "@utkusarioglu/resolver/Common/t_resolver";
 export declare class Controller extends SeparatorHandler {
@@ -21,7 +21,7 @@ export declare class Controller extends SeparatorHandler {
     get_EventEmitter(): i_EventEmitter;
     request<Content = any>(responding_namespace: t_namespace, talk: t_ri_any, scope?: t_singleScope, group?: e_ServiceGroup): Promise<i_response<Content>>;
     private request_DynamicTransmission;
-    respond<CallRi extends t_ri_any = t_ri_any, Content = any>(response_callback: (transmission: i_request<CallRi>) => Promise<Content>, is_static?: boolean, scope?: t_scope, group?: e_ServiceGroup): this;
+    respond<CallRi extends t_ri_any = t_ri_any, Content = any>(response_callback: t_serviceCallback<CallRi, Content>, is_static?: boolean, scope?: t_scope, group?: e_ServiceGroup): this;
     get_DialogueArchive(scope: t_singleScope): object;
     private static set_PromisifiedStaticContent;
     static get_AllStaticChannels(): t_namespace[];

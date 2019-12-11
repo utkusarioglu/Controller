@@ -14,14 +14,14 @@ export interface i_error {
 }
 export declare type t_channel = string;
 export declare type t_serviceId = string;
-export interface i_waitSet<TalkRi, Return = i_talk<TalkRi>> {
+export interface i_waitSet<TalkRi extends t_ri_any = t_ri_any, Return = i_talk<TalkRi>> {
     Namespace: t_namespace;
     Listen: t_ri;
     Test?: t_waitTestCallback<TalkRi>;
     Call?: t_waitPromiseResponse<TalkRi, Return>;
 }
 export declare type t_transmissionContent = any;
-export interface i_dependency_group<TalkRi = t_ri_any, Return = i_talk<TalkRi>> {
+export interface i_dependency_group<TalkRi extends t_ri_any = t_ri_any, Return = i_talk<TalkRi>> {
     Scope: t_singleScope;
     Members: i_waitSet<TalkRi, Return>[];
     Call: (value: any) => Promise<any>;
@@ -32,12 +32,13 @@ export interface i_subscription<CallRi extends t_ri_any = t_ri_any> {
     Listen: t_ri;
     Call: (transmission: i_talk<CallRi>) => void;
 }
-export interface i_service<CallRi extends t_ri_any = t_ri_any> {
+export interface i_service<CallRi extends t_ri_any = t_ri_any, ReturnContent = any> {
     Scope: t_scope;
-    Call: (transmission: i_request<CallRi>) => any;
+    Call: t_serviceCallback<CallRi, ReturnContent>;
     Static?: boolean;
     Group?: e_ServiceGroup;
 }
+export declare type t_serviceCallback<CallRi extends t_ri_any = t_ri_any, Content = any> = (transmission: i_request<CallRi>) => Promise<Content>;
 export interface i_reception<SubscriptionCallRI extends t_ri_any = t_ri_any, AnnouncementTalkRi extends t_ri_any = t_ri_any> {
     Scope: t_scope;
     Namespace?: t_namespace;
@@ -79,7 +80,7 @@ interface i_transmission {
     Time: t_epoch;
     Scope: e_Scope;
 }
-export interface i_talk<TalkRi> extends i_transmission {
+export interface i_talk<TalkRi extends t_ri_any = t_ri_any> extends i_transmission {
     Talk: TalkRi;
 }
 export interface i_response<Content = any> extends i_transmission {
@@ -127,8 +128,8 @@ export interface i_announcementArchiveItem {
     Content: any;
     Time: t_epoch;
 }
-export declare type t_waitActionCallback<TalkRi, Return = i_talk<TalkRi>> = (transmission: i_talk<TalkRi>) => i_talk<TalkRi> | Return;
-export declare type t_waitTestCallback<TalkRi> = (transmission: i_talk<TalkRi>) => boolean;
-export declare type t_waitPromiseResponse<TalkRi, Return = i_talk<TalkRi>> = (reason: t_wait<TalkRi, Return> | Promise<t_wait<TalkRi, Return>>) => t_wait<TalkRi, Return>;
-export declare type t_wait<TalkRi, Return> = i_talk<TalkRi> | Return;
+export declare type t_waitActionCallback<TalkRi extends t_ri_any = t_ri_any, Return = i_talk<TalkRi>> = (transmission: i_talk<TalkRi>) => i_talk<TalkRi> | Return;
+export declare type t_waitTestCallback<TalkRi extends t_ri_any = t_ri_any> = (transmission: i_talk<TalkRi>) => boolean;
+export declare type t_waitPromiseResponse<TalkRi extends t_ri_any = t_ri_any, Return = i_talk<TalkRi>> = (reason: t_wait<TalkRi, Return> | Promise<t_wait<TalkRi, Return>>) => t_wait<TalkRi, Return>;
+export declare type t_wait<TalkRi extends t_ri_any = t_ri_any, Return = any> = i_talk<TalkRi> | Return;
 export {};

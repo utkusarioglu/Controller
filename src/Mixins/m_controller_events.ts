@@ -38,6 +38,7 @@ import {
     e_ServiceGroup,
     t_singleScope,
     i_sequenceStep,
+    i_talk,
 } from "../Common/t_controller";
 import {
     t_ri,
@@ -120,7 +121,9 @@ export abstract class M_ControllerEvents {
      * Class: M_ControllerEvents
      * Service: Controller
      */
-    public include_Subscriptions<SubscriptionCallRI extends t_ri_any = t_ri_any>(
+    public include_Subscriptions<
+        SubscriptionCallRI extends t_ri_any = t_ri_any
+    >(
         subscription_list: Array<i_subscription<SubscriptionCallRI>>,
     ): this {
 
@@ -142,7 +145,10 @@ export abstract class M_ControllerEvents {
      * Class: M_ControllerEvents
      * Service: Controller
      */
-    public include_Dependencies<TalkRi, Return>(
+    public include_Dependencies<
+        TalkRi extends t_ri_any = t_ri_any,
+        Return extends i_talk = i_talk<TalkRi>,
+    >(
         dependencies_list: i_dependency_group<TalkRi, Return>[],
     ): this {
 

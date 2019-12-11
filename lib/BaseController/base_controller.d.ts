@@ -20,7 +20,7 @@ export declare class BaseController extends SeparatorHandler {
     announce<TalkRi extends t_ri_any>(sender_namespace: t_namespace, recipient_namespace: t_namespace, talk: TalkRi, scope: t_singleScope, delay?: boolean | t_epoch): void;
     get_AnnouncementArchive(): Array<i_announcementArchiveItem>;
     private archive_Announcement;
-    subscribe<TalkRi>(listen: t_ri, callback: (transmission: i_talk<TalkRi>) => void, subcribed_namespace: t_namespace, scope: t_singleScope): void;
-    wait<TalkRi, Return>(waiter_namespace: t_namespace, recipient_namespace: t_namespace, listen: t_ri, test_callback: t_waitTestCallback<TalkRi> | undefined, action_callback: t_waitActionCallback<TalkRi, Return> | undefined, scope: t_singleScope, total_count?: number, current_count?: number): Promise<t_wait<TalkRi, Return>>;
-    wait_Some<TalkRi, Return>(scope: t_singleScope, waiter_namespace: t_namespace, wait_set: Array<i_waitSet<TalkRi, Return>>): Promise<Array<t_wait<TalkRi, Return>>>;
+    subscribe<TalkRi extends t_ri_any = t_ri_any>(listen: t_ri, callback: (transmission: i_talk<TalkRi>) => void, subcribed_namespace: t_namespace, scope: t_singleScope): void;
+    wait<TalkRi extends t_ri_any = t_ri_any, Return = any>(waiter_namespace: t_namespace, recipient_namespace: t_namespace, listen: t_ri, test_callback: t_waitTestCallback<TalkRi> | undefined, action_callback: t_waitActionCallback<TalkRi, Return> | undefined, scope: t_singleScope, total_count?: number, current_count?: number): Promise<t_wait<TalkRi, Return>>;
+    wait_Some<TalkRi extends t_ri_any = t_ri_any, Return = any>(scope: t_singleScope, waiter_namespace: t_namespace, wait_set: Array<i_waitSet<TalkRi, Return>>): Promise<Array<t_wait<TalkRi, Return>>>;
 }

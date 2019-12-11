@@ -100,7 +100,7 @@ test("BaseController.subscribe&announce.Local", () => {
     const base_controller = new BaseController(e_Scope.Local, ActiveEmitter);
 
     const subscription = new Promise((resolve, reject) => {
-        base_controller.subscribe<unknown>(
+        base_controller.subscribe(
             C_BootState.ClassReady,
             (transmission) => {
                 resolve(transmission.Talk);
@@ -131,7 +131,7 @@ test("BaseController.wait", () => {
     let announcement_count: number = 0;
 
     const wait_promise = new Promise((resolve) => {
-        base_controller.wait<typeof test_value, void>(
+        base_controller.wait<t_ri<[typeof test_value]>, void>(
             "waiting/for/emit",
             declaration_namespace,
             C_BootState.ClassReady,
@@ -186,7 +186,10 @@ test("BaseController.wait_Some", () => {
     let announcement_count: number = 0;
 
 
-    const wait_some = base_controller.wait_Some<string, i_talk<string>>(
+    const wait_some = base_controller.wait_Some<
+        t_ri<[string]>,
+        i_talk<t_ri<[string]>>
+    >(
         e_Scope.Global,
         "waiter/namespace",
         [

@@ -45,6 +45,7 @@ import {
     t_waitActionCallback,
     t_waitTestCallback,
     t_wait,
+    t_serviceCallback,
 } from "../Common/t_controller";
 import { i_map } from "@utkusarioglu/state/t_state"; // This should be removed
 import { t_namespace } from "@utkusarioglu/namespace";
@@ -344,7 +345,7 @@ export class Controller extends SeparatorHandler {
         CallRi extends t_ri_any = t_ri_any,
         Content = any
     >(
-        response_callback: (transmission: i_request<CallRi>) => Promise<Content>,
+        response_callback: t_serviceCallback<CallRi, Content>,
         is_static: boolean = true,
         scope: t_scope = e_Scope.Global,
         group: e_ServiceGroup = e_ServiceGroup.Standard,

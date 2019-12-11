@@ -505,7 +505,7 @@ export class BaseController extends SeparatorHandler {
      * Class: Basecontroller
      * Service: Controller
      */
-    public subscribe<TalkRi>(
+    public subscribe<TalkRi extends t_ri_any = t_ri_any>(
         listen: t_ri,
         callback: (transmission: i_talk<TalkRi>) => void,
         subcribed_namespace: t_namespace,
@@ -548,7 +548,10 @@ export class BaseController extends SeparatorHandler {
      * Class: Basecontroller
      * Service: Controller
      */
-    public wait<TalkRi, Return>(
+    public wait<
+        TalkRi extends t_ri_any = t_ri_any,
+        Return = any
+    >(
         waiter_namespace: t_namespace,
         recipient_namespace: t_namespace,
         listen: t_ri,
@@ -617,7 +620,10 @@ export class BaseController extends SeparatorHandler {
      * Class: Basecontroller
      * Service: Controller
      */
-    public wait_Some<TalkRi, Return>(
+    public wait_Some<
+        TalkRi extends t_ri_any = t_ri_any,
+        Return = any
+    >(
         scope: t_singleScope,
         waiter_namespace: t_namespace,
         wait_set: Array<i_waitSet<TalkRi, Return>>,
