@@ -219,8 +219,9 @@ export abstract class M_ControllerEvents {
      * Service: Controller
      */
     public include_Services<
-        CallRi extends t_ri_any = t_ri_any
-    >(services_list: i_service<CallRi>[]): this {
+        CallRi extends t_ri_any = t_ri_any,
+        CallReturn = any,
+    >(services_list: i_service<CallRi, CallReturn>[]): this {
 
         if (!this._services) {
             this._services = [];

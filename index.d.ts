@@ -73,7 +73,7 @@ declare module '@utkusarioglu/controller/Mixins/m_controller_events' {
         include_Subscriptions<SubscriptionCallRI extends t_ri_any = t_ri_any>(subscription_list: Array<i_subscription<SubscriptionCallRI>>): this;
         include_Dependencies<TalkRi extends t_ri_any = t_ri_any, Return extends i_talk = i_talk<TalkRi>>(dependencies_list: i_dependency_group<TalkRi, Return>[]): this;
         include_Receptions<SubscriptionCallRi extends t_ri_any = t_ri_any, AnnouncementTalkRi extends t_ri_any = t_ri_any>(reception_list: i_reception<SubscriptionCallRi, AnnouncementTalkRi>[]): this;
-        include_Services<CallRi extends t_ri_any = t_ri_any>(services_list: i_service<CallRi>[]): this;
+        include_Services<CallRi extends t_ri_any = t_ri_any, CallReturn = any>(services_list: i_service<CallRi, CallReturn>[]): this;
         initialize_Controller(sequential_startup?: boolean): this;
         protected manage_ControllerSequence(sequence_steps: Array<i_sequenceStep>, scope: t_singleScope, manager_namespace: t_namespace): Promise<any>;
         produce_PromiseStackMember(scope: t_singleScope, manager_namespace: t_namespace, step: i_sequenceStep): Promise<t_ri>;
