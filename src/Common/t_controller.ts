@@ -276,7 +276,7 @@ export interface i_talk<TalkRi> extends i_transmission {
 /**
  * Extends t_transmission for response event 
  */
-export interface i_response<Content> extends i_transmission {
+export interface i_response<Content = any> extends i_transmission {
     /** denotes the service group in service transmissions */
     Group: e_ServiceGroup;
     /** Talking that is involved with the transmission*/

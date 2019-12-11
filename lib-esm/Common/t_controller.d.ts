@@ -84,7 +84,7 @@ interface i_transmission {
 export interface i_talk<TalkRi> extends i_transmission {
     Talk: TalkRi;
 }
-export interface i_response<Content> extends i_transmission {
+export interface i_response<Content = any> extends i_transmission {
     Group: e_ServiceGroup;
     Talk: t_ri_any;
     Content: Content;
