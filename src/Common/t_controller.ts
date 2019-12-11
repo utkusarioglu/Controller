@@ -137,7 +137,7 @@ export interface i_service<CallRi extends t_ri_any = t_ri_any> {
     /** Namespace that is expected to respond to the request*/
     //Namespace: t_namespace;
     /** Specific method that is being requested*/
-    Listen: t_ri_any;
+    //Listen?: t_ri_any;
 /** Callback function to be executed on the response transmission*/
     Call: (transmission: i_request<CallRi>) => any;
     /** Whelther the service is static */

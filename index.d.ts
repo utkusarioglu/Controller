@@ -128,7 +128,6 @@ declare module '@utkusarioglu/controller/Common/t_controller' {
     }
     export interface i_service<CallRi extends t_ri_any = t_ri_any> {
         Scope: t_scope;
-        Listen: t_ri_any;
         Call: (transmission: i_request<CallRi>) => any;
         Static?: boolean;
         Group?: e_ServiceGroup;
