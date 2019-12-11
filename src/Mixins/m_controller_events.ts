@@ -140,8 +140,8 @@ export abstract class M_ControllerEvents {
      * Class: M_ControllerEvents
      * Service: Controller
      */
-    public include_Dependencies<TalkArgs, Return>(
-        dependencies_list: i_dependency_group<TalkArgs, Return>[],
+    public include_Dependencies<TalkRi, Return>(
+        dependencies_list: i_dependency_group<TalkRi, Return>[],
     ): this {
 
         if (!this._dependencies) {

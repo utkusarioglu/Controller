@@ -84,15 +84,15 @@ export type t_serviceId = string;
 /**
  * Stores specifications required for the wait method to run
  */
-export interface i_waitSet<TalkArgs, Return = i_talk<TalkArgs>> {
+export interface i_waitSet<TalkRi, Return = i_talk<TalkRi>> {
     /** Namespace of the target that is being waited*/
     Namespace: t_namespace;
     /** the resolution to listen to */
     Listen: t_ri;
     /** callback function to determine if the emit from the awaited meets the requirements*/
-    Test?: t_waitTestCallback<TalkArgs>;
+    Test?: t_waitTestCallback<TalkRi>;
     /** callback to be executed once the awaited passes the test*/
-    Call?: t_waitPromiseResponse<TalkArgs, Return>;
+    Call?: t_waitPromiseResponse<TalkRi, Return>;
 }
 
 /**
@@ -104,11 +104,11 @@ export type t_transmissionContent = any;
 /**
  * Datatype for instructing multiple waits followed by a call
  */
-export interface i_dependency_group<TalkArgs, Return> {
+export interface i_dependency_group<TalkRi, Return = i_talk<TalkRi>> {
     /** 1: Local, 2 or 10: global, 3 or 11: global + local */
     Scope: t_singleScope;
     /** Dependency members to be waited*/
-    Members: i_waitSet<TalkArgs, Return>[];
+    Members: i_waitSet<TalkRi, Return>[];
     /** Callback function to be executed once all the dependencies become available*/
     Call: (value: any) => Promise<any>;
 }
@@ -353,18 +353,18 @@ export interface i_announcementArchiveItem {
 /**
  * Alias for wait action callback
  */
-export type t_waitActionCallback<TalkArgs, Return = i_talk<TalkArgs>> =
-    (transmission: i_talk<TalkArgs>) => i_talk<TalkArgs> | Return;
+export type t_waitActionCallback<TalkRi, Return = i_talk<TalkRi>> =
+    (transmission: i_talk<TalkRi>) => i_talk<TalkRi> | Return;
 
 /**
  * Alias for wait test callback
  */
-export type t_waitTestCallback<TalkArgs> = (transmission: i_talk<TalkArgs>) => boolean
+export type t_waitTestCallback<TalkRi> = (transmission: i_talk<TalkRi>) => boolean
 
 /**
  * Alias for wait promise resolve
  */
-export type t_waitPromiseResponse<TalkArgs, Return = i_talk<TalkArgs>> =
-    (reason: t_wait<TalkArgs, Return> | Promise<t_wait<TalkArgs, Return>>) => t_wait<TalkArgs, Return>
+export type t_waitPromiseResponse<TalkRi, Return = i_talk<TalkRi>> =
+    (reason: t_wait<TalkRi, Return> | Promise<t_wait<TalkRi, Return>>) => t_wait<TalkRi, Return>
 
-export type t_wait<TalkArgs, Return> = i_talk<TalkArgs> | Return;
+export type t_wait<TalkRi, Return> = i_talk<TalkRi> | Return;

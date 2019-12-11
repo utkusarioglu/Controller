@@ -502,9 +502,9 @@ export class BaseController extends SeparatorHandler {
      * Class: Basecontroller
      * Service: Controller
      */
-    public subscribe<TalkArgs>(
+    public subscribe<TalkRi>(
         listen: t_ri,
-        callback: (transmission: i_talk<TalkArgs>) => void,
+        callback: (transmission: i_talk<TalkRi>) => void,
         subcribed_namespace: t_namespace,
         scope: t_singleScope,
     ): void {
@@ -518,7 +518,7 @@ export class BaseController extends SeparatorHandler {
 
         this._monologue_emitter.on(
             channel,
-            callback as (transmission: i_talk<TalkArgs>) => void,
+            callback as (transmission: i_talk<TalkRi>) => void,
         );
     }
 
@@ -545,24 +545,24 @@ export class BaseController extends SeparatorHandler {
      * Class: Basecontroller
      * Service: Controller
      */
-    public wait<TalkArgs, Return>(
+    public wait<TalkRi, Return>(
         waiter_namespace: t_namespace,
         recipient_namespace: t_namespace,
         listen: t_ri,
-        test_callback: t_waitTestCallback<TalkArgs> = () => true ,
-        action_callback: t_waitActionCallback<TalkArgs, Return> =
+        test_callback: t_waitTestCallback<TalkRi> = () => true ,
+        action_callback: t_waitActionCallback<TalkRi, Return> =
             (transmission) => transmission,
         scope: t_singleScope,
         total_count: number = 1,
         current_count: number = total_count,
-    ): Promise<t_wait<TalkArgs, Return>> {
+    ): Promise<t_wait<TalkRi, Return>> {
         // TODO
         // @ts-ignore
         return new Promise((
-            resolve2: t_waitPromiseResponse<TalkArgs, Return>,
+            resolve2: t_waitPromiseResponse<TalkRi, Return>,
         ) => {
             const once_callback_function =
-                (transmission: i_talk<TalkArgs>) => {
+                (transmission: i_talk<TalkRi>) => {
 
                     if (test_callback(transmission)) {
 
@@ -571,7 +571,7 @@ export class BaseController extends SeparatorHandler {
                         return action_callback(transmission);
                     } else {
 
-                        const new_promise = this.wait<TalkArgs, Return>(
+                        const new_promise = this.wait<TalkRi, Return>(
                             waiter_namespace,
                             recipient_namespace,
                             listen,
@@ -614,13 +614,13 @@ export class BaseController extends SeparatorHandler {
      * Class: Basecontroller
      * Service: Controller
      */
-    public wait_Some<TalkArgs, Return>(
+    public wait_Some<TalkRi, Return>(
         scope: t_singleScope,
         waiter_namespace: t_namespace,
-        wait_set: Array<i_waitSet<TalkArgs, Return>>,
-    ): Promise<Array<t_wait<TalkArgs, Return>>> {
+        wait_set: Array<i_waitSet<TalkRi, Return>>,
+    ): Promise<Array<t_wait<TalkRi, Return>>> {
         return Promise.all(wait_set
-            .map((wait_event: i_waitSet<TalkArgs, Return>) => {
+            .map((wait_event: i_waitSet<TalkRi, Return>) => {
                 return this.wait(
                     waiter_namespace,
                     wait_event.Namespace,

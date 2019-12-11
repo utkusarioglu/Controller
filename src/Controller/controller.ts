@@ -629,18 +629,18 @@ export class Controller extends SeparatorHandler {
      * Service: Controller
      */
     public wait<
-        TalkArgs = any,
-        Return = i_talk<TalkArgs>
+        TalkRi = any,
+        Return = i_talk<TalkRi>
     >(
         recipient_namespace: t_namespace,
         listen: t_ri,
-        test_callback: t_waitTestCallback<TalkArgs> = () => true,
-        action_callback: t_waitActionCallback<TalkArgs, Return> =
+        test_callback: t_waitTestCallback<TalkRi> = () => true,
+        action_callback: t_waitActionCallback<TalkRi, Return> =
             (transmission) => transmission,
         scope: t_singleScope = e_Scope.Global,
         count: number = 1,
         current_count: number = count,
-    ): Promise<t_wait<TalkArgs, Return>> {
+    ): Promise<t_wait<TalkRi, Return>> {
         const wait_response = this.get_Scopes(scope)[0].wait(
             this._controller_global_namespace,
             recipient_namespace,
@@ -666,12 +666,12 @@ export class Controller extends SeparatorHandler {
      * Service: Controller
      */
     public wait_Some<
-        TalkArgs = any,
-        Return = i_talk<TalkArgs>
+        TalkRi = any,
+        Return = i_talk<TalkRi>
     >(
-        wait_set: Array<i_waitSet<TalkArgs, Return>>,
+        wait_set: Array<i_waitSet<TalkRi, Return>>,
         scope: t_singleScope,
-    ): Promise<Array<t_wait<TalkArgs, Return>>> {
+    ): Promise<Array<t_wait<TalkRi, Return>>> {
         return this
             .get_Scopes(scope)[0]
             .wait_Some(
