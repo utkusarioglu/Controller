@@ -107,7 +107,7 @@ export class M_ControllerEvents {
     register_Services() {
         if (this._services) {
             this._services.forEach((service) => {
-                this.get_Controller().respond(service.Call, service.Static || false, service.Scope, e_ServiceGroup.Standard);
+                this.get_Controller().respond(service.Call, service.Static || false, service.Scope, service.Group || e_ServiceGroup.Standard);
             });
         }
     }

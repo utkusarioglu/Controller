@@ -135,15 +135,15 @@ export interface i_service<CallRi extends t_ri_any = t_ri_any> {
     /** 1: Local, 2 or 10: global, 3 or 11: global + local */
     Scope: t_scope;
     /** Namespace that is expected to respond to the request*/
-    Namespace: t_namespace;
+    //Namespace: t_namespace;
     /** Specific method that is being requested*/
     Listen: t_ri_any;
 /** Callback function to be executed on the response transmission*/
     Call: (transmission: i_request<CallRi>) => any;
     /** Whelther the service is static */
-    Static: boolean;
+    Static?: boolean;
     /** Service group */
-    Group: e_ServiceGroup;
+    Group?: e_ServiceGroup;
 }
 
 /**

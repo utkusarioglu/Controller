@@ -403,7 +403,7 @@ export abstract class M_ControllerEvents {
                     service.Call,
                     service.Static || false,
                     service.Scope,
-                    e_ServiceGroup.Standard,
+                    service.Group || e_ServiceGroup.Standard,
                 );
             }); 
         }
