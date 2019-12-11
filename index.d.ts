@@ -108,7 +108,7 @@ declare module '@utkusarioglu/controller/Common/t_controller' {
     }
     export type t_channel = string;
     export type t_serviceId = string;
-    export interface i_waitSet<TalkArgs, Return> {
+    export interface i_waitSet<TalkArgs, Return = i_talk<TalkArgs>> {
         Namespace: t_namespace;
         Listen: t_ri;
         Test?: t_waitTestCallback<TalkArgs>;
@@ -225,7 +225,7 @@ declare module '@utkusarioglu/controller/Common/t_controller' {
     }
     export type t_waitActionCallback<TalkArgs, Return = i_talk<TalkArgs>> = (transmission: i_talk<TalkArgs>) => i_talk<TalkArgs> | Return;
     export type t_waitTestCallback<TalkArgs> = (transmission: i_talk<TalkArgs>) => boolean;
-    export type t_waitPromiseResponse<TalkArgs, Return> = (reason: t_wait<TalkArgs, Return> | Promise<t_wait<TalkArgs, Return>>) => t_wait<TalkArgs, Return>;
+    export type t_waitPromiseResponse<TalkArgs, Return = i_talk<TalkArgs>> = (reason: t_wait<TalkArgs, Return> | Promise<t_wait<TalkArgs, Return>>) => t_wait<TalkArgs, Return>;
     export type t_wait<TalkArgs, Return> = i_talk<TalkArgs> | Return;
     export {};
 }

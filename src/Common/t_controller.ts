@@ -84,7 +84,7 @@ export type t_serviceId = string;
 /**
  * Stores specifications required for the wait method to run
  */
-export interface i_waitSet<TalkArgs, Return> {
+export interface i_waitSet<TalkArgs, Return = i_talk<TalkArgs>> {
     /** Namespace of the target that is being waited*/
     Namespace: t_namespace;
     /** the resolution to listen to */
@@ -364,7 +364,7 @@ export type t_waitTestCallback<TalkArgs> = (transmission: i_talk<TalkArgs>) => b
 /**
  * Alias for wait promise resolve
  */
-export type t_waitPromiseResponse<TalkArgs, Return> =
+export type t_waitPromiseResponse<TalkArgs, Return = i_talk<TalkArgs>> =
     (reason: t_wait<TalkArgs, Return> | Promise<t_wait<TalkArgs, Return>>) => t_wait<TalkArgs, Return>
 
 export type t_wait<TalkArgs, Return> = i_talk<TalkArgs> | Return;
