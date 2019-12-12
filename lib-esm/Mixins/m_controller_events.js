@@ -27,14 +27,15 @@ export class M_ControllerEvents {
         }
         this._receptions.push(...reception_list);
         reception_list.forEach((reception) => {
+            const reception_namespace = reception.Namespace || this.get_GlobalNamespace();
             this._subscriptions.push({
                 Scope: reception.Scope,
-                Namespace: reception.Namespace || this.get_GlobalNamespace(),
+                Namespace: reception_namespace,
                 Listen: reception.Listen,
                 Call: reception.Call,
             });
             this._announcements.push({
-                Namespace: reception.Namespace,
+                Namespace: reception_namespace,
                 Talk: reception.Talk,
                 Scope: reception.Scope,
             });
@@ -108,7 +109,7 @@ export class M_ControllerEvents {
     register_Services() {
         if (this._services) {
             this._services.forEach((service) => {
-                this.get_Controller().respond(service.Call, service.Static || false, service.Scope, service.Group === undefined
+                this.get_Controller().respond(service.Call, service.Static || false, service.Scope || e_Scope.Global, service.Group === undefined
                     ? e_ServiceGroup.Standard
                     : service.Group);
             });

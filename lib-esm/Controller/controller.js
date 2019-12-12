@@ -56,7 +56,7 @@ export class Controller extends SeparatorHandler {
             .get_Scopes(scope)[0]
             .request(this._controller_global_namespace, recipient_namespace, talk, scope, group);
     }
-    respond(response_callback, is_static = true, scope = e_Scope.Global, group = e_ServiceGroup.Standard) {
+    respond(response_callback, is_static = false, scope = e_Scope.Global, group = e_ServiceGroup.Standard) {
         if (is_static) {
             Controller._static_responders.push(this._controller_global_namespace +
                 this.get_Separator("Dialogue") +

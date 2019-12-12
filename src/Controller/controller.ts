@@ -346,7 +346,7 @@ export class Controller extends SeparatorHandler {
         Content = any
     >(
         response_callback: t_serviceCallback<CallRi, Content>,
-        is_static: boolean = true,
+        is_static: boolean = false,
         scope: t_scope = e_Scope.Global,
         group: e_ServiceGroup = e_ServiceGroup.Standard,
     ): this {
