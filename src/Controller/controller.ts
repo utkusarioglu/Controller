@@ -46,6 +46,7 @@ import {
     t_waitTestCallback,
     t_wait,
     t_serviceCallback,
+    i_announcementArchiveItem,
 } from "../Common/t_controller";
 import { i_map } from "@utkusarioglu/state/t_state"; // This should be removed
 import { t_namespace } from "@utkusarioglu/namespace";
@@ -566,7 +567,9 @@ export class Controller extends SeparatorHandler {
     /**
      * Returns the entire list of announcements since app start
      */
-    public get_AnnouncementArchive(scope: t_singleScope): object[] {
+    public get_AnnouncementArchive(
+        scope: t_singleScope
+    ): i_announcementArchiveItem[] {
         return this.get_Scopes(scope)[0].get_AnnouncementArchive();
     }
 

@@ -21,7 +21,7 @@ import { M_Controller } from "../Mixins/m_controller"
  *	DATATYPES
  */
 import { t_namespace } from "@utkusarioglu/namespace";
-import { i_talk, i_response, i_request } from "../Common/t_controller";
+import { i_talk, i_response, i_request, i_announcement, i_announcementArchiveItem, e_Scope, t_singleScope } from "../Common/t_controller";
 import { Controller } from "../Controller/controller";
 import { C_BootState } from "../Common/c_controller";
 
@@ -114,6 +114,10 @@ export abstract class BaseTestClass extends M_Controller {
             const message = Resolution.extract_Argument(transmission.Talk);
             return Promise.resolve(message + addition);
         })
+    }
+
+    public get_AnnouncementArchive(scope: t_singleScope): i_announcementArchiveItem[] {
+        return this.get_Controller().get_AnnouncementArchive(scope);
     }
 
 };

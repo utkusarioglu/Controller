@@ -1,6 +1,7 @@
 import { Resolution } from "@utkusarioglu/resolver";
 import { Controller } from "../Controller/controller";
 import { SampleControllerClass, ActiveEmitter } from "../TestSupport/sample_controller_class";
+import { e_Scope } from "../Common/t_controller";
 test("App get event emitter static", () => {
     const ee = Controller.get_EventEmitter();
     expect(ee).toBe(ActiveEmitter);
@@ -64,6 +65,25 @@ test("Controller - listen/talk from separate classes", () => {
         return Resolution.extract_Argument(transimission.Talk);
     });
     return expect(listener_message).resolves.toStrictEqual(message);
+});
+test("Controller - listen/talk count consistency", () => {
+    Controller.flush_GlobalController();
+    let message = 0;
+    const talk_count = 4;
+    const channel = "channel/namespace";
+    const listener_namespace = "listener/namespace";
+    const talker_namespace = "talker/namespace";
+    const listener_instance = new SampleControllerClass(listener_namespace, channel);
+    const talker_instance = new SampleControllerClass(talker_namespace, channel);
+    for (let i = 0; i < talk_count; i++) {
+        talker_instance.talk(message++);
+    }
+    const promise = listener_instance.listen().then(() => {
+        const announcement_archive = listener_instance.get_AnnouncementArchive(e_Scope.Global);
+        const archive_count = announcement_archive.length;
+        return archive_count;
+    });
+    return expect(promise).resolves.toStrictEqual(talk_count);
 });
 test("Controller - service from separate classes", () => {
     Controller.flush_GlobalController();

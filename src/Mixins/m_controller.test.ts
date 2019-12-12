@@ -22,7 +22,7 @@ import { SampleControllerClass, ActiveEmitter } from "../TestSupport/sample_cont
 /*
  *	DATATYPES
  */
-import { i_talk, i_request, i_response } from "../Common/t_controller";
+import { i_talk, i_request, i_response, e_Scope } from "../Common/t_controller";
 
 
 /* ////////////////////////////////////////////////////////////////////////////
@@ -136,6 +136,33 @@ test("Controller - listen/talk from separate classes", () => {
     });
 
     return expect(listener_message).resolves.toStrictEqual(message)
+});
+
+test("Controller - listen/talk count consistency", () => {
+
+    Controller.flush_GlobalController();
+
+    let message: number = 0;
+    const talk_count = 4;
+    const channel: t_namespace = "channel/namespace";
+    const listener_namespace: t_namespace = "listener/namespace";
+    const talker_namespace: t_namespace = "talker/namespace";
+
+    const listener_instance = new SampleControllerClass(listener_namespace, channel);
+    const talker_instance = new SampleControllerClass(talker_namespace, channel);
+
+    for (let i = 0; i < talk_count; i++) {
+        talker_instance.talk(message++);
+    }
+
+    const promise = listener_instance.listen().then(() => {
+        const announcement_archive =
+            listener_instance.get_AnnouncementArchive(e_Scope.Global);
+        const archive_count = announcement_archive.length;
+        return archive_count;
+    });
+
+    return expect(promise).resolves.toStrictEqual(talk_count)
 });
 
 test("Controller - service from separate classes", () => {

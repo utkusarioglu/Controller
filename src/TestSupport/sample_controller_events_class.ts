@@ -18,7 +18,9 @@ import { t_namespace } from "@utkusarioglu/namespace";
 import { M_ControllerEvents } from "../Mixins/m_controller_events";
 import { M_Controller } from "../Mixins/m_controller";
 import { BaseTestClass } from "./base_test_class";
-import { C_BootState } from "../Common/c_controller";
+import { C_BootState, C_StartupTalk, C_Controller } from "../Common/c_controller";
+import { Controller } from "../Controller/controller";
+import { i_sequenceStep, e_Scope } from "../Common/t_controller";
 
 
 
@@ -36,7 +38,8 @@ export interface SampleControllerEventsClass extends
 { }
 
 export class SampleControllerEventsClass extends Parent(BaseTestClass).with(
-    M_ControllerEvents
+    M_ControllerEvents,
+    M_Controller,
 ) {
 
     constructor(
@@ -45,7 +48,7 @@ export class SampleControllerEventsClass extends Parent(BaseTestClass).with(
         sequential: boolean = true
     ) {
         super(class_namespace, channel);
-        //this.set_ControllerEvents();
+        this.set_ControllerEvents();
     }
 
     public set_ControllerEvents(): this {
@@ -62,4 +65,45 @@ export class SampleControllerEventsClass extends Parent(BaseTestClass).with(
         this.set_Controller();
         return this;
     }
+
+    public manage_BootUp(): Promise<string> {
+
+        const sequence_members: t_namespace[] =
+            Controller.get_GlobalNamespaces();
+
+        const sequence_steps: i_sequenceStep[] = [
+            {
+                List: sequence_members,
+                Listen: C_BootState.ClassReady,
+            },
+            {
+                StartMessage: "Starting Listen",
+                List: sequence_members,
+                Talk: C_StartupTalk.run_Listen,
+                Listen: C_BootState.ListenReady,
+            },
+        ];
+
+
+        const sequence_manager = this.manage_ControllerSequence(
+            sequence_steps,
+            e_Scope.Global,
+            C_Controller.AllServices,
+        )
+
+        //return Promise.resolve(JSON.stringify(sequence_manager));
+
+        return sequence_manager;
+
+    } // Manage_BootUp
+
+
+    public announce_ListenReady() {
+    this.get_Controller().announce(
+        C_Controller.AllServices,
+        C_BootState.ListenReady,
+        e_Scope.Global,
+    )
+}
+
 }

@@ -416,6 +416,8 @@ export class BaseController extends SeparatorHandler {
             Scope: scope,
         };
 
+        console.log("announcing", talk, scope, sender_namespace)
+
         const do_announcement = () => {
 
             this._monologue_emitter.emit(

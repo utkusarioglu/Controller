@@ -15,7 +15,6 @@ test("App.Controller events participants", () => {
         }, C_Controller.AllServices);
     });
     const talker_class = new SampleControllerEventsClass("Talker", C_Controller.AllServices, false);
-    talker_class.initialize_Controller();
     const participants = Controller.get_GlobalNamespaces();
     expect(participants).toStrictEqual(["Observer", "Talker"]);
 });
@@ -51,8 +50,6 @@ test("App.SampleControllerEventsClass listen/talk", () => {
     const talker_namespace = "talker/namespace";
     const listener_instance = new SampleControllerEventsClass(listener_namespace, channel, false);
     const talker_instance = new SampleControllerEventsClass(talker_namespace, channel, false);
-    listener_instance.set_SampleController();
-    talker_instance.set_SampleController();
     const listener = listener_instance.listen();
     const talker = talker_instance.talk(message);
     const listener_message = listener.then((transimission) => {
@@ -68,8 +65,6 @@ test("App.SampleControllerEventsClass listen/talk", () => {
     const talker_namespace = "talker/namespace";
     const listener_instance = new SampleControllerEventsClass(listener_namespace, channel, false);
     const talker_instance = new SampleControllerEventsClass(talker_namespace, channel, false);
-    listener_instance.set_SampleController();
-    talker_instance.set_SampleController();
     const listener = listener_instance.listen();
     const talker = talker_instance.announce_ClassReady();
     const listener_talk = listener.then((transimission) => {
@@ -85,12 +80,24 @@ test("App.SampleControllerEventsClass set_ControllerEvents", () => {
     const talker_namespace = "talker2/namespace";
     const listener_instance = new SampleControllerEventsClass(listener_namespace, channel, false);
     const talker_instance = new SampleControllerEventsClass(talker_namespace, channel, false);
-    listener_instance.set_SampleController();
     const listener = listener_instance.listen();
-    const talker = talker_instance.set_ControllerEvents();
     const listener_talk = listener.then((transimission) => {
         return transimission.Talk;
     });
     return expect(listener_talk).resolves.toStrictEqual(C_BootState.ClassReady);
+});
+test("App_Controller", () => {
+    Controller.flush_GlobalController();
+    const manager = new SampleControllerEventsClass("App");
+    const child1 = new SampleControllerEventsClass("App/Child");
+    const sequence = new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(manager.manage_BootUp());
+        }, 100);
+    });
+    return expect(sequence).resolves.toStrictEqual([
+        C_BootState.ClassReady,
+        C_BootState.ListenReady
+    ]);
 });
 //# sourceMappingURL=m_controller_events.test.js.map

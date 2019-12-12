@@ -263,6 +263,7 @@ export abstract class M_ControllerEvents {
 
         this.set_Controller();
 
+                        console.log("ns-start", this.get_GlobalNamespace())
         if (sequential_startup) {
 
             // Listens
@@ -275,6 +276,7 @@ export abstract class M_ControllerEvents {
 
                         this.register_Dependencies();
                         this.register_Subscriptions();
+                        console.log("ns-listen", this.get_GlobalNamespace())
 
                         this.announce_ToAllServices(C_BootState.ListenReady);
                     },
@@ -502,7 +504,6 @@ export abstract class M_ControllerEvents {
                     manager_namespace,
                     step.Listen,
                     (transmission) => {
-
                         step.List = step.List.filter((value: string) => {
                             return value !== transmission.Sender;
                         });
@@ -586,12 +587,13 @@ export abstract class M_ControllerEvents {
         delay: t_epoch = 0,
     ): void {
 
-        this.get_Controller().announce(
-            C_Controller.AllServices,
-            resolution_instruction,
-            e_Scope.Global,
-            delay,
-        );
+        this.get_Controller()
+            .announce(
+                C_Controller.AllServices,
+                resolution_instruction,
+                e_Scope.Global,
+                delay,
+            );
     }
 
     /**

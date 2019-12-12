@@ -72,7 +72,7 @@ test("App.Controller events participants", () => {
         C_Controller.AllServices,
         false
     );
-    talker_class.initialize_Controller();
+    //talker_class.initialize_Controller();
 
     const participants = Controller.get_GlobalNamespaces();
 
@@ -150,8 +150,8 @@ test("App.SampleControllerEventsClass listen/talk", () => {
     const listener_instance = new SampleControllerEventsClass(listener_namespace, channel, false);
     const talker_instance = new SampleControllerEventsClass(talker_namespace, channel, false);
 
-    listener_instance.set_SampleController();
-    talker_instance.set_SampleController();
+    //listener_instance.set_SampleController();
+    //talker_instance.set_SampleController();
 
     const listener = listener_instance.listen();
     const talker = talker_instance.talk(message);
@@ -177,8 +177,8 @@ test("App.SampleControllerEventsClass listen/talk", () => {
     const listener_instance = new SampleControllerEventsClass(listener_namespace, channel, false);
     const talker_instance = new SampleControllerEventsClass(talker_namespace, channel, false);
 
-    listener_instance.set_SampleController();
-    talker_instance.set_SampleController();
+    //listener_instance.set_SampleController();
+    //talker_instance.set_SampleController();
 
     const listener = listener_instance.listen();
     const talker = talker_instance.announce_ClassReady();
@@ -203,11 +203,11 @@ test("App.SampleControllerEventsClass set_ControllerEvents", () => {
     const listener_instance = new SampleControllerEventsClass(listener_namespace, channel, false);
     const talker_instance = new SampleControllerEventsClass(talker_namespace, channel, false);
 
-    listener_instance.set_SampleController();
+    //listener_instance.set_SampleController();
     //talker_instance.set_SampleController();
 
     const listener = listener_instance.listen();
-    const talker = talker_instance.set_ControllerEvents();
+    //const talker = talker_instance.set_ControllerEvents();
 
     const listener_talk = listener.then((transimission: any) => {
         return transimission.Talk;
@@ -217,178 +217,29 @@ test("App.SampleControllerEventsClass set_ControllerEvents", () => {
 
 });
 
-//test("Child.announce", () => {
-
-//Controller.flush_GlobalController();
-
-//    const child_class_exp1 = class extends Parent().with(
-//        M_Controller,
-//        M_ControllerEvents
-//    ) {
-
-//        constructor() {
-//            super();
-//            this.set_ControllerEvents();
-
-//        }
-
-//        get_GlobalNamespace(): string {
-//            return "Child/Class/1"
-//        }
-
-//        has_LocalNamespace(): boolean {
-//            return false;
-//        }
-
-//        private set_ControllerEvents(): void {
-//            this
-//                .initialize_Controller();
-//            //this.announce_ListenReady();
-//        }
-
-//        private announce_ListenReady() {
-//            this.get_Controller().announce(
-//                C_Controller.AllServices,
-//                C_BootState.ListenReady,
-//                e_Scope.Global,
-//                3000
-//            )
-//        }
-
-//    }
-
-//    const controller = new Controller("Observer");
-//    const response = new Promise((resolve) => {
-//        controller.subscribe(
-//            C_BootState.ClassReady,
-//            (transmission: t_transmission) => {
-//                resolve(transmission.Talk);
-//            },
-//            C_Controller.AllServices,
-//            e_Scope.Global,
-//        );
-//    });
-
-//    const child1 = (new child_class_exp1());
-
-//    return expect(response).resolves.toBe(C_BootState.ClassReady);
-
-//});
 
 
 
-//test("App_Controller", () => {
+test("App_Controller", () => {
 
-//    Controller.flush_GlobalController();
+    Controller.flush_GlobalController();
 
-//    const app_class_expression = class extends Parent().with(
-//        M_Controller,
-//        M_ControllerEvents
-//    ) {
+    const manager = new SampleControllerEventsClass("App");
+    const child1 = new SampleControllerEventsClass("App/Child");
 
-//        constructor() {
-//            super();
-//            this.set_ControllerEvents();
-//        }
-
-//        public get_GlobalNamespace(): string {
-//            return C_Controller.AllServices;
-//        }
-
-//        public has_LocalNamespace(): boolean {
-//            return false;
-//        }
-
-//        private set_ControllerEvents(): void {
-//            this
-//                .initialize_Controller();
-//                //.manage_BootUp();
-//        }
-
-//        public manage_BootUp(): Promise<string> {
-
-//            const sequence_members: t_namespace[] =
-//                this.get_Controller().get_GlobalNamespaces();
-
-//            const sequence_steps: t_sequenceStep[] = [
-//                {
-//                    List: sequence_members,
-//                    Listen: C_BootState.ClassReady,
-//                },
-//                {
-//                    List: ["Child/Class/1"],
-//                    Talk: C_StartupTalk.run_Listen,
-//                    Listen: C_BootState.ListenReady,
-//            },
-//            ];
+    const sequence = new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(manager.manage_BootUp());
+        }, 100);
+    });
+    //setTimeout(() => {
+    //    child1.announce_ListenReady();
+    //}, 200)
 
 
-//            const sequence_manager = this.manage_ControllerSequence(
-//                sequence_steps,
-//                e_Scope.Global,
-//                C_Controller.AllServices,
-//            )
+    return expect(sequence).resolves.toStrictEqual([
+        C_BootState.ClassReady,
+        C_BootState.ListenReady
+    ]);
 
-//            //return Promise.resolve(JSON.stringify(sequence_manager));
-
-//            return sequence_manager;
-
-//        } // Manage_BootUp
-
-//    };
-
-
-
-//    const child_class_exp1 = class extends Parent().with(
-//        M_Controller,
-//        M_ControllerEvents
-//    ) {
-
-//        constructor() {
-//            super();
-//            this.set_ControllerEvents();
-
-//        }
-
-//        get_GlobalNamespace(): string {
-//            return "Child/Class/1"
-//        }
-
-//        has_LocalNamespace(): boolean {
-//            return false;
-//        }
-
-//        private set_ControllerEvents(): void {
-//            this
-//                .initialize_Controller();
-//            //this.announce_ListenReady();
-//        }
-
-//        private announce_ListenReady() {
-//            this.get_Controller().announce(
-//                C_Controller.AllServices,
-//                C_BootState.ListenReady,
-//                e_Scope.Global,
-//                300
-//            )
-//        }
-
-//    }
-
-//    const manager = (new app_class_expression());
-
-//    const child1 = (new child_class_exp1());
-
-//    const sequence = new Promise((resolve) => {
-//        setTimeout(() => {
-//            resolve(manager.manage_BootUp());
-//        }, 100);
-//    });
-
-
-//    return expect(sequence).resolves.toStrictEqual([
-//        C_BootState.ClassReady,
-//        C_BootState.ListenReady
-//    ]);
-
-//});
+});

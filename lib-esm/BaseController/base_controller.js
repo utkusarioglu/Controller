@@ -101,6 +101,7 @@ export class BaseController extends SeparatorHandler {
             Static: false,
             Scope: scope,
         };
+        console.log("announcing", talk, scope, sender_namespace);
         const do_announcement = () => {
             this._monologue_emitter.emit(announcement_channel, announcement_packet);
             this.archive_Announcement(sender_namespace, announcement_channel, announcement_packet);

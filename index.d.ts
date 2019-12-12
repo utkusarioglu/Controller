@@ -17,7 +17,7 @@ declare module '@utkusarioglu/controller' {
 declare module '@utkusarioglu/controller/Controller/controller' {
     import { SeparatorHandler } from "@utkusarioglu/controller/Common/separator_handler";
     import { t_ri } from "@utkusarioglu/resolver";
-    import { t_scope, t_singleScope, i_waitSet, e_ServiceGroup, i_staticContentArchive, i_localControllerStack, t_epoch, i_talk, i_response, i_EventEmitter, t_waitActionCallback, t_waitTestCallback, t_wait, t_serviceCallback } from "@utkusarioglu/controller/Common/t_controller";
+    import { t_scope, t_singleScope, i_waitSet, e_ServiceGroup, i_staticContentArchive, i_localControllerStack, t_epoch, i_talk, i_response, i_EventEmitter, t_waitActionCallback, t_waitTestCallback, t_wait, t_serviceCallback, i_announcementArchiveItem } from "@utkusarioglu/controller/Common/t_controller";
     import { t_namespace } from "@utkusarioglu/namespace";
     import { t_ri_any } from "@utkusarioglu/resolver/Common/t_resolver";
     export class Controller extends SeparatorHandler {
@@ -34,7 +34,7 @@ declare module '@utkusarioglu/controller/Controller/controller' {
         static flush_StaticContentArchive(): void;
         static force_AllDynamicService(): void;
         announce<TalkRi extends t_ri_any>(recipient_namespace: t_namespace, talk: TalkRi, scope?: t_scope, delay?: boolean | t_epoch): this;
-        get_AnnouncementArchive(scope: t_singleScope): object[];
+        get_AnnouncementArchive(scope: t_singleScope): i_announcementArchiveItem[];
         subscribe<TalkRi extends t_ri_any = t_ri_any>(listen: t_ri, callback: (transmission: i_talk<TalkRi>) => void, subcribed_namespace?: t_namespace, scope?: t_scope): this;
         wait<TalkRi extends t_ri_any = t_ri_any, Return = i_talk<TalkRi>>(recipient_namespace: t_namespace, listen: t_ri, test_callback?: t_waitTestCallback<TalkRi>, action_callback?: t_waitActionCallback<TalkRi, Return>, scope?: t_singleScope, count?: number, current_count?: number): Promise<t_wait<TalkRi, Return>>;
         wait_Some<TalkRi extends t_ri_any = t_ri_any, Return = i_talk<TalkRi>>(wait_set: Array<i_waitSet<TalkRi, Return>>, scope: t_singleScope): Promise<Array<t_wait<TalkRi, Return>>>;

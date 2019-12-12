@@ -51,11 +51,13 @@ export class M_ControllerEvents {
     }
     initialize_Controller(sequential_startup = true) {
         this.set_Controller();
+        console.log("ns-start", this.get_GlobalNamespace());
         if (sequential_startup) {
             this.get_Controller()
                 .wait(C_Controller.AllServices, C_StartupTalk.run_Listen, undefined, () => {
                 this.register_Dependencies();
                 this.register_Subscriptions();
+                console.log("ns-listen", this.get_GlobalNamespace());
                 this.announce_ToAllServices(C_BootState.ListenReady);
             }, e_Scope.Global);
             this.get_Controller()
@@ -159,7 +161,8 @@ export class M_ControllerEvents {
         });
     }
     announce_ToAllServices(resolution_instruction, delay = 0) {
-        this.get_Controller().announce(C_Controller.AllServices, resolution_instruction, e_Scope.Global, delay);
+        this.get_Controller()
+            .announce(C_Controller.AllServices, resolution_instruction, e_Scope.Global, delay);
     }
     announce_LibraryAdded(library_source_namespace) {
         this.get_Controller().announce(C_Controller.AllServices, [...C_BootState.LibraryAdded, [library_source_namespace]], e_Scope.Global, true);
