@@ -34,9 +34,9 @@ export class M_ControllerEvents {
                 Call: reception.Call,
             });
             this._announcements.push({
-                Scope: reception.Scope,
                 Namespace: reception.Namespace,
                 Talk: reception.Talk,
+                Scope: reception.Scope,
             });
         });
         return this;
@@ -76,7 +76,8 @@ export class M_ControllerEvents {
     register_Subscriptions() {
         if (this._subscriptions) {
             this._subscriptions.forEach((subscription) => {
-                this.get_Controller().subscribe(subscription.Listen, subscription.Call, subscription.Namespace, subscription.Scope);
+                this.get_Controller()
+                    .subscribe(subscription.Listen, subscription.Call, subscription.Namespace, subscription.Scope);
             });
         }
     }
@@ -97,7 +98,8 @@ export class M_ControllerEvents {
     }
     register_Announcements() {
         if (this._announcements) {
-            this._announcements.forEach((announcement) => {
+            this._announcements
+                .forEach((announcement) => {
                 this.get_Controller()
                     .announce(announcement.Namespace, announcement.Talk, announcement.Scope);
             });
@@ -106,7 +108,9 @@ export class M_ControllerEvents {
     register_Services() {
         if (this._services) {
             this._services.forEach((service) => {
-                this.get_Controller().respond(service.Call, service.Static || false, service.Scope, service.Group || e_ServiceGroup.Standard);
+                this.get_Controller().respond(service.Call, service.Static || false, service.Scope, service.Group === undefined
+                    ? e_ServiceGroup.Standard
+                    : service.Group);
             });
         }
     }

@@ -199,9 +199,9 @@ export abstract class M_ControllerEvents {
             } as i_subscription<SubscriptionCallRi>);
 
             this._announcements.push({
-                Scope: reception.Scope,
                 Namespace: reception.Namespace,
                 Talk: reception.Talk,
+                Scope: reception.Scope,
             } as i_announcement<AnnouncementTalkRi>);
         });
 
@@ -331,12 +331,13 @@ export abstract class M_ControllerEvents {
     >(): void {
         if (this._subscriptions) {
             this._subscriptions.forEach((subscription) => {
-                this.get_Controller().subscribe(
-                    subscription.Listen,
-                    subscription.Call,
-                    subscription.Namespace,
-                    subscription.Scope,
-                );
+                this.get_Controller()
+                    .subscribe(
+                        subscription.Listen,
+                        subscription.Call,
+                        subscription.Namespace,
+                        subscription.Scope,
+                    );
             });
         }
     }
@@ -384,14 +385,15 @@ export abstract class M_ControllerEvents {
         TalkRi extends t_ri_any = t_ri_any
     >(): void {
         if (this._announcements) {
-            this._announcements.forEach((announcement: i_announcement<TalkRi>) => {
-                this.get_Controller()
-                    .announce(
-                        announcement.Namespace,
-                        announcement.Talk,
-                        announcement.Scope,
-                    );
-            });
+            this._announcements
+                .forEach((announcement: i_announcement<TalkRi>) => {
+                    this.get_Controller()
+                        .announce(
+                            announcement.Namespace,
+                            announcement.Talk,
+                            announcement.Scope,
+                        );
+                });
         }
     }
 
@@ -410,7 +412,9 @@ export abstract class M_ControllerEvents {
                     service.Call,
                     service.Static || false,
                     service.Scope,
-                    service.Group || e_ServiceGroup.Standard,
+                    service.Group === undefined
+                        ? e_ServiceGroup.Standard
+                        : service.Group,
                 );
             }); 
         }

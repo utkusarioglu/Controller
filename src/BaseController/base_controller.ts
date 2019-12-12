@@ -401,7 +401,8 @@ export class BaseController extends SeparatorHandler {
             // TODO: type t_ri0 needs to be changed after resolver types are updated
             Resolution.extract_ExpressionTrail(talk);
 
-        const announcement_channel: t_channel = recipient_namespace +
+        const announcement_channel: t_channel =
+            recipient_namespace +
             this.get_Separator("Monologue") +
             expression_trail;
 
