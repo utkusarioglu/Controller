@@ -592,7 +592,7 @@ export class BaseController extends SeparatorHandler {
                         );
 
                         resolve2(new_promise);
-                        return new_promise;
+                        //return new_promise;
                     }
                 };
 

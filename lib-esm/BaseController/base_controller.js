@@ -145,7 +145,6 @@ export class BaseController extends SeparatorHandler {
                 else {
                     const new_promise = this.wait(waiter_namespace, recipient_namespace, listen, test_callback, action_callback, scope, total_count, current_count);
                     resolve2(new_promise);
-                    return new_promise;
                 }
             };
             if (current_count > 0) {

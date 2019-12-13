@@ -247,33 +247,3 @@ test("App_Controller.ns", () => {
 
 });
 
-
-
-//test("App_Controller", () => {
-
-//    Controller.flush_GlobalController();
-
-//    const manager = new SampleControllerEventsClass("App", undefined, false);
-//    const child1 = new SampleControllerEventsClass("App/Child1", undefined, false);
-//    const child2 = new SampleControllerEventsClass("App/Child2", undefined, false);
-//    const child3 = new SampleControllerEventsClass("App/Child3", undefined, false);
-//    const child4 = new SampleControllerEventsClass("App/Child4", undefined, false);
-
-//    //const sequence = new Promise((resolve) => {
-//    //    setTimeout(() => {
-//    //        resolve(manager.manage_BootUp());
-//    //    }, 100);
-//    //});
-
-//    const sequence = manager.manage_BootUp();
-//    //setTimeout(() => {
-//    //    child1.announce_ListenReady();
-//    //}, 200)
-//    //console.log(Controller.get_GlobalNamespaces())
-
-//    return expect(sequence).resolves.toStrictEqual([
-//        C_BootState.ClassReady,
-//        C_BootState.ListenReady
-//    ]);
-
-//});
