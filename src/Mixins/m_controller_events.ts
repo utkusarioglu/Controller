@@ -262,12 +262,13 @@ export abstract class M_ControllerEvents {
      */
     public initialize_Controller(sequential_startup: boolean = true): this {
 
-        const controller = this.set_Controller().get_Controller();
+        //const controller = this.set_Controller().get_Controller();
+        this.set_Controller();
 
         if (sequential_startup) {
 
             // Listens
-            controller
+            this.get_Controller()
                 .wait(
                     C_Controller.AllServices,
                     C_StartupTalk.run_Listen,
@@ -282,7 +283,7 @@ export abstract class M_ControllerEvents {
                 );
 
             // Talks
-            controller
+            this.get_Controller()
                 .wait(
                     C_Controller.AllServices,
                     C_StartupTalk.run_Talk,

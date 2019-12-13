@@ -438,7 +438,7 @@ export class BaseController extends SeparatorHandler {
                 delay = parseInt(C_Controller.GraceTime);
             }
 
-            setTimeout(do_announcement, delay);
+            setTimeout(do_announcement.bind(this), delay);
 
         } else {
             do_announcement();

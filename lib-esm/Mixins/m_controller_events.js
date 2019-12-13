@@ -50,15 +50,15 @@ export class M_ControllerEvents {
         return this;
     }
     initialize_Controller(sequential_startup = true) {
-        const controller = this.set_Controller().get_Controller();
+        this.set_Controller();
         if (sequential_startup) {
-            controller
+            this.get_Controller()
                 .wait(C_Controller.AllServices, C_StartupTalk.run_Listen, undefined, () => {
                 this.register_Dependencies();
                 this.register_Subscriptions();
                 this.announce_ToAllServices(C_BootState.ListenReady);
             }, e_Scope.Global);
-            controller
+            this.get_Controller()
                 .wait(C_Controller.AllServices, C_StartupTalk.run_Talk, undefined, () => {
                 this.register_Announcements();
                 this.register_Services();
