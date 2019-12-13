@@ -86,15 +86,14 @@ test("App.SampleControllerEventsClass set_ControllerEvents", () => {
     });
     return expect(listener_talk).resolves.toStrictEqual(C_BootState.ClassReady);
 });
-test("App_Controller", () => {
+test("App_Controller.ns", () => {
     Controller.flush_GlobalController();
-    const manager = new SampleControllerEventsClass("App");
-    const child1 = new SampleControllerEventsClass("App/Child");
-    const sequence = new Promise((resolve) => {
-        setTimeout(() => {
-            resolve(manager.manage_BootUp());
-        }, 100);
-    });
+    const manager = new SampleControllerEventsClass("App", undefined);
+    const sequence = manager.manage_BootUp();
+    const child1 = new SampleControllerEventsClass("App/Child1", undefined);
+    const child2 = new SampleControllerEventsClass("App/Child2", undefined);
+    const child3 = new SampleControllerEventsClass("App/Child3", undefined);
+    const child4 = new SampleControllerEventsClass("App/Child4", undefined);
     return expect(sequence).resolves.toStrictEqual([
         C_BootState.ClassReady,
         C_BootState.ListenReady

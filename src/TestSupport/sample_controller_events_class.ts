@@ -48,11 +48,11 @@ export class SampleControllerEventsClass extends Parent(BaseTestClass).with(
         sequential: boolean = true
     ) {
         super(class_namespace, channel);
-        this.set_ControllerEvents();
+        this.set_ControllerEvents(sequential);
     }
 
-    public set_ControllerEvents(): this {
-        this.initialize_Controller();
+    public set_ControllerEvents(sequential: boolean): this {
+        this.initialize_Controller(sequential);
         return this;
     }
 
@@ -77,8 +77,7 @@ export class SampleControllerEventsClass extends Parent(BaseTestClass).with(
                 Listen: C_BootState.ClassReady,
             },
             {
-                StartMessage: "Starting Listen",
-                List: sequence_members,
+                List: ["App/Child2"],
                 Talk: C_StartupTalk.run_Listen,
                 Listen: C_BootState.ListenReady,
             },

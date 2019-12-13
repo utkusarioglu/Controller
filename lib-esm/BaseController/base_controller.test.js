@@ -62,7 +62,7 @@ test("BaseController.wait_Some", () => {
     const test_value1 = "test-value-1";
     const test_value2 = "test-value-2";
     let announcement_count = 0;
-    const wait_some = base_controller.wait_Some(e_Scope.Global, "waiter/namespace", [
+    const wait_some = base_controller.wait_Some([
         {
             Namespace: declaration_namespace1,
             Listen: C_BootState.ClassReady,
@@ -81,7 +81,7 @@ test("BaseController.wait_Some", () => {
                     === test_value2;
             },
         },
-    ]).then((transmissions) => {
+    ], "waiter/namespace", e_Scope.Global).then((transmissions) => {
         return (transmissions).map((transmission) => {
             return (transmission.Talk)[2][0];
         });

@@ -190,8 +190,6 @@ test("BaseController.wait_Some", () => {
         t_ri<[string]>,
         i_talk<t_ri<[string]>>
     >(
-        e_Scope.Global,
-        "waiter/namespace",
         [
             {
                 Namespace: declaration_namespace1,
@@ -212,6 +210,8 @@ test("BaseController.wait_Some", () => {
                 },
             },
         ],
+        "waiter/namespace",
+        e_Scope.Global,
     ).then((transmissions) => {
         return (transmissions).map((transmission) => {
 

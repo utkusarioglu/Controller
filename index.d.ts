@@ -34,7 +34,7 @@ declare module '@utkusarioglu/controller/Controller/controller' {
         static flush_StaticContentArchive(): void;
         static force_AllDynamicService(): void;
         announce<TalkRi extends t_ri_any>(recipient_namespace: t_namespace, talk: TalkRi, scope?: t_scope, delay?: boolean | t_epoch): this;
-        get_AnnouncementArchive(scope: t_singleScope): i_announcementArchiveItem[];
+        get_AnnouncementArchive(scope?: t_singleScope): i_announcementArchiveItem[];
         subscribe<TalkRi extends t_ri_any = t_ri_any>(listen: t_ri, callback: (transmission: i_talk<TalkRi>) => void, subcribed_namespace?: t_namespace, scope?: t_scope): this;
         wait<TalkRi extends t_ri_any = t_ri_any, Return = i_talk<TalkRi>>(recipient_namespace: t_namespace, listen: t_ri, test_callback?: t_waitTestCallback<TalkRi>, action_callback?: t_waitActionCallback<TalkRi, Return>, scope?: t_singleScope, count?: number, current_count?: number): Promise<t_wait<TalkRi, Return>>;
         wait_Some<TalkRi extends t_ri_any = t_ri_any, Return = i_talk<TalkRi>>(wait_set: Array<i_waitSet<TalkRi, Return>>, scope: t_singleScope): Promise<Array<t_wait<TalkRi, Return>>>;
@@ -256,7 +256,7 @@ declare module '@utkusarioglu/controller/BaseController/base_controller' {
         get_AnnouncementArchive(): Array<i_announcementArchiveItem>;
         subscribe<TalkRi extends t_ri_any = t_ri_any>(listen: t_ri, callback: (transmission: i_talk<TalkRi>) => void, subcribed_namespace: t_namespace, scope: t_singleScope): void;
         wait<TalkRi extends t_ri_any = t_ri_any, Return = any>(waiter_namespace: t_namespace, recipient_namespace: t_namespace, listen: t_ri, test_callback: t_waitTestCallback<TalkRi> | undefined, action_callback: t_waitActionCallback<TalkRi, Return> | undefined, scope: t_singleScope, total_count?: number, current_count?: number): Promise<t_wait<TalkRi, Return>>;
-        wait_Some<TalkRi extends t_ri_any = t_ri_any, Return = any>(scope: t_singleScope, waiter_namespace: t_namespace, wait_set: Array<i_waitSet<TalkRi, Return>>): Promise<Array<t_wait<TalkRi, Return>>>;
+        wait_Some<TalkRi extends t_ri_any = t_ri_any, Return = any>(wait_set: Array<i_waitSet<TalkRi, Return>>, waiter_namespace: t_namespace, scope?: t_singleScope): Promise<Array<t_wait<TalkRi, Return>>>;
     }
 }
 

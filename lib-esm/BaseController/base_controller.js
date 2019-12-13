@@ -1,6 +1,7 @@
 import { Resolution } from "@utkusarioglu/resolver";
 import { SeparatorHandler } from "../Common/separator_handler";
 import { C_Controller } from "../Common/c_controller";
+import { e_Scope, } from "../Common/t_controller";
 export class BaseController extends SeparatorHandler {
     constructor(controller_scope, event_emitter) {
         super();
@@ -101,7 +102,6 @@ export class BaseController extends SeparatorHandler {
             Static: false,
             Scope: scope,
         };
-        console.log("announcing", talk, scope, sender_namespace);
         const do_announcement = () => {
             this._monologue_emitter.emit(announcement_channel, announcement_packet);
             this.archive_Announcement(sender_namespace, announcement_channel, announcement_packet);
@@ -157,7 +157,7 @@ export class BaseController extends SeparatorHandler {
             }
         });
     }
-    wait_Some(scope, waiter_namespace, wait_set) {
+    wait_Some(wait_set, waiter_namespace, scope = e_Scope.Global) {
         return Promise.all(wait_set
             .map((wait_event) => {
             return this.wait(waiter_namespace, wait_event.Namespace, wait_event.Listen, wait_event.Test, wait_event.Call, scope);

@@ -39,7 +39,7 @@ import {
     t_expressionTrail,
 } from "@utkusarioglu/resolver";
 import { t_namespace } from "@utkusarioglu/namespace";
-import { EventEmitter } from "@utkusarioglu/event-emitter";
+//import { EventEmitter } from "@utkusarioglu/event-emitter";
 import { t_ri_any } from "@utkusarioglu/resolver/Common/t_resolver";
 
 
@@ -416,7 +416,7 @@ export class BaseController extends SeparatorHandler {
             Scope: scope,
         };
 
-        console.log("announcing", talk, scope, sender_namespace)
+        //console.log("announcing", talk, scope, sender_namespace)
 
         const do_announcement = () => {
 
@@ -627,9 +627,9 @@ export class BaseController extends SeparatorHandler {
         TalkRi extends t_ri_any = t_ri_any,
         Return = any
     >(
-        scope: t_singleScope,
-        waiter_namespace: t_namespace,
         wait_set: Array<i_waitSet<TalkRi, Return>>,
+        waiter_namespace: t_namespace,
+        scope: t_singleScope = e_Scope.Global,
     ): Promise<Array<t_wait<TalkRi, Return>>> {
         return Promise.all(wait_set
             .map((wait_event: i_waitSet<TalkRi, Return>) => {

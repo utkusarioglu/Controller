@@ -47,6 +47,7 @@ import {
 } from "@utkusarioglu/resolver";
 import { t_namespace } from "@utkusarioglu/namespace";
 import { t_epoch } from "@utkusarioglu/state/t_state";
+import { Controller } from "../Controller/controller";
 
 
 
@@ -261,30 +262,27 @@ export abstract class M_ControllerEvents {
      */
     public initialize_Controller(sequential_startup: boolean = true): this {
 
-        this.set_Controller();
+        const controller = this.set_Controller().get_Controller();
 
-                        console.log("ns-start", this.get_GlobalNamespace())
         if (sequential_startup) {
 
             // Listens
-            this.get_Controller()
+            controller
                 .wait(
                     C_Controller.AllServices,
                     C_StartupTalk.run_Listen,
                     undefined,
                     () => {
-
                         this.register_Dependencies();
                         this.register_Subscriptions();
-                        console.log("ns-listen", this.get_GlobalNamespace())
-
+    
                         this.announce_ToAllServices(C_BootState.ListenReady);
                     },
                     e_Scope.Global,
                 );
 
             // Talks
-            this.get_Controller()
+            controller
                 .wait(
                     C_Controller.AllServices,
                     C_StartupTalk.run_Talk,
@@ -310,7 +308,6 @@ export abstract class M_ControllerEvents {
         }
 
         this.announce_ToAllServices(C_BootState.ClassReady, 200);
-
 
         return this;
     }
@@ -544,11 +541,12 @@ export abstract class M_ControllerEvents {
 
         step.sniff(["Talk"], undefined,
             (step_talk: t_ri) => {
-                this.get_Controller().announce(
-                    manager_namespace,
-                    step_talk,
-                    scope,
-                );
+                this.get_Controller()
+                    .announce(
+                        manager_namespace,
+                        step_talk,
+                        scope,
+                    );
             });
 
         const index_str: string = index.toString();

@@ -568,7 +568,7 @@ export class Controller extends SeparatorHandler {
      * Returns the entire list of announcements since app start
      */
     public get_AnnouncementArchive(
-        scope: t_singleScope
+        scope: t_singleScope = e_Scope.Global,
     ): i_announcementArchiveItem[] {
         return this.get_Scopes(scope)[0].get_AnnouncementArchive();
     }
@@ -648,16 +648,17 @@ export class Controller extends SeparatorHandler {
         count: number = 1,
         current_count: number = count,
     ): Promise<t_wait<TalkRi, Return>> {
-        const wait_response = this.get_Scopes(scope)[0].wait(
-            this._controller_global_namespace,
-            recipient_namespace,
-            listen,
-            test_callback,
-            action_callback,
-            scope,
-            count,
-            current_count,
-        );
+        const wait_response = this.get_Scopes(scope)[0]
+            .wait(
+                this._controller_global_namespace,
+                recipient_namespace,
+                listen,
+                test_callback,
+                action_callback,
+                scope,
+                count,
+                current_count,
+            );
 
         return wait_response;
     }
@@ -682,9 +683,9 @@ export class Controller extends SeparatorHandler {
         return this
             .get_Scopes(scope)[0]
             .wait_Some(
-                scope,
-                this._controller_global_namespace,
                 wait_set,
+                this._controller_global_namespace,
+                scope,
             );
     }
 

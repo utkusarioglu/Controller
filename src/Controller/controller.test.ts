@@ -129,3 +129,89 @@ test("Controller.service.global", () => {
     return expect(response).resolves.toStrictEqual(response_data);
 
 });
+
+
+test("Controller.wait.global.noTest", () => {
+    Controller.flush_GlobalController();
+
+    const consuming_namespace = "namespace/consuming";
+    const waiting_controller = new Controller(consuming_namespace);
+    const talking_namespace = "service/namespace";
+    const talking_controller = new Controller(talking_namespace);
+    const response_data = "response_data";
+    const talk_ri: t_ri0 = ["RI", "wait_over"];
+
+    const wait = waiting_controller.wait(
+        talking_namespace,
+        talk_ri,
+        undefined,
+        (t) => t.Talk
+    );
+
+    talking_controller.announce(
+        talking_namespace,
+        talk_ri,
+    )
+
+    return expect(wait).resolves.toStrictEqual(talk_ri);
+
+});
+
+test("Controller.wait.global.test", () => {
+
+    Controller.flush_GlobalController();
+
+    const consuming_namespace = "namespace/consuming";
+    const waiting_controller = new Controller(consuming_namespace);
+    const talking_namespace = "service/namespace";
+    const talking_controller = new Controller(talking_namespace);
+    const response_data = "response_data";
+
+    const talk_ri: t_ri0 = ["RI", "wait_over"];
+    const talk_ri2: t_ri0 = ["RI", "wait_not_over"];
+
+    let wait_over_counter: number = 0;
+
+    const wait = waiting_controller.wait(
+        talking_namespace,
+        talk_ri,
+        (t) => {
+            wait_over_counter += t.Talk === talk_ri ? 1 : 0
+            return wait_over_counter === 3;
+        },
+        (t) => wait_over_counter
+    );
+
+    talking_controller.announce(
+        talking_namespace,
+        talk_ri,
+    )
+
+            for (let i = 0; i < 100; i++) {
+                talking_controller.announce(
+                    talking_namespace,
+                    talk_ri2,
+                )
+            }
+
+    talking_controller.announce(
+        talking_namespace,
+        talk_ri,
+    )
+
+            for (let i = 0; i < 100; i++) {
+                talking_controller.announce(
+                    talking_namespace,
+                    talk_ri2,
+                )
+            }
+
+    talking_controller.announce(
+        talking_namespace,
+        talk_ri,
+    )
+
+    expect(talking_controller.get_AnnouncementArchive().length).toStrictEqual(203)
+    return expect(wait).resolves.toStrictEqual(3);
+
+});

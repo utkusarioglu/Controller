@@ -50,17 +50,15 @@ export class M_ControllerEvents {
         return this;
     }
     initialize_Controller(sequential_startup = true) {
-        this.set_Controller();
-        console.log("ns-start", this.get_GlobalNamespace());
+        const controller = this.set_Controller().get_Controller();
         if (sequential_startup) {
-            this.get_Controller()
+            controller
                 .wait(C_Controller.AllServices, C_StartupTalk.run_Listen, undefined, () => {
                 this.register_Dependencies();
                 this.register_Subscriptions();
-                console.log("ns-listen", this.get_GlobalNamespace());
                 this.announce_ToAllServices(C_BootState.ListenReady);
             }, e_Scope.Global);
-            this.get_Controller()
+            controller
                 .wait(C_Controller.AllServices, C_StartupTalk.run_Talk, undefined, () => {
                 this.register_Announcements();
                 this.register_Services();
@@ -149,7 +147,8 @@ export class M_ControllerEvents {
             console.log(start_message);
         });
         step.sniff(["Talk"], undefined, (step_talk) => {
-            this.get_Controller().announce(manager_namespace, step_talk, scope);
+            this.get_Controller()
+                .announce(manager_namespace, step_talk, scope);
         });
         const index_str = index.toString();
         return step_promise_stack.sniff([index_str], () => {

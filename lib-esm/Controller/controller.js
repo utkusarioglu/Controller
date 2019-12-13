@@ -109,7 +109,7 @@ export class Controller extends SeparatorHandler {
     static is_StaticResponder(channel) {
         return this._static_responders.indexOf(channel) !== -1;
     }
-    get_AnnouncementArchive(scope) {
+    get_AnnouncementArchive(scope = e_Scope.Global) {
         return this.get_Scopes(scope)[0].get_AnnouncementArchive();
     }
     subscribe(listen, callback, subcribed_namespace = this.get_GlobalNamespace(), scope = e_Scope.Global) {
@@ -119,13 +119,14 @@ export class Controller extends SeparatorHandler {
         return this;
     }
     wait(recipient_namespace, listen, test_callback = () => true, action_callback = (transmission) => transmission, scope = e_Scope.Global, count = 1, current_count = count) {
-        const wait_response = this.get_Scopes(scope)[0].wait(this._controller_global_namespace, recipient_namespace, listen, test_callback, action_callback, scope, count, current_count);
+        const wait_response = this.get_Scopes(scope)[0]
+            .wait(this._controller_global_namespace, recipient_namespace, listen, test_callback, action_callback, scope, count, current_count);
         return wait_response;
     }
     wait_Some(wait_set, scope) {
         return this
             .get_Scopes(scope)[0]
-            .wait_Some(scope, this._controller_global_namespace, wait_set);
+            .wait_Some(wait_set, this._controller_global_namespace, scope);
     }
     set_LocalNamespace(local_namespace) {
         this._controller_local_namespace = local_namespace;
