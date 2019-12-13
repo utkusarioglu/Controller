@@ -577,7 +577,7 @@ export class BaseController extends SeparatorHandler {
 
                         current_count--;
                         resolve2(action_callback(transmission));
-                        return action_callback(transmission);
+                        //return action_callback(transmission);
                     } else {
 
                         const new_promise = this.wait<TalkRi, Return>(

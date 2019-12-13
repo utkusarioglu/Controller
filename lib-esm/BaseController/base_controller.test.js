@@ -25,6 +25,40 @@ test("BaseController.subscribe&announce.Global", () => {
     base_controller.announce("base_controller2", namespace, C_BootState.ClassReady, e_Scope.Global);
     return expect(subscription).resolves.toStrictEqual(C_BootState.ClassReady);
 });
+test("BaseController.subscribe&announce.Global.Count", () => {
+    const namespace = "subscribed/namespace";
+    const base_controller = new BaseController(e_Scope.Global, ActiveEmitter);
+    const announcement_count = 10;
+    const counter = new Promise((resolve, reject) => {
+        let counter = 0;
+        let log = [];
+        base_controller.subscribe(C_BootState.ClassReady, (transmission) => {
+            counter++;
+            log.push(transmission);
+        }, namespace, e_Scope.Global);
+        setTimeout(() => resolve(counter), 1000);
+    });
+    for (let i = 0; i < announcement_count; i++) {
+        base_controller.announce("base_controller2", namespace, C_BootState.ClassReady, e_Scope.Global);
+    }
+    return expect(counter).resolves.toStrictEqual(announcement_count);
+});
+test("BaseController.wait&announce.Global.Count", () => {
+    const namespace = "subscribed/namespace";
+    const base_controller = new BaseController(e_Scope.Global, ActiveEmitter);
+    const announcement_count = 1;
+    const counter = new Promise((resolve, reject) => {
+        let counter = 0;
+        let log = [];
+        base_controller.wait("waiter", namespace, C_BootState.ClassReady, undefined, (transmission) => {
+            counter++;
+            log.push(transmission);
+        }, e_Scope.Global);
+        setTimeout(() => resolve(counter), 1000);
+    });
+    base_controller.announce("base_controller2", namespace, C_BootState.ClassReady, e_Scope.Global);
+    return expect(counter).resolves.toStrictEqual(announcement_count);
+});
 test("BaseController.subscribe&announce.Local", () => {
     const namespace = "subscribed/namespace";
     const base_controller = new BaseController(e_Scope.Local, ActiveEmitter);

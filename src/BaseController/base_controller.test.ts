@@ -93,6 +93,87 @@ test("BaseController.subscribe&announce.Global", () => {
 
 });
 
+test("BaseController.subscribe&announce.Global.Count", () => {
+
+    const namespace = "subscribed/namespace";
+    const base_controller = new BaseController(e_Scope.Global, ActiveEmitter);
+    const announcement_count: number = 10;
+
+    const counter = new Promise((resolve, reject) => {
+
+        let counter: number = 0;
+        let log: i_talk[] = [];
+
+        base_controller.subscribe<any>(
+            C_BootState.ClassReady,
+            (transmission) => {
+                counter++
+                log.push(transmission);
+            },
+            namespace,
+            e_Scope.Global,
+        );
+
+        setTimeout(() => resolve(counter), 1000)
+
+    });
+
+
+    for (let i = 0; i < announcement_count; i++) {
+        base_controller.announce(
+            "base_controller2",
+            namespace,
+            C_BootState.ClassReady,
+            e_Scope.Global,
+        );
+    }
+
+    return expect(counter).resolves.toStrictEqual(announcement_count);
+
+});
+
+test("BaseController.wait&announce.Global.Count", () => {
+
+    const namespace = "subscribed/namespace";
+    const base_controller = new BaseController(e_Scope.Global, ActiveEmitter);
+    const announcement_count: number = 1;
+
+    const counter = new Promise((resolve, reject) => {
+
+        let counter: number = 0;
+        let log: i_talk[] = [];
+
+        base_controller.wait<any>(
+            "waiter",
+            namespace,
+            C_BootState.ClassReady,
+            undefined,
+            (transmission) => {
+                counter++
+                log.push(transmission);
+            },
+            e_Scope.Global,
+        );
+
+        setTimeout(() => resolve(counter), 1000)
+
+    });
+
+
+    //for (let i = 0; i < announcement_count; i++) {
+    base_controller.announce(
+        "base_controller2",
+        namespace,
+        C_BootState.ClassReady,
+        e_Scope.Global,
+    );
+    //}
+
+    return expect(counter).resolves.toStrictEqual(announcement_count);
+
+});
+
+
 
 test("BaseController.subscribe&announce.Local", () => {
 

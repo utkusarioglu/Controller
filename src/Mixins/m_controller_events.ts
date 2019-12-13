@@ -517,7 +517,7 @@ export abstract class M_ControllerEvents {
      * @param step
      * @param index
      */
-    produce_StepsPromise(
+    private produce_StepsPromise(
         scope: t_singleScope,
         manager_namespace: t_namespace,
         step_promise_stack: Array<Promise<any>>,

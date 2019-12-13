@@ -37,7 +37,7 @@ declare module '@utkusarioglu/controller/Controller/controller' {
         get_AnnouncementArchive(scope?: t_singleScope): i_announcementArchiveItem[];
         subscribe<TalkRi extends t_ri_any = t_ri_any>(listen: t_ri, callback: (transmission: i_talk<TalkRi>) => void, subcribed_namespace?: t_namespace, scope?: t_scope): this;
         wait<TalkRi extends t_ri_any = t_ri_any, Return = i_talk<TalkRi>>(recipient_namespace: t_namespace, listen: t_ri, test_callback?: t_waitTestCallback<TalkRi>, action_callback?: t_waitActionCallback<TalkRi, Return>, scope?: t_singleScope, count?: number, current_count?: number): Promise<t_wait<TalkRi, Return>>;
-        wait_Some<TalkRi extends t_ri_any = t_ri_any, Return = i_talk<TalkRi>>(wait_set: Array<i_waitSet<TalkRi, Return>>, scope: t_singleScope): Promise<Array<t_wait<TalkRi, Return>>>;
+        wait_Some<TalkRi extends t_ri_any = t_ri_any, Return = i_talk<TalkRi>>(wait_set: Array<i_waitSet<TalkRi, Return>>, scope?: t_singleScope): Promise<Array<t_wait<TalkRi, Return>>>;
         set_LocalNamespace(local_namespace: t_namespace): this;
         get_LocalNamespace(): t_namespace;
         get_LocalNamespaces(): t_namespace[];
@@ -77,7 +77,6 @@ declare module '@utkusarioglu/controller/Mixins/m_controller_events' {
         initialize_Controller(sequential_startup?: boolean): this;
         protected manage_ControllerSequence(sequence_steps: Array<i_sequenceStep>, scope: t_singleScope, manager_namespace: t_namespace): Promise<any>;
         produce_PromiseStackMember(scope: t_singleScope, manager_namespace: t_namespace, step: i_sequenceStep): Promise<t_ri>;
-        produce_StepsPromise(scope: t_singleScope, manager_namespace: t_namespace, step_promise_stack: Array<Promise<any>>, step: i_sequenceStep, index: number): Promise<any>;
         protected announce_ToAllServices(resolution_instruction: t_ri, delay?: t_epoch): void;
         protected announce_LibraryAdded(library_source_namespace: t_namespace): void;
     }

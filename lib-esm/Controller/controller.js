@@ -123,7 +123,7 @@ export class Controller extends SeparatorHandler {
             .wait(this._controller_global_namespace, recipient_namespace, listen, test_callback, action_callback, scope, count, current_count);
         return wait_response;
     }
-    wait_Some(wait_set, scope) {
+    wait_Some(wait_set, scope = e_Scope.Global) {
         return this
             .get_Scopes(scope)[0]
             .wait_Some(wait_set, this._controller_global_namespace, scope);

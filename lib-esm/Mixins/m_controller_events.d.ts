@@ -24,7 +24,7 @@ export declare abstract class M_ControllerEvents {
     private register_Services;
     protected manage_ControllerSequence(sequence_steps: Array<i_sequenceStep>, scope: t_singleScope, manager_namespace: t_namespace): Promise<any>;
     produce_PromiseStackMember(scope: t_singleScope, manager_namespace: t_namespace, step: i_sequenceStep): Promise<t_ri>;
-    produce_StepsPromise(scope: t_singleScope, manager_namespace: t_namespace, step_promise_stack: Array<Promise<any>>, step: i_sequenceStep, index: number): Promise<any>;
+    private produce_StepsPromise;
     protected announce_ToAllServices(resolution_instruction: t_ri, delay?: t_epoch): void;
     protected announce_LibraryAdded(library_source_namespace: t_namespace): void;
 }

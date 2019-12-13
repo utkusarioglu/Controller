@@ -98,6 +98,87 @@ test("Controller.listen&talk.Global", () => {
 
 });
 
+test("Controller.listen&talk.Global.Count", () => {
+
+    Controller.flush_GlobalController();
+
+    const subscriber_namespace = "subscriber/namespace";
+    const announcer_namespace = "announcer/namespace";
+    const subscriber = new Controller(subscriber_namespace);
+    const announcer = new Controller(announcer_namespace);
+    const subscribed_namespace = "subscribed/namespace";
+    const data: string = "data";
+
+    const announcement_count: number = 10;
+
+    const counter = new Promise((resolve) => {
+
+        let counter: number = 0;
+        let log: i_talk[] = [];
+
+        subscriber.subscribe(
+            C_StartupTalk.send_Archive,
+            (transmission: i_talk<t_ri0>) => {
+                log.push(transmission)
+                counter++
+            },
+            subscribed_namespace,
+            //e_Scope.Global,
+        );
+
+        setTimeout(() => resolve(counter), 1000)
+    });
+
+    for (let i = 0; i < announcement_count; i++) {
+        announcer.announce(
+            subscribed_namespace,
+            [...C_StartupTalk.send_Archive, [data]] as t_ri<[typeof data]>,
+        );
+    }
+
+    return expect(counter).resolves.toBe(announcement_count);
+});
+
+
+test("Controller.wait&talk.Global.Count", () => {
+
+    Controller.flush_GlobalController();
+
+    const subscriber_namespace = "subscriber/namespace";
+    const announcer_namespace = "announcer/namespace";
+    const subscriber = new Controller(subscriber_namespace);
+    const announcer = new Controller(announcer_namespace);
+    const subscribed_namespace = "subscribed/namespace";
+    const data: string = "data";
+
+    const announcement_count: number = 1;
+
+    const counter = new Promise((resolve) => {
+
+        let counter: number = 0;
+        let log: i_talk[] = [];
+
+        subscriber.wait(
+            subscribed_namespace,
+            C_StartupTalk.send_Archive,
+            undefined,
+            (transmission: i_talk<t_ri0>) => {
+                log.push(transmission)
+                counter++
+            },
+            //e_Scope.Global,
+        );
+
+        setTimeout(() => resolve(counter), 1000)
+    });
+
+    announcer.announce(
+        subscribed_namespace,
+        [...C_StartupTalk.send_Archive, [data]] as t_ri<[typeof data]>,
+    );
+
+    return expect(counter).resolves.toBe(announcement_count);
+});
 
 
 test("Controller.service.global", () => {

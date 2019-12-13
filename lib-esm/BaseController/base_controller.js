@@ -140,7 +140,6 @@ export class BaseController extends SeparatorHandler {
                 if (test_callback(transmission)) {
                     current_count--;
                     resolve2(action_callback(transmission));
-                    return action_callback(transmission);
                 }
                 else {
                     const new_promise = this.wait(waiter_namespace, recipient_namespace, listen, test_callback, action_callback, scope, total_count, current_count);
