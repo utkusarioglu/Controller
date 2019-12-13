@@ -267,37 +267,27 @@ export abstract class M_ControllerEvents {
 
         if (sequential_startup) {
 
-            // Listens
             this.get_Controller()
-                .wait(
-                    C_Controller.AllServices,
-                    C_StartupTalk.run_Listen,
-                    undefined,
-                    () => {
-                        this.register_Dependencies();
-                        this.register_Subscriptions();
-    
-                        this.announce_ToAllServices(C_BootState.ListenReady);
+                .wait_Some([
+                    {
+                        Namespace: C_Controller.AllServices,
+                        Listen: C_StartupTalk.run_Listen,
+                        Call: () => {
+                            this.register_Dependencies();
+                            this.register_Subscriptions();
+                            this.announce_ToAllServices(C_BootState.ListenReady);
+                        },
                     },
-                    e_Scope.Global,
-                );
-
-            // Talks
-            this.get_Controller()
-                .wait(
-                    C_Controller.AllServices,
-                    C_StartupTalk.run_Talk,
-                    undefined,
-                    () => {
-
-                        this.register_Announcements();
-                        this.register_Services();
-
-                        this.announce_ToAllServices(C_BootState.TalkReady);
-                    },
-                    e_Scope.Global,
-                );
-
+                    {
+                        Namespace: C_Controller.AllServices,
+                        Listen: C_StartupTalk.run_Listen,
+                        Call: () => {
+                            this.register_Announcements();
+                            this.register_Services();
+                            this.announce_ToAllServices(C_BootState.TalkReady);
+                        },
+                    }
+                ])
 
         } else {
 

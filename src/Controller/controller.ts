@@ -678,7 +678,7 @@ export class Controller extends SeparatorHandler {
         Return = i_talk<TalkRi>
     >(
         wait_set: Array<i_waitSet<TalkRi, Return>>,
-        scope: t_singleScope,
+        scope: t_singleScope = e_Scope.Global,
     ): Promise<Array<t_wait<TalkRi, Return>>> {
         return this
             .get_Scopes(scope)[0]
