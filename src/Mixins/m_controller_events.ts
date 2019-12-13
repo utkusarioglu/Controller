@@ -383,8 +383,8 @@ export abstract class M_ControllerEvents {
                 .forEach((announcement: i_announcement<TalkRi>) => {
                     this.get_Controller()
                         .announce<TalkRi>(
-                            announcement.Namespace,
                             announcement.Talk,
+                            announcement.Namespace,
                             announcement.Scope,
                         );
                 });
@@ -437,9 +437,6 @@ export abstract class M_ControllerEvents {
         manager_namespace: t_namespace,
     ): Promise<any> {
 
-        let TEST;
-        //return Promise.resolve(this.get_GlobalNamespace());
-
         const step_promise_stack:
             Array<Promise<t_ri>> = [];
 
@@ -489,8 +486,8 @@ export abstract class M_ControllerEvents {
         return new Promise((resolve_step_promise) => {
             return this.get_Controller()
                 .wait<t_ri<[string]>, any>(
-                    manager_namespace,
                     step.Listen,
+                    manager_namespace,
                     (transmission) => {
                         step.List = step.List.filter((value: string) => {
                             return value !== transmission.Sender;
@@ -534,8 +531,8 @@ export abstract class M_ControllerEvents {
             (step_talk: t_ri) => {
                 this.get_Controller()
                     .announce(
-                        manager_namespace,
                         step_talk,
+                        manager_namespace,
                         scope,
                     );
             });
@@ -578,8 +575,8 @@ export abstract class M_ControllerEvents {
 
         this.get_Controller()
             .announce(
-                C_Controller.AllServices,
                 resolution_instruction,
+                C_Controller.AllServices,
                 e_Scope.Global,
                 delay,
             );
@@ -598,8 +595,8 @@ export abstract class M_ControllerEvents {
         library_source_namespace: t_namespace,
     ): void {
         this.get_Controller().announce(
-            C_Controller.AllServices,
             [...C_BootState.LibraryAdded, [library_source_namespace]] as t_ri<[t_namespace]>,
+            C_Controller.AllServices,
             e_Scope.Global,
             true,
         );

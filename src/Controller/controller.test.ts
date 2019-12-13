@@ -60,8 +60,8 @@ test("Single Controller.listen&talk.Global", () => {
     });
 
     c.announce(
-        subscribed_namespace,
         [...C_StartupTalk.send_Archive, [data]] as t_ri<[typeof data]>,
+        subscribed_namespace,
     );
 
     return expect(listen).resolves.toBe(data);
@@ -90,8 +90,8 @@ test("Controller.listen&talk.Global", () => {
     });
 
     announcer.announce(
-        subscribed_namespace,
         [...C_StartupTalk.send_Archive, [data]] as t_ri<[typeof data]>,
+        subscribed_namespace,
     );
 
     return expect(listen).resolves.toBe(data);
@@ -131,8 +131,8 @@ test("Controller.listen&talk.Global.Count", () => {
 
     for (let i = 0; i < announcement_count; i++) {
         announcer.announce(
-            subscribed_namespace,
             [...C_StartupTalk.send_Archive, [data]] as t_ri<[typeof data]>,
+            subscribed_namespace,
         );
     }
 
@@ -159,8 +159,8 @@ test("Controller.wait&talk.Global.Count", () => {
         let log: i_talk[] = [];
 
         subscriber.wait(
-            subscribed_namespace,
             C_StartupTalk.send_Archive,
+            subscribed_namespace,
             undefined,
             (transmission: i_talk<t_ri0>) => {
                 log.push(transmission)
@@ -173,8 +173,8 @@ test("Controller.wait&talk.Global.Count", () => {
     });
 
     announcer.announce(
-        subscribed_namespace,
         [...C_StartupTalk.send_Archive, [data]] as t_ri<[typeof data]>,
+        subscribed_namespace,
     );
 
     return expect(counter).resolves.toBe(announcement_count);
@@ -199,8 +199,8 @@ test("Controller.service.global", () => {
     );
 
     const response = consuming_controller.request<string>(
-        service_namespace,
         ["RI", "do_Something"],
+        service_namespace,
         //e_Scope.Global,
     ).
         then((transmission: i_response<string>) => {
@@ -223,15 +223,15 @@ test("Controller.wait.global.noTest", () => {
     const talk_ri: t_ri0 = ["RI", "wait_over"];
 
     const wait = waiting_controller.wait(
-        talking_namespace,
         talk_ri,
+        talking_namespace,
         undefined,
         (t) => t.Talk
     );
 
     talking_controller.announce(
-        talking_namespace,
         talk_ri,
+        talking_namespace,
     )
 
     return expect(wait).resolves.toStrictEqual(talk_ri);
@@ -254,8 +254,8 @@ test("Controller.wait.global.test", () => {
     let wait_over_counter: number = 0;
 
     const wait = waiting_controller.wait(
-        talking_namespace,
         talk_ri,
+        talking_namespace,
         (t) => {
             wait_over_counter += t.Talk === talk_ri ? 1 : 0
             return wait_over_counter === 3;
@@ -264,32 +264,32 @@ test("Controller.wait.global.test", () => {
     );
 
     talking_controller.announce(
-        talking_namespace,
         talk_ri,
+        talking_namespace,
     )
 
             for (let i = 0; i < 100; i++) {
                 talking_controller.announce(
-                    talking_namespace,
                     talk_ri2,
+                    talking_namespace,
                 )
             }
 
     talking_controller.announce(
-        talking_namespace,
         talk_ri,
+        talking_namespace,
     )
 
             for (let i = 0; i < 100; i++) {
                 talking_controller.announce(
-                    talking_namespace,
                     talk_ri2,
+                    talking_namespace,
                 )
             }
 
     talking_controller.announce(
-        talking_namespace,
         talk_ri,
+        talking_namespace,
     )
 
     expect(talking_controller.get_AnnouncementArchive().length).toStrictEqual(203)

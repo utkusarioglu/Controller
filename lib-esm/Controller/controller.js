@@ -10,12 +10,12 @@ export class Controller extends SeparatorHandler {
         this.set_GlobalController();
     }
     static flush_GlobalController() {
-        Controller._global_controller = new BaseController(e_Scope.Global, this.get_EventEmitter());
+        Controller._global_controller = new BaseController(e_Scope.Global, this.get_EventEmitter(), Controller._max_listener_count);
         Controller.flush_GlobalNamespaces();
     }
     set_GlobalController() {
         if (Controller._global_controller === undefined) {
-            Controller._global_controller = new BaseController(e_Scope.Global, this.get_EventEmitter());
+            Controller.flush_GlobalController();
         }
         return this;
     }
@@ -28,7 +28,7 @@ export class Controller extends SeparatorHandler {
     get_EventEmitter() {
         return Controller._event_emitter_class;
     }
-    request(responding_namespace, talk, scope = e_Scope.Global, group = e_ServiceGroup.Standard) {
+    request(talk, responding_namespace, scope = e_Scope.Global, group = e_ServiceGroup.Standard) {
         const responding_channel = responding_namespace +
             this.get_Separator("Dialogue") + group;
         const instruction_code = Resolution.produce_UniqueInstructionCode(talk);
@@ -38,7 +38,7 @@ export class Controller extends SeparatorHandler {
                 responding_channel,
                 instruction_code,
             ], () => {
-                const dynamic_transmission = this.request_DynamicTransmission(responding_namespace, talk, scope, group);
+                const dynamic_transmission = this.request_DynamicTransmission(talk, responding_namespace, scope, group);
                 Controller.set_PromisifiedStaticContent(responding_channel, instruction_code, dynamic_transmission);
                 return dynamic_transmission;
             }, (static_transmisson) => {
@@ -48,13 +48,13 @@ export class Controller extends SeparatorHandler {
             });
         }
         else {
-            return this.request_DynamicTransmission(responding_namespace, talk, scope, group);
+            return this.request_DynamicTransmission(talk, responding_namespace, scope, group);
         }
     }
-    request_DynamicTransmission(recipient_namespace, talk, scope = e_Scope.Global, group = e_ServiceGroup.Standard) {
+    request_DynamicTransmission(talk, recipient_namespace, scope = e_Scope.Global, group = e_ServiceGroup.Standard) {
         return this
             .get_Scopes(scope)[0]
-            .request(this._controller_global_namespace, recipient_namespace, talk, scope, group);
+            .request(this._controller_global_namespace, talk, recipient_namespace, scope, group);
     }
     respond(response_callback, is_static = false, scope = e_Scope.Global, group = e_ServiceGroup.Standard) {
         if (is_static) {
@@ -99,10 +99,10 @@ export class Controller extends SeparatorHandler {
         console.log(C_Controller.E_ForcedDynamic);
         Controller._forced_dynamic_service = true;
     }
-    announce(recipient_namespace, talk, scope = e_Scope.Global, delay = false) {
+    announce(talk, recipient_namespace, scope = e_Scope.Global, delay = false) {
         this.get_Scopes(scope)
             .forEach((active_scope) => {
-            active_scope.announce(this._controller_global_namespace, recipient_namespace, talk, scope, delay);
+            active_scope.announce(this._controller_global_namespace, talk, recipient_namespace, scope, delay);
         });
         return this;
     }
@@ -118,9 +118,9 @@ export class Controller extends SeparatorHandler {
         });
         return this;
     }
-    wait(recipient_namespace, listen, test_callback = () => true, action_callback = (transmission) => transmission, scope = e_Scope.Global, count = 1, current_count = count) {
+    wait(listen, awaited_namespace, test_callback = () => true, action_callback = (transmission) => transmission, scope = e_Scope.Global, count = 1, current_count = count) {
         const wait_response = this.get_Scopes(scope)[0]
-            .wait(this._controller_global_namespace, recipient_namespace, listen, test_callback, action_callback, scope, count, current_count);
+            .wait(this._controller_global_namespace, listen, awaited_namespace, test_callback, action_callback, scope, count, current_count);
         return wait_response;
     }
     wait_Some(wait_set, scope = e_Scope.Global) {
@@ -151,7 +151,7 @@ export class Controller extends SeparatorHandler {
         Controller._local_controllers
             .pave([local_namespace], () => {
         }, () => {
-            return new BaseController(e_Scope.Local, Controller.get_EventEmitter());
+            return new BaseController(e_Scope.Local, Controller.get_EventEmitter(), Controller._max_listener_count);
         });
     }
     destroy_LocalNamespace(local_namespace) {
@@ -185,10 +185,17 @@ export class Controller extends SeparatorHandler {
     static get_LocalControllerStack() {
         return Controller._local_controllers;
     }
+    static set_MaxListenerCount(max_listener_count) {
+        Controller._max_listener_count = max_listener_count;
+    }
+    static get_MaxListenerCount() {
+        return Controller._max_listener_count;
+    }
 }
 Controller._local_controllers = {};
 Controller._global_namespaces = [];
 Controller._static_content_archive = {};
 Controller._static_responders = [];
 Controller._forced_dynamic_service = false;
+Controller._max_listener_count = 10;
 //# sourceMappingURL=controller.js.map

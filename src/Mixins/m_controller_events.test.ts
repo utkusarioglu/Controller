@@ -99,8 +99,8 @@ test("App.Class Ready manual", () => {
     });
 
     talking_controller.announce(
-            C_Controller.AllServices,
             C_BootState.ClassReady,
+            C_Controller.AllServices,
             e_Scope.Global,
             0,
         );
@@ -128,8 +128,8 @@ test("App.Class Ready, late announce", () => {
     });
 
     talking_controller.announce(
-        C_Controller.AllServices,
         C_BootState.ClassReady,
+        C_Controller.AllServices,
         undefined,
         500
     )

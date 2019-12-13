@@ -27,7 +27,7 @@ test("App.Class Ready manual", () => {
             resolve(transmission.Talk);
         }, C_Controller.AllServices);
     });
-    talking_controller.announce(C_Controller.AllServices, C_BootState.ClassReady, e_Scope.Global, 0);
+    talking_controller.announce(C_BootState.ClassReady, C_Controller.AllServices, e_Scope.Global, 0);
     return expect(subscription).resolves.toBe(C_BootState.ClassReady);
 });
 test("App.Class Ready, late announce", () => {
@@ -39,7 +39,7 @@ test("App.Class Ready, late announce", () => {
             resolve(transmission.Talk);
         }, C_Controller.AllServices);
     });
-    talking_controller.announce(C_Controller.AllServices, C_BootState.ClassReady, undefined, 500);
+    talking_controller.announce(C_BootState.ClassReady, C_Controller.AllServices, undefined, 500);
     return expect(subscription).resolves.toBe(C_BootState.ClassReady);
 });
 test("App.SampleControllerEventsClass listen/talk", () => {

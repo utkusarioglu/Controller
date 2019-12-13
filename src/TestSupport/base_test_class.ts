@@ -95,8 +95,8 @@ export abstract class BaseTestClass extends M_Controller {
 
     public talk(message: any): void {
         this.get_Controller().announce(
-            this.channel,
             [...C_BootState.ClassReady, [message]] as t_ri<[typeof message]>,
+            this.channel,
             undefined,
             100
         );
@@ -104,8 +104,8 @@ export abstract class BaseTestClass extends M_Controller {
 
     public request(channel:t_namespace, message: string): Promise<i_response<string>> {
         return this.get_Controller().request(
+            ["RI", "request()", [message]],
             channel,
-            ["RI", "request()", [message]]
         );
     }
 

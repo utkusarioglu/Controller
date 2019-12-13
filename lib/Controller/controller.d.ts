@@ -13,13 +13,14 @@ export declare class Controller extends SeparatorHandler {
     private static _static_content_archive;
     private static _static_responders;
     private static _forced_dynamic_service;
+    private static _max_listener_count;
     constructor(namespace: t_namespace);
     static flush_GlobalController(): void;
     private set_GlobalController;
     static set_EventEmitter(event_emitter: any): void;
     static get_EventEmitter(): i_EventEmitter;
     get_EventEmitter(): i_EventEmitter;
-    request<Content = any>(responding_namespace: t_namespace, talk: t_ri_any, scope?: t_singleScope, group?: e_ServiceGroup): Promise<i_response<Content>>;
+    request<Content = any>(talk: t_ri_any, responding_namespace: t_namespace, scope?: t_singleScope, group?: e_ServiceGroup): Promise<i_response<Content>>;
     private request_DynamicTransmission;
     respond<CallRi extends t_ri_any = t_ri_any, Content = any>(response_callback: t_serviceCallback<CallRi, Content>, is_static?: boolean, scope?: t_scope, group?: e_ServiceGroup): this;
     get_DialogueArchive(scope: t_singleScope): object;
@@ -28,11 +29,11 @@ export declare class Controller extends SeparatorHandler {
     static get_AllStaticContent(): i_staticContentArchive;
     static flush_StaticContentArchive(): void;
     static force_AllDynamicService(): void;
-    announce<TalkRi extends t_ri_any>(recipient_namespace: t_namespace, talk: TalkRi, scope?: t_scope, delay?: boolean | t_epoch): this;
+    announce<TalkRi extends t_ri_any>(talk: TalkRi, recipient_namespace: t_namespace, scope?: t_scope, delay?: boolean | t_epoch): this;
     private static is_StaticResponder;
     get_AnnouncementArchive(scope?: t_singleScope): i_announcementArchiveItem[];
     subscribe<TalkRi extends t_ri_any = t_ri_any>(listen: t_ri, callback: (transmission: i_talk<TalkRi>) => void, subcribed_namespace?: t_namespace, scope?: t_scope): this;
-    wait<TalkRi extends t_ri_any = t_ri_any, Return = i_talk<TalkRi>>(recipient_namespace: t_namespace, listen: t_ri, test_callback?: t_waitTestCallback<TalkRi>, action_callback?: t_waitActionCallback<TalkRi, Return>, scope?: t_singleScope, count?: number, current_count?: number): Promise<t_wait<TalkRi, Return>>;
+    wait<TalkRi extends t_ri_any = t_ri_any, Return = i_talk<TalkRi>>(listen: t_ri, awaited_namespace: t_namespace, test_callback?: t_waitTestCallback<TalkRi>, action_callback?: t_waitActionCallback<TalkRi, Return>, scope?: t_singleScope, count?: number, current_count?: number): Promise<t_wait<TalkRi, Return>>;
     wait_Some<TalkRi extends t_ri_any = t_ri_any, Return = i_talk<TalkRi>>(wait_set: Array<i_waitSet<TalkRi, Return>>, scope?: t_singleScope): Promise<Array<t_wait<TalkRi, Return>>>;
     set_LocalNamespace(local_namespace: t_namespace): this;
     get_LocalNamespace(): t_namespace;
@@ -46,4 +47,6 @@ export declare class Controller extends SeparatorHandler {
     private static flush_GlobalNamespaces;
     private get_Scopes;
     static get_LocalControllerStack(): i_localControllerStack;
+    static set_MaxListenerCount(max_listener_count: number): void;
+    static get_MaxListenerCount(): number;
 }

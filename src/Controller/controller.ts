@@ -123,6 +123,11 @@ export class Controller extends SeparatorHandler {
      */
     private static _forced_dynamic_service: boolean = false;
 
+    /**
+     * Max listeners allowed per basecontroller
+     */
+    private static _max_listener_count: number = 10;
+
 
     /**
      * Establishes local and global event emitters,
@@ -148,7 +153,8 @@ export class Controller extends SeparatorHandler {
     public static flush_GlobalController(): void {
         Controller._global_controller = new BaseController(
             e_Scope.Global,
-            this.get_EventEmitter()
+            this.get_EventEmitter(),
+            Controller._max_listener_count,
         );
         Controller.flush_GlobalNamespaces();
     }
@@ -158,10 +164,7 @@ export class Controller extends SeparatorHandler {
      */
     private set_GlobalController(): this {
         if (Controller._global_controller === undefined) {
-            Controller._global_controller = new BaseController(
-                e_Scope.Global,
-                this.get_EventEmitter()
-            );
+            Controller.flush_GlobalController();
         }
         return this;
     }
@@ -227,8 +230,8 @@ export class Controller extends SeparatorHandler {
      * Service: Controller
      */
     public request<Content = any>(
-        responding_namespace: t_namespace,
         talk: t_ri_any,
+        responding_namespace: t_namespace,
         scope: t_singleScope = e_Scope.Global,
         group: e_ServiceGroup = e_ServiceGroup.Standard,
     ): Promise<i_response<Content>> {
@@ -252,8 +255,8 @@ export class Controller extends SeparatorHandler {
 
                     const dynamic_transmission =
                         this.request_DynamicTransmission(
-                            responding_namespace,
                             talk,
+                            responding_namespace,
                             scope,
                             group,
                         );
@@ -278,8 +281,8 @@ export class Controller extends SeparatorHandler {
         } else {
 
             return this.request_DynamicTransmission<Content>(
-                responding_namespace,
                 talk,
+                responding_namespace,
                 scope,
                 group,
             );
@@ -300,8 +303,8 @@ export class Controller extends SeparatorHandler {
      * Service: Controller
      */
     private request_DynamicTransmission<Content = any>(
-        recipient_namespace: t_namespace,
         talk: t_ri_any,
+        recipient_namespace: t_namespace,
         scope: t_singleScope = e_Scope.Global,
         group: e_ServiceGroup = e_ServiceGroup.Standard,
     ): Promise<i_response<Content>> {
@@ -309,8 +312,8 @@ export class Controller extends SeparatorHandler {
             .get_Scopes(scope)[0]
             .request(
                 this._controller_global_namespace,
-                recipient_namespace,
                 talk,
+                recipient_namespace,
                 scope,
                 group,
             );
@@ -525,8 +528,8 @@ export class Controller extends SeparatorHandler {
      * Service: Controller
      */
     public announce<TalkRi extends t_ri_any>(
-        recipient_namespace: t_namespace,
         talk: TalkRi,
+        recipient_namespace: t_namespace,
         scope: t_scope = e_Scope.Global,
         delay: boolean | t_epoch = false,
     ): this {
@@ -534,8 +537,8 @@ export class Controller extends SeparatorHandler {
             .forEach((active_scope: BaseController) => {
                 active_scope.announce(
                     this._controller_global_namespace,
-                    recipient_namespace,
                     talk,
+                    recipient_namespace,
                     scope as t_singleScope,
                     delay,
                 );
@@ -639,8 +642,8 @@ export class Controller extends SeparatorHandler {
         TalkRi extends t_ri_any = t_ri_any,
         Return = i_talk<TalkRi>
     >(
-        recipient_namespace: t_namespace,
         listen: t_ri,
+        awaited_namespace: t_namespace,
         test_callback: t_waitTestCallback<TalkRi> = () => true,
         action_callback: t_waitActionCallback<TalkRi, Return> =
             (transmission) => transmission,
@@ -651,8 +654,8 @@ export class Controller extends SeparatorHandler {
         const wait_response = this.get_Scopes(scope)[0]
             .wait(
                 this._controller_global_namespace,
-                recipient_namespace,
                 listen,
+                awaited_namespace,
                 test_callback,
                 action_callback,
                 scope,
@@ -785,7 +788,8 @@ export class Controller extends SeparatorHandler {
                 () => {
                     return new BaseController(
                         e_Scope.Local,
-                        Controller.get_EventEmitter()
+                        Controller.get_EventEmitter(),
+                        Controller._max_listener_count,
                     );
                 },
             );
@@ -890,6 +894,31 @@ export class Controller extends SeparatorHandler {
      */
     public static get_LocalControllerStack(): i_localControllerStack {
         return Controller._local_controllers;
+    }
+
+
+/* --------------------------------------------------------- Use Case ---------
+ *	HANDLE MAX LISTENER COUNT
+ */
+
+    /**
+     * Sets the max number of listeners basecontrollers are allowed to 
+     * attach. Setting this number as low as possible helps with detecting
+     * memory leaks
+     * 
+     * @param max_listener_count
+     */
+    public static set_MaxListenerCount(max_listener_count: number): void {
+        Controller._max_listener_count = max_listener_count;
+    }
+
+    /**
+     * Returns the max number of listeners basecontrollers are allowed to
+     * attach
+     * Default: 10
+     */
+    public static get_MaxListenerCount(): number {
+        return Controller._max_listener_count;
     }
 }
 

@@ -3,18 +3,20 @@ import { SeparatorHandler } from "../Common/separator_handler";
 import { C_Controller } from "../Common/c_controller";
 import { e_Scope, } from "../Common/t_controller";
 export class BaseController extends SeparatorHandler {
-    constructor(controller_scope, event_emitter) {
+    constructor(controller_scope, event_emitter, max_listener = 10) {
         super();
         this._announcement_archive = [];
         this._dialogue_archive = [];
         this._controller_scope = controller_scope;
         this._event_emitter = event_emitter;
-        this._monologue_emitter = new event_emitter().setMaxListeners(20);
-        this._dialogue_emitter = new event_emitter().setMaxListeners(20);
+        this._monologue_emitter =
+            new event_emitter().setMaxListeners(max_listener);
+        this._dialogue_emitter =
+            new event_emitter().setMaxListeners(max_listener);
     }
-    request(sender_namespace, recipient_namespace, talk, scope, group) {
+    request(requesting_namespace, talk, responding_namespace, scope, group) {
         const service_id = BaseController.create_RandomServiceId();
-        const request_channel = recipient_namespace +
+        const request_channel = responding_namespace +
             this.get_Separator("Dialogue") +
             group;
         const response_channel = request_channel +
@@ -22,9 +24,9 @@ export class BaseController extends SeparatorHandler {
             service_id;
         const request_packet = {
             Channel: response_channel,
-            Sender: sender_namespace,
+            Sender: requesting_namespace,
             Group: group,
-            Recipient: recipient_namespace,
+            Recipient: responding_namespace,
             Talk: talk,
             Id: service_id,
             Time: (new Date()).getTime(),
@@ -63,7 +65,7 @@ export class BaseController extends SeparatorHandler {
                     .emit(transmission.Channel, serve_packet);
             })
                 .catch((error) => {
-                console.log("serve error:", error);
+                console.log("Respond Error:\n", error);
             });
         });
     }
@@ -88,7 +90,7 @@ export class BaseController extends SeparatorHandler {
     publicget_ServedChannels() {
         return this._dialogue_emitter.eventNames();
     }
-    announce(sender_namespace, recipient_namespace, talk, scope, delay = false) {
+    announce(sender_namespace, talk, recipient_namespace, scope, delay = false) {
         const expression_trail = Resolution.extract_ExpressionTrail(talk);
         const announcement_channel = recipient_namespace +
             this.get_Separator("Monologue") +
@@ -134,7 +136,7 @@ export class BaseController extends SeparatorHandler {
             expression_trail;
         this._monologue_emitter.on(channel, callback);
     }
-    wait(waiter_namespace, recipient_namespace, listen, test_callback = () => true, action_callback = (transmission) => transmission, scope, total_count = 1, current_count = total_count) {
+    wait(waiter_namespace, listen, awaited_namespace, test_callback = () => true, action_callback = (transmission) => transmission, scope, total_count = 1, current_count = total_count) {
         return new Promise((resolve2) => {
             const once_callback_function = (transmission) => {
                 if (test_callback(transmission)) {
@@ -142,13 +144,13 @@ export class BaseController extends SeparatorHandler {
                     resolve2(action_callback(transmission));
                 }
                 else {
-                    const new_promise = this.wait(waiter_namespace, recipient_namespace, listen, test_callback, action_callback, scope, total_count, current_count);
+                    const new_promise = this.wait(waiter_namespace, listen, awaited_namespace, test_callback, action_callback, scope, total_count, current_count);
                     resolve2(new_promise);
                 }
             };
             if (current_count > 0) {
                 const expression_trail = Resolution.extract_ExpressionTrail(listen);
-                const channel = recipient_namespace +
+                const channel = awaited_namespace +
                     this.get_Separator("Monologue") +
                     expression_trail;
                 this._monologue_emitter.once(channel, once_callback_function);
@@ -158,7 +160,7 @@ export class BaseController extends SeparatorHandler {
     wait_Some(wait_set, waiter_namespace, scope = e_Scope.Global) {
         return Promise.all(wait_set
             .map((wait_event) => {
-            return this.wait(waiter_namespace, wait_event.Namespace, wait_event.Listen, wait_event.Test, wait_event.Call, scope);
+            return this.wait(waiter_namespace, wait_event.Listen, wait_event.Namespace, wait_event.Test, wait_event.Call, scope);
         }));
     }
 }

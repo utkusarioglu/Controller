@@ -84,8 +84,8 @@ test("BaseController.subscribe&announce.Global", () => {
 
     base_controller.announce(
         "base_controller2",
-        namespace,
         C_BootState.ClassReady,
+        namespace,
         e_Scope.Global,
     );
 
@@ -122,8 +122,8 @@ test("BaseController.subscribe&announce.Global.Count", () => {
     for (let i = 0; i < announcement_count; i++) {
         base_controller.announce(
             "base_controller2",
-            namespace,
             C_BootState.ClassReady,
+            namespace,
             e_Scope.Global,
         );
     }
@@ -145,8 +145,8 @@ test("BaseController.wait&announce.Global.Count", () => {
 
         base_controller.wait<any>(
             "waiter",
-            namespace,
             C_BootState.ClassReady,
+            namespace,
             undefined,
             (transmission) => {
                 counter++
@@ -163,8 +163,8 @@ test("BaseController.wait&announce.Global.Count", () => {
     //for (let i = 0; i < announcement_count; i++) {
     base_controller.announce(
         "base_controller2",
-        namespace,
         C_BootState.ClassReady,
+        namespace,
         e_Scope.Global,
     );
     //}
@@ -194,8 +194,8 @@ test("BaseController.subscribe&announce.Local", () => {
 
     base_controller.announce(
         "base_controller2",
-        namespace,
         C_BootState.ClassReady,
+        namespace,
         e_Scope.Local,
     );
 
@@ -214,8 +214,8 @@ test("BaseController.wait", () => {
     const wait_promise = new Promise((resolve) => {
         base_controller.wait<t_ri<[typeof test_value]>, void>(
             "waiting/for/emit",
-            declaration_namespace,
             C_BootState.ClassReady,
+            declaration_namespace,
             (transmission) => {
                 announcement_count++;
                 return (transmission.Talk)[2][0]
@@ -230,23 +230,23 @@ test("BaseController.wait", () => {
 
     base_controller.announce(
         "base/controller/2",
-        declaration_namespace,
         [...C_BootState.ClassReady, ["not-test-value"] ] as t_ri<[typeof test_value]>,
+        declaration_namespace,
         e_Scope.Local,
     );
 
     base_controller.announce(
         "base/controller/3",
-        declaration_namespace,
         [...C_BootState.ClassReady, ["not-test-value"] ] as t_ri<[typeof test_value]>,
+        declaration_namespace,
         e_Scope.Local,
     );
 
    
     base_controller.announce(
         "base/controller/2",
-        declaration_namespace,
         [...C_BootState.ClassReady, [test_value]] as t_ri<[typeof test_value]>,
+        declaration_namespace,
         e_Scope.Local,
     );
 
@@ -302,22 +302,22 @@ test("BaseController.wait_Some", () => {
 
     base_controller.announce(
         "1",
-        declaration_namespace1,
         [...C_BootState.ClassReady, [test_value1]] as t_ri<[typeof test_value1]>,
+        declaration_namespace1,
         e_Scope.Global,
     );
 
     base_controller.announce(
         "2",
-        declaration_namespace2,
         [...C_BootState.ClassReady, ["not-test-value"]] as t_ri<[string]>,
+        declaration_namespace2,
         e_Scope.Global,
     );
 
     base_controller.announce(
         "2",
-        declaration_namespace2,
         [...C_BootState.ClassReady, [test_value2]] as t_ri<[typeof test_value2]>,
+        declaration_namespace2,
         e_Scope.Global,
     );
 
@@ -350,8 +350,8 @@ test("Basecontroller.service", () => {
 
     const response = base_controller.request<i_request>(
         sender_namespace,
-        responder_namespace,
         ["RI", "set_Banana"],
+        responder_namespace,
         e_Scope.Global,
         e_ServiceGroup.Standard,
     )

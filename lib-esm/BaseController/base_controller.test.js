@@ -22,7 +22,7 @@ test("BaseController.subscribe&announce.Global", () => {
             resolve(transmission.Talk);
         }, namespace, e_Scope.Global);
     });
-    base_controller.announce("base_controller2", namespace, C_BootState.ClassReady, e_Scope.Global);
+    base_controller.announce("base_controller2", C_BootState.ClassReady, namespace, e_Scope.Global);
     return expect(subscription).resolves.toStrictEqual(C_BootState.ClassReady);
 });
 test("BaseController.subscribe&announce.Global.Count", () => {
@@ -39,7 +39,7 @@ test("BaseController.subscribe&announce.Global.Count", () => {
         setTimeout(() => resolve(counter), 1000);
     });
     for (let i = 0; i < announcement_count; i++) {
-        base_controller.announce("base_controller2", namespace, C_BootState.ClassReady, e_Scope.Global);
+        base_controller.announce("base_controller2", C_BootState.ClassReady, namespace, e_Scope.Global);
     }
     return expect(counter).resolves.toStrictEqual(announcement_count);
 });
@@ -50,13 +50,13 @@ test("BaseController.wait&announce.Global.Count", () => {
     const counter = new Promise((resolve, reject) => {
         let counter = 0;
         let log = [];
-        base_controller.wait("waiter", namespace, C_BootState.ClassReady, undefined, (transmission) => {
+        base_controller.wait("waiter", C_BootState.ClassReady, namespace, undefined, (transmission) => {
             counter++;
             log.push(transmission);
         }, e_Scope.Global);
         setTimeout(() => resolve(counter), 1000);
     });
-    base_controller.announce("base_controller2", namespace, C_BootState.ClassReady, e_Scope.Global);
+    base_controller.announce("base_controller2", C_BootState.ClassReady, namespace, e_Scope.Global);
     return expect(counter).resolves.toStrictEqual(announcement_count);
 });
 test("BaseController.subscribe&announce.Local", () => {
@@ -67,7 +67,7 @@ test("BaseController.subscribe&announce.Local", () => {
             resolve(transmission.Talk);
         }, namespace, e_Scope.Local);
     });
-    base_controller.announce("base_controller2", namespace, C_BootState.ClassReady, e_Scope.Local);
+    base_controller.announce("base_controller2", C_BootState.ClassReady, namespace, e_Scope.Local);
     return expect(subscription).resolves.toStrictEqual(C_BootState.ClassReady);
 });
 test("BaseController.wait", () => {
@@ -76,7 +76,7 @@ test("BaseController.wait", () => {
     const test_value = "test-value";
     let announcement_count = 0;
     const wait_promise = new Promise((resolve) => {
-        base_controller.wait("waiting/for/emit", declaration_namespace, C_BootState.ClassReady, (transmission) => {
+        base_controller.wait("waiting/for/emit", C_BootState.ClassReady, declaration_namespace, (transmission) => {
             announcement_count++;
             return (transmission.Talk)[2][0]
                 === test_value;
@@ -84,9 +84,9 @@ test("BaseController.wait", () => {
             resolve(announcement_count);
         }, e_Scope.Local);
     });
-    base_controller.announce("base/controller/2", declaration_namespace, [...C_BootState.ClassReady, ["not-test-value"]], e_Scope.Local);
-    base_controller.announce("base/controller/3", declaration_namespace, [...C_BootState.ClassReady, ["not-test-value"]], e_Scope.Local);
-    base_controller.announce("base/controller/2", declaration_namespace, [...C_BootState.ClassReady, [test_value]], e_Scope.Local);
+    base_controller.announce("base/controller/2", [...C_BootState.ClassReady, ["not-test-value"]], declaration_namespace, e_Scope.Local);
+    base_controller.announce("base/controller/3", [...C_BootState.ClassReady, ["not-test-value"]], declaration_namespace, e_Scope.Local);
+    base_controller.announce("base/controller/2", [...C_BootState.ClassReady, [test_value]], declaration_namespace, e_Scope.Local);
     return expect(wait_promise).resolves.toStrictEqual(3);
 });
 test("BaseController.wait_Some", () => {
@@ -120,9 +120,9 @@ test("BaseController.wait_Some", () => {
             return (transmission.Talk)[2][0];
         });
     });
-    base_controller.announce("1", declaration_namespace1, [...C_BootState.ClassReady, [test_value1]], e_Scope.Global);
-    base_controller.announce("2", declaration_namespace2, [...C_BootState.ClassReady, ["not-test-value"]], e_Scope.Global);
-    base_controller.announce("2", declaration_namespace2, [...C_BootState.ClassReady, [test_value2]], e_Scope.Global);
+    base_controller.announce("1", [...C_BootState.ClassReady, [test_value1]], declaration_namespace1, e_Scope.Global);
+    base_controller.announce("2", [...C_BootState.ClassReady, ["not-test-value"]], declaration_namespace2, e_Scope.Global);
+    base_controller.announce("2", [...C_BootState.ClassReady, [test_value2]], declaration_namespace2, e_Scope.Global);
     return expect(wait_some).resolves.toStrictEqual([test_value1, test_value2]);
 });
 test("Basecontroller.service", () => {
@@ -134,7 +134,7 @@ test("Basecontroller.service", () => {
             resolve(transmission);
         });
     }, e_Scope.Global, e_ServiceGroup.Standard);
-    const response = base_controller.request(sender_namespace, responder_namespace, ["RI", "set_Banana"], e_Scope.Global, e_ServiceGroup.Standard)
+    const response = base_controller.request(sender_namespace, ["RI", "set_Banana"], responder_namespace, e_Scope.Global, e_ServiceGroup.Standard)
         .then((transmission) => {
         return (transmission.Content).Time;
     });

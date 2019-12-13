@@ -89,18 +89,9 @@ export class BaseController extends SeparatorHandler {
 
     /**
      * Scope that the basecontroller is currently working on
+     * BaseController doesn't use this, but it's useful for debuging
      */
-    private _controller_scope: t_singleScope; // BaseController doesn't use this, but it's useful for debuging
-
-/*
- *	These will be used in future feature expansions
- */
-    // private static _static_reserve = {};
-    // private _open_requests: object[] = [];
-    // private _open_annuncements: object[] = [];
-    // private _open_subscriptions: object[] = [];
-    // private _open_waits: object[] = [];
-    // private _open_wait_dependencies: object[] = [];
+    private _controller_scope: t_singleScope;
 
     /**
      * Extends event emitter to include specific send and receive functions 
@@ -116,15 +107,17 @@ export class BaseController extends SeparatorHandler {
      */
     constructor(
         controller_scope: t_singleScope,
-        event_emitter: any
+        event_emitter: any,
+        max_listener: number = 10
     ) {
         super();
         this._controller_scope = controller_scope;
 
         this._event_emitter = event_emitter
-        this._monologue_emitter = new event_emitter().setMaxListeners(20);
-        this._dialogue_emitter = new event_emitter().setMaxListeners(20);
-
+        this._monologue_emitter =
+            new event_emitter().setMaxListeners(max_listener);
+        this._dialogue_emitter =
+            new event_emitter().setMaxListeners(max_listener);
     }
 
 
@@ -151,8 +144,8 @@ export class BaseController extends SeparatorHandler {
      * Works in tandem with  {@link BaseController.(serve:instance)}
      * 
      * 
-     * @param sender_namespace namespace of the requesting class
-     * @param recipient_namespace namespace that is intended to receive the 
+     * @param requesting_namespace namespace of the requesting class
+     * @param responding_namespace namespace that is intended to receive the 
      * request
      * @param talk the resolution that the responder will process
      * @param group defines the set of methods that will be used for the service
@@ -165,15 +158,15 @@ export class BaseController extends SeparatorHandler {
      * Service: Controller
      */
     public request<Content>(
-        sender_namespace: t_namespace,
-        recipient_namespace: t_namespace,
+        requesting_namespace: t_namespace,
         talk: t_ri_any,
+        responding_namespace: t_namespace,
         scope: e_Scope,
         group: e_ServiceGroup,
     ): Promise<i_response<Content>> {
 
         const service_id: t_serviceId = BaseController.create_RandomServiceId();
-        const request_channel: t_channel = recipient_namespace +
+        const request_channel: t_channel = responding_namespace +
             this.get_Separator("Dialogue") +
             group;
         const response_channel: t_channel = request_channel +
@@ -181,9 +174,9 @@ export class BaseController extends SeparatorHandler {
             service_id;
         const request_packet: i_request = {
             Channel: response_channel,
-            Sender: sender_namespace,
+            Sender: requesting_namespace,
             Group: group,
-            Recipient: recipient_namespace,
+            Recipient: responding_namespace,
             Talk: talk,
             Id: service_id,
             Time: (new Date()).getTime(),
@@ -284,7 +277,7 @@ export class BaseController extends SeparatorHandler {
                     }) // then
                     .catch((error) => {
                         // TODO
-                        console.log("serve error:", error);
+                        console.log("Respond Error:\n", error);
                     });
 
             }); // dialogue emitter
@@ -391,8 +384,8 @@ export class BaseController extends SeparatorHandler {
      */
     public announce<TalkRi extends t_ri_any>(
         sender_namespace: t_namespace,
-        recipient_namespace: t_namespace,
         talk: TalkRi,
+        recipient_namespace: t_namespace,
         scope: t_singleScope,
         delay: boolean | t_epoch = false,
     ): void {
@@ -415,8 +408,6 @@ export class BaseController extends SeparatorHandler {
             Static: false,
             Scope: scope,
         };
-
-        //console.log("announcing", talk, scope, sender_namespace)
 
         const do_announcement = () => {
 
@@ -524,7 +515,7 @@ export class BaseController extends SeparatorHandler {
 
         this._monologue_emitter.on(
             channel,
-            callback as (transmission: i_talk<TalkRi>) => void,
+            callback
         );
     }
 
@@ -537,7 +528,7 @@ export class BaseController extends SeparatorHandler {
      *  criteria through the test callback
      *
      * @param waiter_namespace namespace of the class that is waiting
-     * @param recipient_namespace namespace that is being awaited 
+     * @param awaited_namespace namespace that is being awaited 
      * @param listen method or announcement to listen to
      * @param test_callback callback for determining whether the channel signal 
      * meets 
@@ -556,8 +547,8 @@ export class BaseController extends SeparatorHandler {
         Return = any
     >(
         waiter_namespace: t_namespace,
-        recipient_namespace: t_namespace,
         listen: t_ri,
+        awaited_namespace: t_namespace,
         test_callback: t_waitTestCallback<TalkRi> = () => true ,
         action_callback: t_waitActionCallback<TalkRi, Return> =
             (transmission) => transmission,
@@ -577,13 +568,13 @@ export class BaseController extends SeparatorHandler {
 
                         current_count--;
                         resolve2(action_callback(transmission));
-                        //return action_callback(transmission);
+
                     } else {
 
                         const new_promise = this.wait<TalkRi, Return>(
                             waiter_namespace,
-                            recipient_namespace,
                             listen,
+                            awaited_namespace,
                             test_callback,
                             action_callback,
                             scope,
@@ -592,7 +583,7 @@ export class BaseController extends SeparatorHandler {
                         );
 
                         resolve2(new_promise);
-                        //return new_promise;
+
                     }
                 };
 
@@ -601,7 +592,7 @@ export class BaseController extends SeparatorHandler {
                 const expression_trail: t_expressionTrail =
                     Resolution.extract_ExpressionTrail(listen);
 
-                const channel: t_channel = recipient_namespace +
+                const channel: t_channel = awaited_namespace +
                     this.get_Separator("Monologue") +
                     expression_trail;
 
@@ -635,8 +626,8 @@ export class BaseController extends SeparatorHandler {
             .map((wait_event: i_waitSet<TalkRi, Return>) => {
                 return this.wait(
                     waiter_namespace,
-                    wait_event.Namespace,
                     wait_event.Listen,
+                    wait_event.Namespace,
                     wait_event.Test,
                     wait_event.Call,
                     scope,

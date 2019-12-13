@@ -111,7 +111,7 @@ export class M_ControllerEvents {
             this._announcements
                 .forEach((announcement) => {
                 this.get_Controller()
-                    .announce(announcement.Namespace, announcement.Talk, announcement.Scope);
+                    .announce(announcement.Talk, announcement.Namespace, announcement.Scope);
             });
         }
     }
@@ -125,7 +125,6 @@ export class M_ControllerEvents {
         }
     }
     manage_ControllerSequence(sequence_steps, scope, manager_namespace) {
-        let TEST;
         const step_promise_stack = [];
         let steps_promise_sequence = Promise.resolve();
         sequence_steps.forEach((step, index) => {
@@ -141,7 +140,7 @@ export class M_ControllerEvents {
     produce_PromiseStackMember(scope, manager_namespace, step) {
         return new Promise((resolve_step_promise) => {
             return this.get_Controller()
-                .wait(manager_namespace, step.Listen, (transmission) => {
+                .wait(step.Listen, manager_namespace, (transmission) => {
                 step.List = step.List.filter((value) => {
                     return value !== transmission.Sender;
                 });
@@ -157,7 +156,7 @@ export class M_ControllerEvents {
         });
         step.sniff(["Talk"], undefined, (step_talk) => {
             this.get_Controller()
-                .announce(manager_namespace, step_talk, scope);
+                .announce(step_talk, manager_namespace, scope);
         });
         const index_str = index.toString();
         return step_promise_stack.sniff([index_str], () => {
@@ -170,10 +169,10 @@ export class M_ControllerEvents {
     }
     announce_ToAllServices(resolution_instruction, delay = 0) {
         this.get_Controller()
-            .announce(C_Controller.AllServices, resolution_instruction, e_Scope.Global, delay);
+            .announce(resolution_instruction, C_Controller.AllServices, e_Scope.Global, delay);
     }
     announce_LibraryAdded(library_source_namespace) {
-        this.get_Controller().announce(C_Controller.AllServices, [...C_BootState.LibraryAdded, [library_source_namespace]], e_Scope.Global, true);
+        this.get_Controller().announce([...C_BootState.LibraryAdded, [library_source_namespace]], C_Controller.AllServices, e_Scope.Global, true);
     }
 }
 //# sourceMappingURL=m_controller_events.js.map

@@ -99,8 +99,8 @@ export class SampleControllerEventsClass extends Parent(BaseTestClass).with(
 
     public announce_ListenReady() {
     this.get_Controller().announce(
-        C_Controller.AllServices,
         C_BootState.ListenReady,
+        C_Controller.AllServices,
         e_Scope.Global,
     )
 }
