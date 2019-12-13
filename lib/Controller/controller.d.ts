@@ -29,7 +29,7 @@ export declare class Controller extends SeparatorHandler {
     static get_AllStaticContent(): i_staticContentArchive;
     static flush_StaticContentArchive(): void;
     static force_AllDynamicService(): void;
-    announce<TalkRi extends t_ri_any>(talk: TalkRi, recipient_namespace: t_namespace, scope?: t_scope, delay?: boolean | t_epoch): this;
+    announce<TalkRi extends t_ri_any = t_ri_any>(talk: TalkRi, recipient_namespace: t_namespace, scope?: t_scope, delay?: boolean | t_epoch): this;
     private static is_StaticResponder;
     get_AnnouncementArchive(scope?: t_singleScope): i_announcementArchiveItem[];
     subscribe<TalkRi extends t_ri_any = t_ri_any>(listen: t_ri, callback: (transmission: i_talk<TalkRi>) => void, subcribed_namespace?: t_namespace, scope?: t_scope): this;

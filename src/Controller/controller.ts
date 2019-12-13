@@ -221,6 +221,9 @@ export class Controller extends SeparatorHandler {
      * If the responding channel is registered the group as static, static 
      * response will be served
      * 
+     * Generics:
+     * Content = any
+     * 
      * @param scope defines local and/or global scope
      * @param responding_namespace t_namespace for the recipient
      * @param talk t_resolution that will be processed by the responding class
@@ -229,7 +232,9 @@ export class Controller extends SeparatorHandler {
      * Class: Controller
      * Service: Controller
      */
-    public request<Content = any>(
+    public request<
+        Content = any
+    >(
         talk: t_ri_any,
         responding_namespace: t_namespace,
         scope: t_singleScope = e_Scope.Global,
@@ -293,6 +298,9 @@ export class Controller extends SeparatorHandler {
     /**
      * Requests dynamic transmission from related scopes
      * 
+     * Generics:
+     * Content = any
+     * 
      * @param scope
      * @param recipient_namespace
      * @param talk
@@ -302,7 +310,9 @@ export class Controller extends SeparatorHandler {
      * Class: Controller
      * Service: Controller
      */
-    private request_DynamicTransmission<Content = any>(
+    private request_DynamicTransmission<
+        Content = any
+    >(
         talk: t_ri_any,
         recipient_namespace: t_namespace,
         scope: t_singleScope = e_Scope.Global,
@@ -329,6 +339,10 @@ export class Controller extends SeparatorHandler {
      * Responds to controller requests
      * {@link A_Controller} class introduces include_Services method for 
      * registering responses
+     * 
+     * Generics:
+     * CallRi extends t_ri_any = t_ri_any,
+     * Content = any
      * 
      * @param scope defines local and/or global scope
      * @param response_callback (t_transmission) => Promise that will process the 
@@ -518,6 +532,9 @@ export class Controller extends SeparatorHandler {
     /**
      * Declares to a channel and doesnt expect a response
      * 
+     * Generics:
+     * TalkRi extends t_ri_any = t_ri_any
+     * 
      * @param scope specifies local and/or global scope
      * @param recipient_namespace the namespace that is the primary target for 
      * the announcement
@@ -527,7 +544,9 @@ export class Controller extends SeparatorHandler {
      * Class: Controller
      * Service: Controller
      */
-    public announce<TalkRi extends t_ri_any>(
+    public announce<
+        TalkRi extends t_ri_any = t_ri_any
+    >(
         talk: TalkRi,
         recipient_namespace: t_namespace,
         scope: t_scope = e_Scope.Global,
@@ -588,6 +607,9 @@ export class Controller extends SeparatorHandler {
      * Listens during the run of the app, it may take internal action 
      * but the emitter talker will not be notified of this
      * 
+     * Generics:
+     * TalkRi extends t_ri_any = t_ri_any
+     * 
      * @param scope specifies local and/or global scope
      * @param subcribed_namespace t_namespace that will be monitored
      * @param listen t_resolutionNoArgs that will be monitored
@@ -598,7 +620,9 @@ export class Controller extends SeparatorHandler {
      * Class: Controller
      * Service: Controller
      */
-    public subscribe<TalkRi extends t_ri_any = t_ri_any>(
+    public subscribe<
+        TalkRi extends t_ri_any = t_ri_any
+    >(
         listen: t_ri,
         callback: (transmission: i_talk<TalkRi>) => void,
         subcribed_namespace: t_namespace = this.get_GlobalNamespace(),
@@ -622,6 +646,10 @@ export class Controller extends SeparatorHandler {
      * Similar to subscribe, listens to a specific channel but does not 
      * respond to the source, Unlike subscribe, wait quits listening after 
      * a certain number of occurences of the channel, default = 1
+     * 
+     * Generics
+     * TalkRi extends t_ri_any = t_ri_any,
+     * Return = i_talk<TalkRi>
      * 
      * @param scope Local or global
      * @oaram recipient_namespace t_namespace that will be monitored
@@ -668,6 +696,10 @@ export class Controller extends SeparatorHandler {
 
     /**
      * Waits multiple conditions and returns promise when all of them are met
+     * 
+     * Generics
+     * TalkRi extends t_ri_any = t_ri_any,
+     * Return = i_talk<TalkRi>
      * 
      * @param scope defines local and/or global scope
      * @param wait_set: instructions for the wait conditions
