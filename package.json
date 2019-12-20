@@ -1,6 +1,6 @@
 {
   "name": "@utkusarioglu/controller",
-  "version": "0.0.56",
+  "version": "0.0.57",
   "description": "2-scope event emitter package that allows one and two-way communications between services",
   "main": "index.js",
   "author": {
@@ -14,7 +14,7 @@
     "build": "npm run clean && tsc && tsc -m es6 --outDir lib-esm && webpack && npm run declaration",
     "test": "jest",
     "test-": "npm run build && jest",
-    "publish": "npm publish"
+    "publish": "npm version patch --force && npm publish"
   },
   "devDependencies": {
     "@types/jest": "24.0.21",
